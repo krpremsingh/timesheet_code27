@@ -9,6 +9,8 @@
 			type="com.awcsoftware.app.timesheet.TimeCardSummaryInfo" />
 		<typeAlias alias="User"
 			type="com.awcsoftware.spring.security.auth.user.User" />
+		<typeAlias alias="TimecardDetails"
+			type="com.awcsoftware.app.timesheet.TimeCardDetails" />
 	</typeAliases>
 	<environments default="development">
 		<environment id="development">
