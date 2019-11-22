@@ -28,6 +28,9 @@ public class TimeCardValidator {
 		if (tci.getTimeCardDetails() == null) {
 			errorMsg.add("kindly enter atleast one day for saving a timecard");
 		}
+		for (TimeCardDetails tcd : tci.getTimeCardDetails()) {
+			validateTimeCardDetails(tcd);
+		}
 		return errorMsg;
 	}
 
