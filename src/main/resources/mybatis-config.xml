@@ -6,7 +6,6 @@
 <configuration>
 	<typeAliases>
 		<typeAlias  alias="User" type="com.awcsoftware.spring.security.auth.user.User"/>
-		<!--  <typeAlias alias="BasePojo" type="com.awcsoftware.app.common.BasePojo"/> -->
 		 
 	</typeAliases>
 	<environments default="development">
