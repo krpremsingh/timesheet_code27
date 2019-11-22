@@ -1,8 +1,8 @@
 package com.awcsoftware.app.timesheet;
 
+import java.util.Set;
+
 import org.apache.log4j.Logger;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 
 import com.awcsoftware.app.AppException;
 import com.awcsoftware.mybatis.DbException;
@@ -14,14 +14,22 @@ public class TimeCardService {
 			throws DbException, AppException {
 		String strReturnCardSummaryDet = "", strReturnCardValue = "";
 		// validate here
+		TimeCardValidator tcv=new TimeCardValidator();
+		Set validationValue=tcv.validateSubmitTimeCard(theTimeCardSummaryInfoSerObj);
+		if(validationValue.size()==0){
+			TimeCardDao dao = new TimeCardDao();
+			strReturnCardSummaryDet = dao.addTimeCardSummaryInfo(theTimeCardSummaryInfoSerObj);
+			if (strReturnCardSummaryDet.equals("added to database")) {
+				return dao.addTimeCardDetailsInfo(theTimeCardSummaryInfoSerObj);
+			} else
+				return strReturnCardSummaryDet;
+		}
+		else {
+			return validationValue.toString();
+		}
 		// if success
 		// add
-		TimeCardDao dao = new TimeCardDao();
-		strReturnCardSummaryDet = dao.addTimeCardSummaryInfo(theTimeCardSummaryInfoSerObj);
-		if (strReturnCardSummaryDet.equals("added to database")) {
-			return dao.addTimeCardDetailsInfo(theTimeCardSummaryInfoSerObj);
-		} else
-			return strReturnCardSummaryDet;
+		
 	}
 	/*
 	 * public String updTimeSheetDetails(TimeCardSummaryInfo
