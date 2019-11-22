@@ -5,8 +5,10 @@
 
 <configuration>
 	<typeAliases>
+		 <typeAlias alias="TimecardSummaryInfo" type="com.awcsoftware.app.timesheet.TimeCardSummaryInfo"/>
 		<typeAlias  alias="User" type="com.awcsoftware.spring.security.auth.user.User"/>
-		<!--  <typeAlias alias="BasePojo" type="com.awcsoftware.app.common.BasePojo"/> -->
+		 <typeAlias alias="TimecardDetails" type="com.awcsoftware.app.timesheet.TimeCardDetails"/>
+		 <!-- <typeAlias alias="ParentBasePojo" type="com.awcsoftware.app.common.ParentBasePojo"/> -->
 		 
 	</typeAliases>
 	<environments default="development">
@@ -21,9 +23,8 @@
 		</environment>
 	</environments>
 	<mappers>
+	   <mapper resource="com/awcsoftware/app/timesheet/TimeCardRepositoryMapper.xml" />
 		<mapper resource="com/awcsoftware/app/common/BaseRepositoryMapper.xml"/>
 		<mapper resource="com/awcsoftware/spring/security/auth/user/UserMapper.xml" />
-		<mapper resource="com/awcsoftware/app/timesheet/ChangePasswordMapper.xml" />
-		
 	</mappers>
 </configuration>
