@@ -13,7 +13,7 @@ import com.awcsoftware.app.Util;
 public class TimeCardValidator {
 	static Set<LocalDate> timeCardDetailsFlag;
 	static Set<String> errorMsg;
-	
+
 	static {
 		errorMsg = new LinkedHashSet<String>();
 		timeCardDetailsFlag = new LinkedHashSet<>();
@@ -75,5 +75,5 @@ public class TimeCardValidator {
 		}
 		return errorMsg;
 	}
-	
+
 }
