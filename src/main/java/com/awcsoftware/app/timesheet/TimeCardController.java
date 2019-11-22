@@ -20,10 +20,10 @@ public class TimeCardController {
 	// UserAuthenticationDetail authDetails) {
 	public ResponseEntity<String> addTimeSheetDetails(@RequestBody TimeCardSummaryInfo theTimeCardSummaryInfo) {
 		TimeCardService service = new TimeCardService();
-
+		String strTimeCardServiceRet="";
 		try {
-			service.addTimeSheetDetails(theTimeCardSummaryInfo);
-			return new ResponseEntity<String>("Added", HttpStatus.OK);
+			strTimeCardServiceRet=service.addTimeSheetDetails(theTimeCardSummaryInfo);
+			return new ResponseEntity<String>(strTimeCardServiceRet, HttpStatus.OK);
 		} catch (AppException e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		} catch (DbException e) {

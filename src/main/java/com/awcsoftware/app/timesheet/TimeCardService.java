@@ -13,10 +13,14 @@ public class TimeCardService {
 	public String addTimeSheetDetails(TimeCardSummaryInfo theTimeCardSummaryInfoSerObj)
 			throws DbException, AppException {
 		String strReturnCardSummaryDet = "", strReturnCardValue = "";
+		logger.info("In 1");
 		// validate here
 		TimeCardValidator tcv=new TimeCardValidator();
-		Set validationValue=tcv.validateSubmitTimeCard(theTimeCardSummaryInfoSerObj);
-		if(validationValue.size()==0){
+		
+		Set validationValue=tcv.validateSaveTimeCard(theTimeCardSummaryInfoSerObj);
+		logger.info("In 2>>>>"+validationValue.toString());
+		if(validationValue.size()==0)
+		{
 			TimeCardDao dao = new TimeCardDao();
 			strReturnCardSummaryDet = dao.addTimeCardSummaryInfo(theTimeCardSummaryInfoSerObj);
 			if (strReturnCardSummaryDet.equals("added to database")) {
@@ -24,7 +28,8 @@ public class TimeCardService {
 			} else
 				return strReturnCardSummaryDet;
 		}
-		else {
+		else 
+		{
 			return validationValue.toString();
 		}
 		// if success
