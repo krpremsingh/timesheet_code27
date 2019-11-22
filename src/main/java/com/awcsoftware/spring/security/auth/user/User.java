@@ -1,17 +1,100 @@
 package com.awcsoftware.spring.security.auth.user;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
+
 public class User {
 
-	private String username;
-	private String password;
-	private String role;
 	private int empId;
 	
-	public String getUsername() {
-		return username;
+	private String firstName;
+
+	private String middleName;
+
+	private String lastName;
+
+	private String empCode;
+
+	private LocalDate dob;
+
+	private LocalDate doj;
+
+	private LocalDateTime addedOn;
+
+	private LocalDateTime lastModifiedOn;
+
+	private String email;
+
+	private String password;
+	
+	private int firstLoginStatus;
+
+	private String status;
+
+	private int designationId;
+	
+	private List<Role> role;
+		
+	public int getEmpId() {
+		return empId;
 	}
-	public void setUsername(String username) {
-		this.username = username;
+	public void setEmpId(int empId) {
+		this.empId = empId;
+	}
+	public String getFirstName() {
+		return firstName;
+	}
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+	public String getMiddleName() {
+		return middleName;
+	}
+	public void setMiddleName(String middleName) {
+		this.middleName = middleName;
+	}
+	public String getLastName() {
+		return lastName;
+	}
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+	public String getEmpCode() {
+		return empCode;
+	}
+	public void setEmpCode(String empCode) {
+		this.empCode = empCode;
+	}
+	public LocalDate getDob() {
+		return dob;
+	}
+	public void setDob(LocalDate dob) {
+		this.dob = dob;
+	}
+	public LocalDate getDoj() {
+		return doj;
+	}
+	public void setDoj(LocalDate doj) {
+		this.doj = doj;
+	}
+	public LocalDateTime getAddedOn() {
+		return addedOn;
+	}
+	public void setAddedOn(LocalDateTime addedOn) {
+		this.addedOn = addedOn;
+	}
+	public LocalDateTime getLastModifiedOn() {
+		return lastModifiedOn;
+	}
+	public void setLastModifiedOn(LocalDateTime lastModifiedOn) {
+		this.lastModifiedOn = lastModifiedOn;
+	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
 	}
 	public String getPassword() {
 		return password;
@@ -19,16 +102,30 @@ public class User {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public String getRole() {
+	public int getFirstLoginStatus() {
+		return firstLoginStatus;
+	}
+	public void setFirstLoginStatus(int firstLoginStatus) {
+		this.firstLoginStatus = firstLoginStatus;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	public int getDesignationId() {
+		return designationId;
+	}
+	public void setDesignationId(int designationId) {
+		this.designationId = designationId;
+	}
+	public List<Role> getRole() {
 		return role;
 	}
-	public void setRole(String role) {
+	public void setRole(List<Role> role) {
 		this.role = role;
 	}
-	public int getEmpId() {
-		return empId;
-	}
-	public void setEmpId(int empId) {
-		this.empId = empId;
-	}
+
+
 }

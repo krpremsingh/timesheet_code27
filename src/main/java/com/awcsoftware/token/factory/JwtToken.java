@@ -20,7 +20,7 @@ public class JwtToken implements Token {
                 .setIssuer("AWC-Software")
                 .setIssuedAt(Date.from(currentTime.atZone(ZoneId.systemDefault()).toInstant()))
 		          .setExpiration(Date.from(currentTime
-		                  .plusSeconds(20)
+		                  .plusSeconds(2000000)
 		                  .atZone(ZoneId.systemDefault()).toInstant()))
                 .signWith(SignatureAlgorithm.HS256, "AWC-Software");
 		 

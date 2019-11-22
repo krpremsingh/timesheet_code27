@@ -3,11 +3,30 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="User">
-	<select id="getUser" parameterType="string" resultType="User">
-		select u.*, r.text from user u, role r where u.roleId = r.id and u.username = #{username}
-	</select>
+	<resultMap
+		type="User" id="User">
+		<id column="empId" property="empId" jdbcType="INTEGER" />
+		<result column="password" property="password"
+			jdbcType="VARCHAR" />
+		<result column="firstLoginStatus" property="firstLoginStatus"
+			jdbcType="INTEGER" />
+	</resultMap>
 	
+	<select id="getUser" parameterType="string" resultType="User">
+		select
+		e.empId,e.firstName,e.email,e.password,e.designationId,e.empCode,e.firstLoginStatus
+		from EmployeeInfo e where e.email=#{email}
+	</select>
+
 	<select id="isExists" parameterType="string" resultType="int">
-		SELECT CASE WHEN count(username) > 0 THEN 1 ELSE 0 END FROM user WHERE username = #{username}
+		SELECT
+		CASE WHEN count(email) > 0 THEN 1 ELSE 0 END FROM EmployeeInfo WHERE
+		email = #{email}
+	</select>
+
+	<select id="getRoles" parameterType="int"
+		resultType="com.awcsoftware.spring.security.auth.user.Role">
+		select r.roleId ,r.role from EmployeeRole er inner join RolesInfo r on
+		er.roleId=r.roleId where er.empId=#{empId};
 	</select>
 </mapper>

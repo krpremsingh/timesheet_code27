@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="ParentBasePojo">
+<!--<cache /> -->
+<resultMap id="DesignationResult" type="com.awcsoftware.app.common.ParentBasePojo">
+<id column="DesignationId" property="id" jdbcType="INTEGER" />
+<collection property="basepojo"  select="getActivities" column="DesignationId" />
+</resultMap>
+
+<resultMap id="ProjectResult" type="com.awcsoftware.app.common.ParentBasePojo">
+<id column="ProjectId" property="id" jdbcType="INTEGER" />
+<collection property="basepojo"  select="getProjects" column="ProjectId" />
+</resultMap>
+
+<resultMap type="com.awcsoftware.app.common.BasePojo" id="ActivitiesResult">
+<id column="activityId" property="id" jdbcType="INTEGER" />
+<result column="activity" property="name" jdbcType="VARCHAR" />
+</resultMap>
+
+<resultMap type="com.awcsoftware.app.common.BasePojo" id="projectResult">
+<id column="projectId" property="id"  jdbcType="INTEGER"/>
+ <result column="projectName" property="name" jdbcType="VARCHAR" />
+</resultMap>
+
+<resultMap type="com.awcsoftware.app.common.BasePojo" id="locationResult">
+<id column="workLocationId" property="id"  jdbcType="INTEGER"/>
+ <result column="location" property="name" jdbcType="VARCHAR" />
+</resultMap>
+
+<select id="getActivities"  resultMap="ActivitiesResult">
+select distinct a.activity,a.activityId from ActivitiesInfo a,DesignationInfo d where a.designationId=#{designationId};
+</select>
+	
+<select id="getProjects" resultMap="projectResult">
+select p.projectName,p.projectId from ProjectsInfo p inner join EmployeesProjects ep on ep.projectId=p.projectId where ep.empId=#{empId} ;
+</select>
+
+<select id="getProjectLocations" resultMap="locationResult">
+select distinct wl.location,wl.workLocationId from WorkLocationsInfo wl inner join ProjectLocationDetails pld on pld.workLocationId=wl.workLocationId where pld.projectId=#{projectId};
+</select>
+	
+</mapper>

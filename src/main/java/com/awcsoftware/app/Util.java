@@ -31,7 +31,7 @@ public class Util {
 		return false;
 	}
 
-	static Predicate<String> validateEmail = (email) -> {
+	public static Predicate<String> validateEmail = (email) -> {
 		return pattern.matcher(email).matches();
 	};
 }
