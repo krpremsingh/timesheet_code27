@@ -26,8 +26,6 @@ public class TimeCardSummaryInfo {
 	@JsonManagedReference
 	private List<TimeCardDetails> timeCardDetails;
 
-	private String insertStatement;
-
 	public int getTcId() {
 		return tcId;
 	}
@@ -99,16 +97,6 @@ public class TimeCardSummaryInfo {
 	public void setTimeCardDetails(List<TimeCardDetails> timeCardDetails) {
 		this.timeCardDetails = timeCardDetails;
 	}
-
-	public String getInsertStatement() {
-		return insertStatement;
-	}
-
-	public void setInsertStatement(String insertStatement) {
-		this.insertStatement = insertStatement;
-	}
-
-	
 	
 	@Override
 	public int hashCode() {
@@ -116,7 +104,6 @@ public class TimeCardSummaryInfo {
 		int result = 1;
 		result = prime * result + ((addedOn == null) ? 0 : addedOn.hashCode());
 		result = prime * result + empId;
-		result = prime * result + ((insertStatement == null) ? 0 : insertStatement.hashCode());
 		result = prime * result + ((status == null) ? 0 : status.hashCode());
 		result = prime * result + tcId;
 		result = prime * result + ((timeCardDetails == null) ? 0 : timeCardDetails.hashCode());
@@ -142,11 +129,6 @@ public class TimeCardSummaryInfo {
 		} else if (!addedOn.equals(other.addedOn))
 			return false;
 		if (empId != other.empId)
-			return false;
-		if (insertStatement == null) {
-			if (other.insertStatement != null)
-				return false;
-		} else if (!insertStatement.equals(other.insertStatement))
 			return false;
 		if (status == null) {
 			if (other.status != null)
@@ -181,8 +163,7 @@ public class TimeCardSummaryInfo {
 	public String toString() {
 		return "TimeCardSummaryInfo [tcId=" + tcId + ", empId=" + empId + ", weekStart=" + weekStart + ", weekEnd="
 				+ weekEnd + ", yearWeek=" + yearWeek + ", totalHours=" + totalHours + ", status=" + status
-				+ ", addedOn=" + addedOn + ", timeCardDetails=" + timeCardDetails + ", insertStatement="
-				+ insertStatement + "]";
+				+ ", addedOn=" + addedOn + ", timeCardDetails=" + timeCardDetails + "]";
 	}
 	
 }
