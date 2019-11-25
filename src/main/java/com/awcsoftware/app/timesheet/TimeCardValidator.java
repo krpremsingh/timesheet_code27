@@ -11,15 +11,20 @@ import com.awcsoftware.app.Util;
  *
  */
 public class TimeCardValidator {
+	
 	static Set<LocalDate> timeCardDetailsFlag;
 	static Set<String> errorMsg;
-
+	static String draftFlag;
+	static String submitFlag;
 	static {
 		errorMsg = new LinkedHashSet<String>();
 		timeCardDetailsFlag = new LinkedHashSet<>();
+		draftFlag="draft";
+		submitFlag="submit";
 	}
-
+	
 	public Set<String> validateSaveTimeCard(TimeCardSummaryInfo tci) {
+		
 		errorMsg.clear();
 		if (Util.validateWeeklyHours.test(tci.getTotalHours())) {
 			errorMsg.add("please enter weekly hours less than 168 and greater than 0");
@@ -29,7 +34,7 @@ public class TimeCardValidator {
 			errorMsg.add("kindly enter atleast one day for saving a timecard");
 		}
 		for (TimeCardDetails tcd : tci.getTimeCardDetails()) {
-			validateTimeCardDetails(tcd);
+			validateTimeCardDetails(tcd,draftFlag);
 		}
 		return errorMsg;
 	}
@@ -53,13 +58,13 @@ public class TimeCardValidator {
 			return errorMsg;
 		}
 		for (TimeCardDetails tcd : tci.getTimeCardDetails()) {
-			validateTimeCardDetails(tcd);
+			validateTimeCardDetails(tcd,submitFlag);
 		}
 
 		return errorMsg;
 	}
 
-	public Set<String> validateTimeCardDetails(TimeCardDetails tcd) {
+	public Set<String> validateTimeCardDetails(TimeCardDetails tcd,String flag) {
 
 		if (Util.validateInt.test(tcd.getProjectId())) {
 			errorMsg.add("please enter a valid project");
@@ -73,8 +78,10 @@ public class TimeCardValidator {
 		if (Util.validateDailyHours.test(tcd.getWorkingHours())) {
 			errorMsg.add("please enter working hours between 0-23.59");
 		}
-		if (tcd.getTimeCardApprovalDetails() == null) {
-			errorMsg.add("approval details is empty, kindly contact adminstrator and try again");
+		if(flag.equals("submit")) {
+			if (tcd.getTimeCardApprovalDetails() == null) {
+				errorMsg.add("approval details is empty, kindly contact adminstrator and try again");
+			}
 		}
 		return errorMsg;
 	}
