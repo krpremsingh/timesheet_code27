@@ -73,9 +73,10 @@ public class TimeCardValidator {
 		if (Util.validateDailyHours.test(tcd.getWorkingHours())) {
 			errorMsg.add("please enter working hours between 0-23.59");
 		}
-		if (tcd.getTimeCardApprovalDetails() == null) {
+/*		if (tcd.getTimeCardApprovalDetails() == null) {
 			errorMsg.add("approval details is empty, kindly contact adminstrator and try again");
 		}
+*/
 		return errorMsg;
 	}
 

@@ -98,6 +98,7 @@ public class TimeCardSummaryInfo {
 		this.timeCardDetails = timeCardDetails;
 	}
 	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;

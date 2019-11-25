@@ -23,6 +23,7 @@ public class TimeCardDetails
 	private String status;
 	private String comments;
 
+
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
 	private LocalDateTime addedOn;
 
@@ -184,9 +185,9 @@ public class TimeCardDetails
 		String strReturn= "('"+tcId+"','"+projectId+"','"+activityId+"','"+workingDay+"','"+
 				workingDate+"','"+workingHours+"','"+comments+"','"+status+"',";
 		if(addedOn==null)		
-			strReturn="now(),now(),'"+taskDetails+"')";		
+			strReturn=strReturn+"now(),now(),'"+taskDetails+"')";		
 		else
-			strReturn="'"+addedOn+"',now(),'"+taskDetails+"')";
+			strReturn=strReturn+"'"+addedOn+"',now(),'"+taskDetails+"')";
 		
 		return strReturn;
 	}

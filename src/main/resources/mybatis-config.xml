@@ -11,16 +11,19 @@
 			type="com.awcsoftware.spring.security.auth.user.User" />
 		<typeAlias alias="TimecardDetails"
 			type="com.awcsoftware.app.timesheet.TimeCardDetails" />
+		<typeAlias alias="TimeCardView"
+			type="com.awcsoftware.app.timesheet.TimeCardView" />
+
 	</typeAliases>
 	<environments default="development">
 		<environment id="development">
 			<transactionManager type="JDBC" />
 			<dataSource type="POOLED">
-				<property name="driver" value="com.mysql.jdbc.Driver" />
-				<property name="url"
-					value="jdbc:mysql://192.168.1.32:3306/timesheet" />
+				<property name="driver" value="com.mysql.cj.jdbc.Driver" />
+ 				<property name="url"
+					value="jdbc:mysql://192.168.1.32:3306/timesheet" />  
 				<property name="username" value="root" />
-				<property name="password" value="My@SQL" />
+				<property name="password" value="root" />
 			</dataSource>
 		</environment>
 	</environments>
