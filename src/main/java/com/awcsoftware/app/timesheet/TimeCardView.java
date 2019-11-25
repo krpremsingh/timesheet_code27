@@ -5,7 +5,7 @@ import java.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-public class TimeCardView implements Serializable  
+public class TimeCardView  implements Serializable 
 {
 
 	private int tcId;

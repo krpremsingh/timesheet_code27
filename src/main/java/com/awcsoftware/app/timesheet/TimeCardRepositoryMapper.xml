@@ -52,7 +52,7 @@
 		keyProperty='tcId'>
 		insert into
 		TimeCardSummaryInfo
-		(tcid,empid,weekstart,weekend,yearweek,totalhours,status,addedon,lastmodifiedon)
+		(tcId,empId,weekStart,weekEnd,yearWeek,totalHours,status,addedOn,lastmodifiedon)
 		values
 		(#{tcId},
 		#{empId},
@@ -108,7 +108,7 @@
 	</select>
 
 	<select id="getTimeViewCard" resultType="com.awcsoftware.app.timesheet.TimeCardView" >
-		select tcId,ifnull(weekStart,' ') as weekstartDT,ifnull(weekend,' ') as weekEndDT, ifnull(status,' ') as status,
+		select tcId,ifnull(weekStart,' ') as weekstartDT,ifnull(weekEnd,' ') as weekEndDT, ifnull(status,' ') as status,
 		ifnull(concat(date_format(weekStart,'%d %b'),' to ',date_format(weekend,'%d %b')),' ') WeekPeriod,
 		ifnull(totalHours,' ') totalHour,
 		ifnull((select group_concat(distinct concat(firstName,' ',lastName )) from 
