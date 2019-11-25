@@ -15,7 +15,7 @@ import com.awcsoftware.session.store.TokenSession;
  */
 public class TimeCardValidator {
 	@Autowired
-	TokenSession ts1,ts2;
+	TokenSession ts1,ts2,ts3,ts4;
 	static Set<LocalDate> timeCardDetailsFlag;
 	static Set<String> errorMsg;
 	static String draftFlag;
@@ -29,6 +29,8 @@ public class TimeCardValidator {
 	public TimeCardValidator() {
 		System.out.println("Equals Metod : "+ts1.equals(ts2));
 		System.out.println("Double Equals :"+(ts1==ts2));
+		System.out.println("Double Equals :"+(ts1==ts4));
+		System.out.println("Double Equals :"+(ts1==ts3));
 	}
 	public Set<String> validateSaveTimeCard(TimeCardSummaryInfo tci) {
 		
