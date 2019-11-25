@@ -13,20 +13,6 @@ import java.util.List;
  */
 public class TimeCardValidatorTest {
 	public static void main(String[] args) {
-		
-		/*
-		 * 
-		private int tcId;
-		private int empId;
-		private LocalDate weekStart;
-		private LocalDate weekEnd;
-		private int yearWeek;
-		private float totalHours;
-		private String status;
-		private LocalDateTime addedOn;
-		private LocalDateTime lastModifiedOn;
-		private List<TimeCardDetails> timeCardDetails;
-		 * */
 		TimeCardSummaryInfo tci=new TimeCardSummaryInfo();
 		tci.setEmpId(1277);
 		tci.setWeekStart(LocalDate.now());
