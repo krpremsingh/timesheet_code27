@@ -12,7 +12,7 @@ import com.awcsoftware.spring.security.auth.UserAuthenticationDetail;
 
 @Component
 @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
-public class TokenSession {
+public class TokenSession implements SessionBuilder{
 
 	long inactiveTime = 900000; // 15 minutes
 
@@ -74,5 +74,4 @@ public class TokenSession {
 		}
 		return false;
 	}
-
 }
