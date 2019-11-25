@@ -27,7 +27,7 @@ public class TimeCardValidator {
 		submitFlag="submit";
 	}
 	public TimeCardValidator() {
-		System.out.println("Equals Metod : "+ts1.equals(ts2));
+		//System.out.println("Equals Metod : "+ts1.equals(ts2));
 		System.out.println("Double Equals :"+(ts1==ts2));
 		System.out.println("Double Equals :"+(ts1==ts4));
 		System.out.println("Double Equals :"+(ts1==ts3));
