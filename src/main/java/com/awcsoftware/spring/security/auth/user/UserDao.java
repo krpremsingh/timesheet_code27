@@ -46,6 +46,19 @@ public class UserDao {
 
 	}
 
+/*	
+	public boolean updateLoginTransaction(LoginTransaction transaction) {
+		SqlSession session = MyBatisManager.openSession();
+		try {
+			  int result = session.update("User.updateLoginTransaction", transaction);
+			if (result != 1)
+				return false;
+			return true;
+		} finally {
+			session.close();
+		}
+		
+	}*/
 	
 	/*  boolean forgotPassword(ConfirmationToken token);
 	  ConfirmationToken findByToken(String token);

@@ -1,4 +1,4 @@
-package com.awcsoftware.app.timesheet;
+package com.awcsoftware.app.password;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
