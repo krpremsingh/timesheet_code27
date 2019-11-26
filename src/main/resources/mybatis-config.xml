@@ -6,23 +6,23 @@
 <configuration>
 	<typeAliases>
 
-	<typeAlias alias="User"
-		type="com.awcsoftware.spring.security.auth.user.User" />
-		
-	<typeAlias alias="ConfirmationToken"
-		type="com.awcsoftware.app.password.ConfirmationToken" />
-		
-	<typeAlias alias="TimecardSummaryInfo"
-		type="com.awcsoftware.app.timesheet.TimeCardSummaryInfo" />
-	
-	<typeAlias alias="User"
-		type="com.awcsoftware.spring.security.auth.user.User" />
-	
-	<typeAlias alias="TimecardDetails"
-		type="com.awcsoftware.app.timesheet.TimeCardDetails" />
-	
-	<typeAlias alias="TimeCardView"
-		type="com.awcsoftware.app.timesheet.TimeCardView" />
+		<typeAlias alias="User"
+			type="com.awcsoftware.spring.security.auth.user.User" />
+
+		<typeAlias alias="ConfirmationToken"
+			type="com.awcsoftware.app.password.ConfirmationToken" />
+
+		<typeAlias alias="TimecardSummaryInfo"
+			type="com.awcsoftware.app.timesheet.TimeCardSummaryInfo" />
+
+		<typeAlias alias="User"
+			type="com.awcsoftware.spring.security.auth.user.User" />
+
+		<typeAlias alias="TimecardDetails"
+			type="com.awcsoftware.app.timesheet.TimeCardDetails" />
+
+		<typeAlias alias="TimeCardView"
+			type="com.awcsoftware.app.timesheet.TimeCardView" />
 
 	</typeAliases>
 
@@ -31,21 +31,21 @@
 			<transactionManager type="JDBC" />
 			<dataSource type="POOLED">
 				<property name="driver" value="com.mysql.cj.jdbc.Driver" />
- 				<property name="url"
-					value="jdbc:mysql://127.0.0.1:3306/timesheet" />  
+				<property name="url"
+					value="jdbc:mysql://127.0.0.1:3306/timesheet" />
 				<property name="username" value="root" />
 				<property name="password" value="root" />
 			</dataSource>
 		</environment>
 	</environments>
 	<mappers>
-	<mapper
-		resource="com/awcsoftware/app/timesheet/TimeCardRepositoryMapper.xml" />
-	<mapper
-		resource="com/awcsoftware/app/common/BaseRepositoryMapper.xml" />
-	<mapper
-		resource="com/awcsoftware/spring/security/auth/user/UserMapper.xml" />
-	<mapper
-		resource="com/awcsoftware/app/password/UserPasswordMapper.xml" />
+		<mapper
+			resource="com/awcsoftware/app/timesheet/TimeCardRepositoryMapper.xml" />
+		<mapper
+			resource="com/awcsoftware/app/common/BaseRepositoryMapper.xml" />
+		<mapper
+			resource="com/awcsoftware/spring/security/auth/user/UserMapper.xml" />
+		<mapper
+			resource="com/awcsoftware/app/password/UserPasswordMapper.xml" />
 	</mappers>
 </configuration>
