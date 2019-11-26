@@ -1,4 +1,4 @@
-package com.awcsoftware.app.timesheet;
+package com.awcsoftware.mail;
 
 import java.util.Properties;
 

@@ -4,18 +4,14 @@ import java.time.LocalDate;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.awcsoftware.app.Util;
-import com.awcsoftware.session.store.TokenSession;
 
 /**
  * @author Pratik Gaurav
  *
  */
 public class TimeCardValidator {
-	@Autowired
-	TokenSession ts1,ts2,ts3,ts4;
+	
 	static Set<LocalDate> timeCardDetailsFlag;
 	static Set<String> errorMsg;
 	static String draftFlag;
@@ -26,12 +22,7 @@ public class TimeCardValidator {
 		draftFlag="draft";
 		submitFlag="submit";
 	}
-	public TimeCardValidator() {
-		//System.out.println("Equals Metod : "+ts1.equals(ts2));
-		System.out.println("Double Equals :"+(ts1==ts2));
-		System.out.println("Double Equals :"+(ts1==ts4));
-		System.out.println("Double Equals :"+(ts1==ts3));
-	}
+	
 	public Set<String> validateSaveTimeCard(TimeCardSummaryInfo tci) {
 		
 		errorMsg.clear();
