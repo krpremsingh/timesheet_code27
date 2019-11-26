@@ -9,34 +9,36 @@ import com.awcsoftware.app.AppException;
 import com.awcsoftware.mybatis.DbException;
 
 public class TimeCardService {
-	static Logger logger = Logger.getLogger(TimeCardDao.class);
+	static Logger logger = Logger.getLogger(TimeCardService.class);
 
-	public String addTimeSheetDetails(TimeCardSummaryInfo theTimeCardSummaryInfoSerObj)
+	public String addTimeSheetDetails(TimeCardSummaryInfo addTCSumInfo)
 			throws DbException, AppException {
-		String strReturnCardSummaryDet = "", strReturnCardValue = "";
+		String strTCSummaryRet = "", strTCReturn = "",strTCDetQry="";
+		
 		// validate here
 		TimeCardValidator tcv=new TimeCardValidator();
 		
-		Set validationValue=tcv.validateSaveTimeCard(theTimeCardSummaryInfoSerObj);
+		Set validationValue=tcv.validateSaveTimeCard(addTCSumInfo);
 		// if success
 		// add
 		if(validationValue.size()==0)
 		{
 			TimeCardDao dao = new TimeCardDao();
-			strReturnCardSummaryDet = dao.addTimeCardSummaryInfo(theTimeCardSummaryInfoSerObj);
-			if (strReturnCardSummaryDet.equals("S0000")) 
+			strTCSummaryRet = dao.addTCSummaryInfo(addTCSumInfo);
+			if (strTCSummaryRet.equals("S0000")) 
 			{
-				for (TimeCardDetails theTimeCardObj : theTimeCardSummaryInfoSerObj.getTimeCardDetails()) 
+				for (TimeCardDetails theTimeCardObj : addTCSumInfo.getTimeCardDetails()) 
 				{
-					theTimeCardObj.setTcId(theTimeCardSummaryInfoSerObj.getTcId());
-					strReturnCardValue = dao.addTimeCardDetailsInfo(theTimeCardObj);
-					if(!strReturnCardValue.equals("S0000"))
-						return strReturnCardValue;
-				}
-				return strReturnCardValue;
+					theTimeCardObj.setTcId(addTCSumInfo.getTcId());
+				}			
+				strTCReturn = dao.addTCDetails(addTCSumInfo.getTimeCardDetails());
+				if(!strTCReturn.equals("S0000"))
+					return strTCReturn;
+
+				return strTCReturn;
 			}
 			else
-				return strReturnCardSummaryDet;
+				return strTCSummaryRet;
 		}
 		else 
 		{
@@ -45,23 +47,23 @@ public class TimeCardService {
 		
 	}
 	
-	public String updTimeSheetDetails(TimeCardSummaryInfo theTimeCardSummaryInfoSerObj) throws DbException, AppException 
+	public String updTimeSheetDetails(TimeCardSummaryInfo updTCSumObj) throws DbException, AppException 
 	{
 		boolean resultValidateDao; // validate here // if success // add
-		String strDaoReturnVal="No Data Found",strCardDaoReturnVal="No Data Found";
+		String strTCSumRet="No Data Found",strCardDaoReturnVal="No Data Found";
 		TimeCardDao dao = new TimeCardDao();
 		
-		resultValidateDao = dao.validateTimeSummaryById(theTimeCardSummaryInfoSerObj.getTcId());
+		resultValidateDao = dao.vldTimeSummaryId(updTCSumObj.getTcId());
 		if (resultValidateDao == true) {
-			strDaoReturnVal= dao.updTimeCardSummaryInfo(theTimeCardSummaryInfoSerObj);
-			if(strDaoReturnVal.equals("S0000"))
+			strTCSumRet= dao.updTCSummaryInfo(updTCSumObj);
+			if(strTCSumRet.equals("S0000"))
 			{
-				for (TimeCardDetails theTimeCardObj : theTimeCardSummaryInfoSerObj.getTimeCardDetails()) 
+				for (TimeCardDetails theTimeCardObj : updTCSumObj.getTimeCardDetails()) 
 				{
-					resultValidateDao = dao.validateTimeCardByIds(theTimeCardObj);
+					resultValidateDao = dao.vldTCById(theTimeCardObj);
 					if(resultValidateDao==true)
 					{
-						strCardDaoReturnVal=dao.updTimeCardDetailsInfo(theTimeCardObj);
+						strCardDaoReturnVal=dao.updTCDetails(theTimeCardObj);
 						return strCardDaoReturnVal;
 					}
 					else
@@ -73,21 +75,19 @@ public class TimeCardService {
 			}
 			else
 			{
-				return strDaoReturnVal;
+				return strTCSumRet;
 			}
 		}
 		else
 		{
-			return strDaoReturnVal;
+			return strTCSumRet;
 		}
 
 	}	 
 
-	public List<TimeCardView> getTimeCardView() throws DbException, AppException  
+	public List<TimeCardView> getTCView() throws DbException, AppException  
 	{
-		logger.debug("Inside getTimeCardView creating DAO Object");
 		TimeCardDao dao = new TimeCardDao();
-		logger.debug("Inside getTimeCardView creating DAO Object 2");
-		return  (List<TimeCardView>)dao.getTimeCardView();
+		return  (List<TimeCardView>)dao.getTCSummaryView();
 	}
 }

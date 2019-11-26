@@ -11,11 +11,11 @@ import com.awcsoftware.mybatis.MyBatisManager;
 public class TimeCardDao {
 	static Logger logger = Logger.getLogger(TimeCardDao.class);
 
-	public String addTimeCardSummaryInfo(TimeCardSummaryInfo theTimeCardSummaryinfoObj) throws DbException {
+	public String addTCSummaryInfo(TimeCardSummaryInfo objTCSummary) throws DbException {
 		SqlSession session = MyBatisManager.openSession();
 		try {
 //Inserting data into table TimeCardSummaryInfo
-			session.insert("TimeSheetSummaryMapper.TimecardSummaryInfoId", theTimeCardSummaryinfoObj);
+			session.insert("TimeSheetSummaryMapper.addTCSummaryInfo", objTCSummary);
 			session.commit();
 		} finally {
 			session.close();
@@ -23,10 +23,10 @@ public class TimeCardDao {
 		return "S0000";
 	}
 
-	public String updTimeCardSummaryInfo(TimeCardSummaryInfo theTimeCardSummaryinfoObj) throws DbException {
+	public String updTCSummaryInfo(TimeCardSummaryInfo objTCSummary) throws DbException {
 		SqlSession session = MyBatisManager.openSession();
 		try {
-			session.insert("TimeSheetSummaryMapper.updateTimeCardSummaryInfo", theTimeCardSummaryinfoObj);
+			session.insert("TimeSheetSummaryMapper.updTCSummaryInfo", objTCSummary);
 			session.commit();
 		} finally {
 			session.close();
@@ -34,11 +34,11 @@ public class TimeCardDao {
 		return "S0000";
 	}
 
-	public String addTimeCardDetailsInfo(TimeCardDetails theTimeCardObj) throws DbException {
+	public String addTCDetails(List<TimeCardDetails> lstTCDetails) throws DbException {
 		SqlSession session = MyBatisManager.openSession();
 		try 
 		{
-			session.insert("TimeSheetSummaryMapper.insTimeCardDetailsID", theTimeCardObj);
+			session.insert("TimeSheetSummaryMapper.addTCDetails", lstTCDetails);
 			session.commit();
 		} finally {
 			session.close();
@@ -46,11 +46,11 @@ public class TimeCardDao {
 		return "S0000";
 	}
 
-	public String updTimeCardDetailsInfo(TimeCardDetails theTimeCardDetailsObj) throws DbException {
+	public String updTCDetails(TimeCardDetails objTCDetails) throws DbException {
 		SqlSession session = MyBatisManager.openSession();
 		try 
 		{
-			session.insert("TimeSheetSummaryMapper.updateTimeCardDetails", theTimeCardDetailsObj);
+			session.insert("TimeSheetSummaryMapper.updTCDetails", objTCDetails);
 			session.commit();
 		} finally {
 			session.close();
@@ -58,11 +58,11 @@ public class TimeCardDao {
 		return "S0000";
 	}
 
-	public boolean validateTimeSummaryById(int tcId) throws DbException {
+	public boolean vldTimeSummaryId(int tcId) throws DbException {
 		SqlSession session = MyBatisManager.openSession();
 		try {
 logger.info("itcId>>>>>>>>>>"+tcId);			
-			int iResult = session.selectOne("TimeSheetSummaryMapper.findTimeSummaryInfoById", tcId);
+			int iResult = session.selectOne("TimeSheetSummaryMapper.srhTCSummaryById", tcId);
 logger.info("iResult>>>>>>>>>>"+iResult);			
 
 			if (iResult == -1)
@@ -74,10 +74,10 @@ logger.info("iResult>>>>>>>>>>"+iResult);
 		}
 	}
 	
-	public boolean validateTimeCardByIds(TimeCardDetails theTimeCardDetailsObj) throws DbException {
+	public boolean vldTCById(TimeCardDetails objTCDetails) throws DbException {
 		SqlSession session = MyBatisManager.openSession();
 		try {
-			int result = session.selectOne("TimeSheetSummaryMapper.findTimeSummaryInfoById", theTimeCardDetailsObj);
+			int result = session.selectOne("TimeSheetSummaryMapper.srhTCByID", objTCDetails);
 			if (result == -1)
 				return false;
 			else
@@ -86,20 +86,17 @@ logger.info("iResult>>>>>>>>>>"+iResult);
 			session.close();
 		}
 	}
-	public List<TimeCardView> getTimeCardView()  throws DbException 
+	public List<TimeCardView> getTCSummaryView()  throws DbException 
 	{
 		List<TimeCardView> theTimeCardViewObj = null;
 		SqlSession session = MyBatisManager.openSession();
 		try
 		{
-			logger.debug("Going to execute query getTimeViewCard!!!!");
-			List<TimeCardView> theTimeCardViewListObj = session.selectList("getTimeViewCard");
-			logger.debug("Query getTimeViewCard is executed>>>"+theTimeCardViewListObj);
-			return theTimeCardViewListObj;
+			List<TimeCardView> lstTCView = session.selectList("getTCView");
+			return lstTCView;
 		} finally {
 			session.close();
 		}
-
 	}	
 
 }

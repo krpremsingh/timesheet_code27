@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="TimeSheetSummaryMapper">
 	<cache />
-	<resultMap id="TimecardSummaryInfoId"
+	<resultMap id="TCSummaryInfo"
 		type="TimecardSummaryInfo">
 		<result column="tcId" property="tcId" jdbcType="INTEGER" />
 		<result column="empId" property="empId" jdbcType="INTEGER" />
@@ -23,7 +23,7 @@
 		</collection>
 	</resultMap>
 
-	<resultMap id="insTimeCardDetailsID" type="TimecardDetails">
+	<resultMap id="TCDetails" type="TimecardDetails">
 		<id column="tcdId" property="tcdId" jdbcType="INTEGER" />
 		<result column="tcId" property="tcId" jdbcType="INTEGER" />
 		<result column="projectId" property="projectId"
@@ -47,7 +47,7 @@
 	</resultMap>
 
 
-	<insert id="TimecardSummaryInfoId"
+	<insert id="addTCSummaryInfo"
 		parameterType="TimecardSummaryInfo" useGeneratedKeys='true'
 		keyProperty='tcId'>
 		insert into
@@ -60,24 +60,29 @@
 		#{weekEnd},#{yearWeek},#{totalHours},#{status},#{addedOn},now())
 	</insert>
 
-	<insert id="insTimeCardDetailsID"
-		parameterType="TimecardDetails" useGeneratedKeys='true'
-		keyProperty='tcdId' keyColumn="tcdId">
-		insert ignore into
+	<insert id="addTCDetails" parameterType="list"
+		useGeneratedKeys='true' keyProperty='tcdId' keyColumn="tcdId">
+		insert into
 		TimeCardDetails(tcId,projectId,activityId,workingDay,workingDate,
 		workingHours,comments,status,addedOn,lastModifiedOn,taskDetails)
 		values
-		(#{tcId},#{projectId},#{activityId},#{workingDay},#{workingDate},
-		#{workingHours},#{comments},#{status},#{addedOn},now(),#{taskDetails})
+
+		<foreach collection="list" item="TimecardDetails"
+			index="index" separator=",">
+			(#{TimecardDetails.tcId},#{TimecardDetails.projectId},#{TimecardDetails.activityId},
+			#{TimecardDetails.workingDay},#{TimecardDetails.workingDate},
+			#{TimecardDetails.workingHours},#{TimecardDetails.comments},#{TimecardDetails.status},
+			#{TimecardDetails.addedOn},now(),#{TimecardDetails.taskDetails})
+		</foreach>
 	</insert>
 
-	<update id="updateTimeCardSummaryInfo"
+	<update id="updTCSummaryInfo"
 		parameterType="TimecardSummaryInfo"	keyProperty="tcId">
 		UPDATE TimeCardSummaryInfo SET yearWeek = #{yearWeek}, totalHours =	#{totalHours},
 		status=#{status}, lastModifiedOn=now()	WHERE tcId=#{tcId} and empId=#{empId}
 	</update>
 
-	<update id="updateTimeCardDetails"
+	<update id="updTCDetails"
 		parameterType="TimecardDetails"
 		useGeneratedKeys="true" keyProperty="tcdId">
 		UPDATE TimeCardDetails SET
@@ -94,30 +99,45 @@
 		WHERE tcdId=#{tcdId} and tcId = #{tcId} and workingDay= #{workingDay}
 	</update>
 
-	<select id="findTimeSummaryInfoById" parameterType="int"
-		resultType="TimecardSummaryInfo" resultMap="TimecardSummaryInfoId">
+	<select id="srhTCSummaryById" parameterType="int"
+		resultType="TimecardSummaryInfo" resultMap="TCSummaryInfo">
 		SELECT ifnull(tcid,'-1')
 		FROM TimeCardSummaryInfo WHERE tcId= #{tcId}
 	</select>
 
-	<select id="findTimeCardDetailsById" parameterType="int"
-		resultType="TimecardSummaryInfo" resultMap="insTimeCardDetailsID">
+	<select id="srhTCSummaryById" parameterType="int"
+		resultType="TimecardSummaryInfo" resultMap="TCSummaryInfo">
+		SELECT ifnull(tcid,'-1')
+		FROM TimeCardSummaryInfo WHERE tcId= #{tcId}
+	</select>
+
+	<select id="vldTCDate" parameterType="int"
+		resultType="TimecardSummaryInfo" resultMap="TCSummaryInfo">
+		SELECT ifnull(tcid,'-1')
+		FROM TimeCardSummaryInfo WHERE tcId= #{tcId}
+	</select>
+
+	<select id="srhTCByID" parameterType="int"
+		resultType="TimecardDetails" resultMap="TCDetails">
 		SELECT ifnull(tcdid,'-1')
 		FROM TimeCardDetails WHERE tcdId= #{tcdId} and
 		tcId= #{tcId}
 	</select>
 
-	<select id="getTimeViewCard" resultType="com.awcsoftware.app.timesheet.TimeCardView" >
+	<select id="getTCView" resultType="TimeCardView" >
+
 		select tcId,ifnull(weekStart,' ') as weekstartDT,ifnull(weekEnd,' ') as weekEndDT, ifnull(status,' ') as status,
 		ifnull(concat(date_format(weekStart,'%d %b'),' to ',date_format(weekend,'%d %b')),' ') WeekPeriod,
 		ifnull(totalHours,' ') totalHour,
 		ifnull((select group_concat(distinct concat(firstName,' ',lastName )) from 
 		timecardapprovaldetails tcad, timecarddetails tcd,employeeinfo where 
 		tcd.tcId=tcsi.tcid and tcad.tcdId=tcd.tcdid and empId=approverId ),' ') managerName		
-		,ifnull(status,' ') statusGrid,ifnull((select group_concat(distinct tcad.comments) from timecardapprovaldetails tcad ,
+		,ifnull(status,' ') statusGrid,ifnull((select group_concat(distinct tcad.comments) from 
+		timecardapprovaldetails tcad ,
 		timecarddetails tcd where
 		tcd.tcId=tcsi.tcid and tcad.tcdId= tcd.tcdid ),' ')	managerComment
 		from timecardsummaryinfo tcsi;
+
 	</select>
 
 </mapper> 
