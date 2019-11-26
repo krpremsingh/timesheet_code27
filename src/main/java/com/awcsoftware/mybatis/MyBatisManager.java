@@ -15,6 +15,7 @@ public class MyBatisManager {
 		log.info("read mybatis config");
 		InputStream inputStream = MyBatisManager.class.getClassLoader().getResourceAsStream("mybatis-config.xml");
 		sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
+		log.info("end static block");
 	}
 
 	public static SqlSessionFactory getSessionFactory() {
