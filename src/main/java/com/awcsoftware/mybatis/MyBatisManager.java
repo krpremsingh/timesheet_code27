@@ -26,7 +26,10 @@ public class MyBatisManager {
 		catch(IOException e) {
 			e.printStackTrace();
 		}
-		sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
+		SqlSessionFactoryBuilder sfb=new SqlSessionFactoryBuilder();
+		System.out.println("Pratiik Gaurv");
+		sqlSessionFactory = sfb.build(inputStream);
+		System.out.println("Pratik Gaurav");
 	}
 
 	public static SqlSessionFactory getSessionFactory() {
