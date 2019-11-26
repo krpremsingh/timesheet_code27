@@ -18,6 +18,7 @@ public class TimeCardValidatorTest {
 		tci.setWeekStart(LocalDate.now());
 		tci.setWeekEnd(LocalDate.now().plusDays(7));
 		tci.setTotalHours(20);
+		
 		TimeCardDetails tcd1=new TimeCardDetails();
 		tcd1.setWorkingDate(LocalDate.now());
 		TimeCardDetails tcd2=new TimeCardDetails();
@@ -34,6 +35,7 @@ public class TimeCardValidatorTest {
 		tci.setTimeCardDetails(list);
 		TimeCardValidator tcv=new TimeCardValidator();
 		
-		System.out.println(tcv.validateSubmitTimeCard(tci));
+		System.out.println("Submit Validation :"+tcv.validateSubmitTimeCard(tci));
+		System.out.println("Save Validation :"+tcv.validateSaveTimeCard(tci));
 	}
 }
