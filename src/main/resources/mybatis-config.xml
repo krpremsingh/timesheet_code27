@@ -5,26 +5,27 @@
 
 <configuration>
 	<typeAliases>
-<<<<<<< HEAD
-<typeAlias alias="User" type="com.awcsoftware.spring.security.auth.user.User" />
+
+	<typeAlias alias="User"
+		type="com.awcsoftware.spring.security.auth.user.User" />
+		
+	<typeAlias alias="ConfirmationToken"
+		type="com.awcsoftware.app.password.ConfirmationToken" />
+		
+	<typeAlias alias="TimecardSummaryInfo"
+		type="com.awcsoftware.app.timesheet.TimeCardSummaryInfo" />
 	
-<typeAlias alias="TimecardSummaryInfo" type="com.awcsoftware.app.timesheet.TimeCardSummaryInfo" />
+	<typeAlias alias="User"
+		type="com.awcsoftware.spring.security.auth.user.User" />
+	
+	<typeAlias alias="TimecardDetails"
+		type="com.awcsoftware.app.timesheet.TimeCardDetails" />
+	
+	<typeAlias alias="TimeCardView"
+		type="com.awcsoftware.app.timesheet.TimeCardView" />
 
-<typeAlias alias="TimecardDetails" type="com.awcsoftware.app.timesheet.TimeCardDetails" />
-				
-<typeAlias alias="ConfirmationToken" type="com.awcsoftware.app.password.ConfirmationToken" />
-=======
-		<typeAlias alias="TimecardSummaryInfo"
-			type="com.awcsoftware.app.timesheet.TimeCardSummaryInfo" />
-		<typeAlias alias="User"
-			type="com.awcsoftware.spring.security.auth.user.User" />
-		<typeAlias alias="TimecardDetails"
-			type="com.awcsoftware.app.timesheet.TimeCardDetails" />
-		<typeAlias alias="TimeCardView"
-			type="com.awcsoftware.app.timesheet.TimeCardView" />
-
->>>>>>> e23ceb67971e06cae45aeafee257d128218a2250
 	</typeAliases>
+
 	<environments default="development">
 		<environment id="development">
 			<transactionManager type="JDBC" />
@@ -38,9 +39,13 @@
 		</environment>
 	</environments>
 	<mappers>
-		<mapper resource="com/awcsoftware/app/timesheet/TimeCardRepositoryMapper.xml" />
-		<mapper resource="com/awcsoftware/app/common/BaseRepositoryMapper.xml" />
-		<mapper resource="com/awcsoftware/spring/security/auth/user/UserMapper.xml" />
-			<mapper resource="com/awcsoftware/app/password/UserPasswordMapper.xml"/>
+	<mapper
+		resource="com/awcsoftware/app/timesheet/TimeCardRepositoryMapper.xml" />
+	<mapper
+		resource="com/awcsoftware/app/common/BaseRepositoryMapper.xml" />
+	<mapper
+		resource="com/awcsoftware/spring/security/auth/user/UserMapper.xml" />
+	<mapper
+		resource="com/awcsoftware/app/password/UserPasswordMapper.xml" />
 	</mappers>
 </configuration>
