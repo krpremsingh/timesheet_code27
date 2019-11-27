@@ -22,6 +22,8 @@ public class TimeCardDetails
 	private float workingHours;
 	private String status;
 	private String comments;
+	private String startTime ;
+	private String endTime;
 
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
@@ -165,18 +167,29 @@ public class TimeCardDetails
 		return serialVersionUID;
 	}
 
-	/**
-	 * @return the timeCardApprovalDetails
-	 */
 	public TimeCardApprovalDetails getTimeCardApprovalDetails() {
 		return timeCardApprovalDetails;
 	}
 
-	/**
-	 * @param timeCardApprovalDetails the timeCardApprovalDetails to set
-	 */
 	public void setTimeCardApprovalDetails(TimeCardApprovalDetails timeCardApprovalDetails) {
 		this.timeCardApprovalDetails = timeCardApprovalDetails;
+	}
+
+
+	public String getStartTime() {
+		return startTime;
+	}
+
+	public void setStartTime(String startTime) {
+		this.startTime = startTime;
+	}
+
+	public String getEndTime() {
+		return endTime;
+	}
+
+	public void setEndTime(String endTime) {
+		this.endTime = endTime;
 	}
 
 	@Override

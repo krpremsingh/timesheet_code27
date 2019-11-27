@@ -1,5 +1,8 @@
 package com.awcsoftware.app;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -34,4 +37,25 @@ public class Util {
 	public static Predicate<String> validateEmail = (email) -> {
 		return pattern.matcher(email).matches();
 	};
+
+	public static boolean chkDateRange(String dateToCheck, String startDate, String endDate) {
+		boolean res = false;
+		SimpleDateFormat fmt1 = new SimpleDateFormat("yyyy-MM-dd"); 
+		SimpleDateFormat fmt2 = new SimpleDateFormat("yyyy-MM-dd"); 
+		try {
+			Date requestDate = fmt2.parse(dateToCheck);
+			Date fromDate = fmt1.parse(startDate);
+			Date toDate = fmt1.parse(endDate);
+			res = requestDate.compareTo(fromDate) >= 0 && requestDate.compareTo(toDate) <= 0;
+		} catch (ParseException pex) {
+			pex.printStackTrace();
+		}
+		return res;
+	}
+
+    public static boolean isHourInInterval(String target, String start, String end) {
+        return ((target.compareTo(start) >= 0)
+                && (target.compareTo(end) <= 0));
+    }	
+
 }

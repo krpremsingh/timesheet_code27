@@ -61,10 +61,7 @@ public class TimeCardDao {
 	public boolean vldTimeSummaryId(int tcId) throws DbException {
 		SqlSession session = MyBatisManager.openSession();
 		try {
-logger.info("itcId>>>>>>>>>>"+tcId);			
 			int iResult = session.selectOne("TimeSheetSummaryMapper.srhTCSummaryById", tcId);
-logger.info("iResult>>>>>>>>>>"+iResult);			
-
 			if (iResult == -1)
 				return false;
 			else
@@ -74,6 +71,24 @@ logger.info("iResult>>>>>>>>>>"+iResult);
 		}
 	}
 	
+	public TimeCardDBValidate vldTCWeekDT(TimeCardSummaryInfo objTCSummary) throws DbException {
+		SqlSession session = MyBatisManager.openSession();
+		try {
+			return (TimeCardDBValidate) session.selectOne("TimeSheetSummaryMapper.vldTCDate", objTCSummary);
+		} finally {
+			session.close();
+		}
+	}
+
+	public TimeCardTimeValidate vldTCDateTime(TimeCardDetails objTCDetails) throws DbException {
+		SqlSession session = MyBatisManager.openSession();
+		try {
+			return (TimeCardTimeValidate) session.selectOne("TimeSheetSummaryMapper.vldTCDTTime", objTCDetails);
+		} finally {
+			session.close();
+		}
+	}
+
 	public boolean vldTCById(TimeCardDetails objTCDetails) throws DbException {
 		SqlSession session = MyBatisManager.openSession();
 		try {

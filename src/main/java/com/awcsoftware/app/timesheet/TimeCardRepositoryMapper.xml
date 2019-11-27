@@ -105,17 +105,27 @@
 		FROM TimeCardSummaryInfo WHERE tcId= #{tcId}
 	</select>
 
-	<select id="srhTCSummaryById" parameterType="int"
-		resultType="TimecardSummaryInfo" resultMap="TCSummaryInfo">
-		SELECT ifnull(tcid,'-1')
-		FROM TimeCardSummaryInfo WHERE tcId= #{tcId}
+	<select id="vldTCDate" parameterType="TimecardSummaryInfo"
+		resultType="TCDBValidate">
+			<![CDATA[select tcId, weekStart, weekEnd, dateDiff(weekEnd,weekStart) dateDiffVal, status from 
+				timecardsummaryinfo where empId= #{empId} and 
+				(((weekStart< #{weekStart} or weekStart= #{weekStart} ) and 
+				(weekend> #{weekEnd} or weekend=#{weekEnd} )) or 
+				(( weekStart > #{weekStart} or weekStart= #{weekStart} ) and 
+				(weekend>#{weekStart} or weekend=#{weekStart}) and (weekStart<#{weekStart} OR weekStart=#{weekStart} )) or 
+				((weekStart<#{weekStart} or weekStart=#{weekStart} ) and 
+				(weekend<#{weekEnd} or weekend=#{weekEnd} ) and (weekend>#{weekStart} or weekend=#{weekEnd}))) limit 0,1
+			 ]]>
 	</select>
 
-	<select id="vldTCDate" parameterType="int"
-		resultType="TimecardSummaryInfo" resultMap="TCSummaryInfo">
-		SELECT ifnull(tcid,'-1')
-		FROM TimeCardSummaryInfo WHERE tcId= #{tcId}
-	</select>
+	<select id="vldTCDTTime" parameterType="TimecardDetails"
+		resultType="TCTimeValidate">
+
+			<![CDATA[select tcdId, tcId, projectId, activityId, workingDate, startTime , endTime , workingHours,  status from 
+				timecarddetails where tcId = #{tcId} and workingDate=#{workingDate} 
+				and startTime>=#{startTime} and endTime<=#{endTime}  
+			 ]]>
+	</select>	
 
 	<select id="srhTCByID" parameterType="int"
 		resultType="TimecardDetails" resultMap="TCDetails">
