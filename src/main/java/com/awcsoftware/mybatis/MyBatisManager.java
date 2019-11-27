@@ -10,18 +10,19 @@ import org.apache.log4j.Logger;
 public class MyBatisManager {
 	static Logger log = Logger.getLogger(MyBatisManager.class.getName());
 	protected static SqlSessionFactory sqlSessionFactory;
-	
+
 	static {
 		log.info("read mybatis config");
 		InputStream inputStream = MyBatisManager.class.getClassLoader().getResourceAsStream("mybatis-config.xml");
 		sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
+		log.info("end static block");
 	}
 
 	public static SqlSessionFactory getSessionFactory() {
 		return sqlSessionFactory;
 	}
-	
-	public static SqlSession openSession () {
+
+	public static SqlSession openSession() {
 		return getSessionFactory().openSession();
 	}
 }

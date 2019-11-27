@@ -1,9 +1,12 @@
 package com.awcsoftware.app.timesheet;
 
 import java.time.LocalDate;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
 
+import com.awcsoftware.app.ErrorConstants;
 import com.awcsoftware.app.Util;
 
 /**
@@ -11,30 +14,32 @@ import com.awcsoftware.app.Util;
  *
  */
 public class TimeCardValidator {
-	
+
 	static Set<LocalDate> timeCardDetailsFlag;
 	static Set<String> errorMsg;
 	static String draftFlag;
 	static String submitFlag;
+	static Map<LocalDate,Integer> dayHoursMap;
 	static {
 		errorMsg = new LinkedHashSet<String>();
 		timeCardDetailsFlag = new LinkedHashSet<>();
-		draftFlag="draft";
-		submitFlag="submit";
+		draftFlag = "draft";
+		submitFlag = "submit";
+		dayHoursMap = new LinkedHashMap<LocalDate,Integer>();
 	}
-	
+
 	public Set<String> validateSaveTimeCard(TimeCardSummaryInfo tci) {
-		
+
 		errorMsg.clear();
-		if (Util.validateWeeklyHours.test(tci.getTotalHours())) {
+		/*if (Util.validateWeeklyHours.test(tci.getTotalHours())) {
 			errorMsg.add("please enter weekly hours less than 168 and greater than 0");
-		}
+		}*/
 
 		if (tci.getTimeCardDetails() == null) {
-			errorMsg.add("kindly enter atleast one day for saving a timecard");
+			errorMsg.add(ErrorConstants.BlankTimecardDetails.getLabel());
 		}
 		for (TimeCardDetails tcd : tci.getTimeCardDetails()) {
-			validateTimeCardDetails(tcd,draftFlag);
+			validateTimeCardDetails(tcd, draftFlag);
 		}
 		return errorMsg;
 	}
@@ -42,45 +47,46 @@ public class TimeCardValidator {
 	public Set<String> validateSubmitTimeCard(TimeCardSummaryInfo tci) {
 		errorMsg.clear();
 
-		if (Util.validateWeeklyHours.test(tci.getTotalHours())) {
+		/*if (Util.validateWeeklyHours.test(tci.getTotalHours())) {
 			errorMsg.add("please enter weekly hours less than 168 and greater than 0");
-		}
+		}*/
 
 		if (tci.getTimeCardDetails() == null) {
-			errorMsg.add("kindly enter atleast one day for saving a timecard");
+			errorMsg.add(ErrorConstants.BlankTimecardDetails.getLabel());
 			return errorMsg;
 		}
 		for (TimeCardDetails tcd : tci.getTimeCardDetails()) {
 			timeCardDetailsFlag.add(tcd.getWorkingDate());
 		}
 		if (timeCardDetailsFlag.size() < 5) {
-			errorMsg.add("please send atleast 5 timecard details for submitting a time card");
+			errorMsg.add(ErrorConstants.MimimunTimecards.getLabel());
 			return errorMsg;
 		}
 		for (TimeCardDetails tcd : tci.getTimeCardDetails()) {
-			validateTimeCardDetails(tcd,submitFlag);
+			validateTimeCardDetails(tcd, submitFlag);
+			
 		}
 
 		return errorMsg;
 	}
 
-	public Set<String> validateTimeCardDetails(TimeCardDetails tcd,String flag) {
+	public Set<String> validateTimeCardDetails(TimeCardDetails tcd, String flag) {
 
 		if (Util.validateInt.test(tcd.getProjectId())) {
-			errorMsg.add("please enter a valid project");
+			errorMsg.add(ErrorConstants.BlankProject.getLabel());
 		}
 		if (Util.validateInt.test(tcd.getActivityId())) {
-			errorMsg.add("please enter a valid activity");
+			errorMsg.add(ErrorConstants.BlankActivity.getLabel());
 		}
 		if (tcd.getWorkingDate() == null) {
-			errorMsg.add("working date is blank, please enter a valid working date");
+			errorMsg.add(ErrorConstants.BlankWorkingDate.getLabel());
 		}
 		if (Util.validateDailyHours.test(tcd.getWorkingHours())) {
-			errorMsg.add("please enter working hours between 0-23.59");
+			errorMsg.add(ErrorConstants.DailyWorkingLimit.getLabel());
 		}
-		if(flag.equals("submit")) {
+		if (flag.equals("submit")) {
 			if (tcd.getTimeCardApprovalDetails() == null) {
-				errorMsg.add("approval details is empty, kindly contact adminstrator and try again");
+				errorMsg.add(ErrorConstants.BlankApprovalDetails.getLabel());
 			}
 		}
 		return errorMsg;
