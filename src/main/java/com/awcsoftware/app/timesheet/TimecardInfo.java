@@ -7,7 +7,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
-public class TimeCardSummaryInfo {
+public class TimecardInfo {
 	// Field mapped for table TimeCardSummaryInfo
 	private int tcId;
 	private int empId;
@@ -15,16 +15,16 @@ public class TimeCardSummaryInfo {
 	private LocalDate weekStart;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	private LocalDate weekEnd;
-	private int yearWeek;
+	private int yearWeek;			//Not Required
 	private float totalHours;
-	private String status;
+	private String status;			// Put in enum
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
 	private LocalDateTime addedOn;
 
 //	variable to store json Array
 	@JsonManagedReference
-	private List<TimeCardDetails> timeCardDetails;
+	private List<TimecardDetails> timeCardDetails;
 
 	public int getTcId() {
 		return tcId;
@@ -90,11 +90,11 @@ public class TimeCardSummaryInfo {
 		this.addedOn = addedOn;
 	}
 
-	public List<TimeCardDetails> getTimeCardDetails() {
+	public List<TimecardDetails> getTimeCardDetails() {
 		return timeCardDetails;
 	}
 
-	public void setTimeCardDetails(List<TimeCardDetails> timeCardDetails) {
+	public void setTimeCardDetails(List<TimecardDetails> timeCardDetails) {
 		this.timeCardDetails = timeCardDetails;
 	}
 	
@@ -123,7 +123,7 @@ public class TimeCardSummaryInfo {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		TimeCardSummaryInfo other = (TimeCardSummaryInfo) obj;
+		TimecardInfo other = (TimecardInfo) obj;
 		if (addedOn == null) {
 			if (other.addedOn != null)
 				return false;

@@ -12,17 +12,14 @@
 		<typeAlias alias="ConfirmationToken"
 			type="com.awcsoftware.app.password.ConfirmationToken" />
 
-		<typeAlias alias="TimecardSummaryInfo"
-			type="com.awcsoftware.app.timesheet.TimeCardSummaryInfo" />
-
-		<typeAlias alias="User"
-			type="com.awcsoftware.spring.security.auth.user.User" />
+		<typeAlias alias="TimecardInfo"
+			type="com.awcsoftware.app.timesheet.TimecardInfo" />
 
 		<typeAlias alias="TimecardDetails"
-			type="com.awcsoftware.app.timesheet.TimeCardDetails" />
+			type="com.awcsoftware.app.timesheet.TimecardDetails" />
 
 		<typeAlias alias="TimeCardView"
-			type="com.awcsoftware.app.timesheet.TimeCardView" />
+			type="com.awcsoftware.app.timesheet.TimecardView" />
 
 		<typeAlias alias="TCDBValidate"
 			type="com.awcsoftware.app.timesheet.TimeCardDBValidate" />
@@ -40,9 +37,9 @@
 			<dataSource type="POOLED">
 				<property name="driver" value="com.mysql.jdbc.Driver" />
 				<property name="url"
-					value="jdbc:mysql://192.168.1.32:3306/timesheet" />
+					value="jdbc:mysql://127.0.0.1:3306/timesheet" />
 				<property name="username" value="root" />
-				<property name="password" value="My@SQL" />
+				<property name="password" value="root" />
 			</dataSource>
 		</environment>
 	</environments>

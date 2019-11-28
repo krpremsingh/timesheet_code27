@@ -13,24 +13,24 @@ import java.util.List;
  */
 public class TimeCardValidatorTest {
 	public static void main(String[] args) {
-		TimeCardSummaryInfo tci=new TimeCardSummaryInfo();
+		TimecardInfo tci=new TimecardInfo();
 		tci.setEmpId(1277);
 		tci.setWeekStart(LocalDate.now());
 		tci.setWeekEnd(LocalDate.now().plusDays(7));
 		tci.setTotalHours(20);
 		
-		TimeCardDetails tcd1=new TimeCardDetails();
+		TimecardDetails tcd1=new TimecardDetails();
 		tcd1.setWorkingDate(LocalDate.now());
-		TimeCardDetails tcd2=new TimeCardDetails();
+		TimecardDetails tcd2=new TimecardDetails();
 		tcd2.setWorkingDate(LocalDate.now().plusDays(1));
-		TimeCardDetails tcd3=new TimeCardDetails();
+		TimecardDetails tcd3=new TimecardDetails();
 		tcd3.setWorkingDate(LocalDate.now().plusDays(2));
-		TimeCardDetails tcd4=new TimeCardDetails();
+		TimecardDetails tcd4=new TimecardDetails();
 		tcd4.setWorkingDate(LocalDate.now().plusDays(3));
-		TimeCardDetails tcd5=new TimeCardDetails();
+		TimecardDetails tcd5=new TimecardDetails();
 		tcd5.setWorkingDate(LocalDate.now().plusDays(4));
 		
-		List<TimeCardDetails> list=new ArrayList<TimeCardDetails>();
+		List<TimecardDetails> list=new ArrayList<TimecardDetails>();
 		list.add(tcd1);list.add(tcd2);list.add(tcd3);list.add(tcd4);//list.add(tcd5);
 		tci.setTimeCardDetails(list);
 		TimeCardValidator tcv=new TimeCardValidator();
