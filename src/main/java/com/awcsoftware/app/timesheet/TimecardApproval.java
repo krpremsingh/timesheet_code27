@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-public class TimeCardApprovalDetails {
+public class TimecardApproval {
 	private int tcadId;
 
 	private int tcdId;

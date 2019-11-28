@@ -16,10 +16,10 @@ import com.awcsoftware.app.AppException;
 import com.awcsoftware.mybatis.DbException;
 
 @RestController
-public class TimeCardController {
+public class TimecardController {
 
 	static String  strClassName="";
-	public TimeCardController()
+	public TimecardController()
 	{	
 		strClassName = getClass().getSimpleName();
 		strClassName=strClassName+".class";
@@ -27,13 +27,22 @@ public class TimeCardController {
 
 	static Logger logger = Logger.getLogger(strClassName);
 
+	
+	public void saveTimecard() {
+		
+	}
+	
+	public void submitTimecard() {
+		
+	}
+	
 
 	@RequestMapping(value = "/tc-add", method = RequestMethod.POST, headers = "Accept=application/json")
-	public ResponseEntity<String> addTimeSheetDetails( @Valid @RequestBody TimeCardSummaryInfo tcSumaryInfo) {
-		TimeCardService service = new TimeCardService();
+	public ResponseEntity<String> addTimeSheetDetails(@RequestBody TimecardInfo timecardInfo) {
+		TimecardService service = new TimecardService();
 		String strTimeCardServiceRet="";
 		try {
-			strTimeCardServiceRet=service.addTimeSheetDetails(tcSumaryInfo);
+			strTimeCardServiceRet=service.saveTimecard(timecardInfo);
 			return new ResponseEntity<String>(strTimeCardServiceRet, HttpStatus.OK);
 		} catch (AppException e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -44,12 +53,12 @@ public class TimeCardController {
 
 	
 	@RequestMapping(value = "/tc-edit", method = RequestMethod.POST, headers ="Accept=application/json")
-	public ResponseEntity<String> updTimeSheetDetails(@Valid @RequestBody TimeCardSummaryInfo tcSumaryInfo) 
+	public ResponseEntity<String> updTimeSheetDetails(@RequestBody TimecardInfo timecardInfo) 
 	{
-		TimeCardService service = new TimeCardService();
+		TimecardService service = new TimecardService();
 		String strTimeCardServiceRet="";
 		try {
-			strTimeCardServiceRet=service.updTimeSheetDetails(tcSumaryInfo);
+			strTimeCardServiceRet=service.saveTimecard(timecardInfo);	//updTimeSheetDetails(tcSumaryInfo);
 			return new ResponseEntity<String>(strTimeCardServiceRet, HttpStatus.OK);
 		} catch (AppException e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -59,23 +68,24 @@ public class TimeCardController {
 	}	 
 
 	@RequestMapping(value = "/tc-search", method = RequestMethod.GET, headers = "Accept=application/json")
-	public ResponseEntity<List<TimeCardView>> TimeCardView(@Valid @RequestBody TimeCardView tcVwObj) {
+	public ResponseEntity<List<TimecardView>> TimeCardView(@RequestBody TimecardView tcVwObj) {
 		logger.debug("Inside tc-search 0");
-		TimeCardService service = new TimeCardService();
+		TimecardService service = new TimecardService();
 		logger.debug("Inside tc-search 0-1-0");
 
-		List<TimeCardView> lsttcView=null;
+		List<TimecardView> lsttcView=null;
 		logger.debug("Inside tc-search 1");
 
 		try {
 			logger.debug("Inside tc-search 2");
-			lsttcView=(List<TimeCardView>)service.getTCView();
+			lsttcView=(List<TimecardView>)service.getTimecardView();
 			logger.debug("Inside tc-search 3");
-			return new ResponseEntity<List<TimeCardView>>(lsttcView, HttpStatus.OK);
+			return new ResponseEntity<List<TimecardView>>(lsttcView, HttpStatus.OK);
 		} catch (AppException e) {
-			return new ResponseEntity<List<TimeCardView>>(HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<List<TimecardView>>(HttpStatus.INTERNAL_SERVER_ERROR);
 		} catch (DbException e) {
-			return new ResponseEntity<List<TimeCardView>>(HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<List<TimecardView>>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+
 }

@@ -7,8 +7,10 @@ import java.util.stream.Collectors;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
+import org.omg.CORBA.Request;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -80,7 +82,6 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
 				authDetail.setEmpCode(user.getEmpCode());
 				authDetail.setFirstLoginStatus(user.getFirstLoginStatus());
 				authDetail.setDesignationId(user.getDesignationId());
-
 				return authDetail;
 			} else {
 				throw new BadCredentialsException("902 - Credentials mismatch");

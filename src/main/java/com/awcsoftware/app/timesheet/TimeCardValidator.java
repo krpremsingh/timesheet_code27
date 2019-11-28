@@ -28,7 +28,7 @@ public class TimeCardValidator {
 		dayHoursMap = new LinkedHashMap<LocalDate,Integer>();
 	}
 
-	public Set<String> validateSaveTimeCard(TimeCardSummaryInfo tci) {
+	public Set<String> validateSaveTimeCard(TimecardInfo tci) {
 
 		errorMsg.clear();
 		/*if (Util.validateWeeklyHours.test(tci.getTotalHours())) {
@@ -38,13 +38,13 @@ public class TimeCardValidator {
 		if (tci.getTimeCardDetails() == null) {
 			errorMsg.add(ErrorConstants.BlankTimecardDetails.getLabel());
 		}
-		for (TimeCardDetails tcd : tci.getTimeCardDetails()) {
+		for (TimecardDetails tcd : tci.getTimeCardDetails()) {
 			validateTimeCardDetails(tcd, draftFlag);
 		}
 		return errorMsg;
 	}
 
-	public Set<String> validateSubmitTimeCard(TimeCardSummaryInfo tci) {
+	public Set<String> validateSubmitTimeCard(TimecardInfo tci) {
 		errorMsg.clear();
 
 		/*if (Util.validateWeeklyHours.test(tci.getTotalHours())) {
@@ -55,14 +55,14 @@ public class TimeCardValidator {
 			errorMsg.add(ErrorConstants.BlankTimecardDetails.getLabel());
 			return errorMsg;
 		}
-		for (TimeCardDetails tcd : tci.getTimeCardDetails()) {
+		for (TimecardDetails tcd : tci.getTimeCardDetails()) {
 			timeCardDetailsFlag.add(tcd.getWorkingDate());
 		}
 		if (timeCardDetailsFlag.size() < 5) {
 			errorMsg.add(ErrorConstants.MimimunTimecards.getLabel());
 			return errorMsg;
 		}
-		for (TimeCardDetails tcd : tci.getTimeCardDetails()) {
+		for (TimecardDetails tcd : tci.getTimeCardDetails()) {
 			validateTimeCardDetails(tcd, submitFlag);
 			
 		}
@@ -70,7 +70,7 @@ public class TimeCardValidator {
 		return errorMsg;
 	}
 
-	public Set<String> validateTimeCardDetails(TimeCardDetails tcd, String flag) {
+	public Set<String> validateTimeCardDetails(TimecardDetails tcd, String flag) {
 
 		if (Util.validateInt.test(tcd.getProjectId())) {
 			errorMsg.add(ErrorConstants.BlankProject.getLabel());

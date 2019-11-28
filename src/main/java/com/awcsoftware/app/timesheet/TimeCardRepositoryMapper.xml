@@ -2,8 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="TimeSheetSummaryMapper">
 	<cache />
-	<resultMap id="TCSummaryInfo"
-		type="TimecardSummaryInfo">
+	<resultMap id="TimecardInfoMap"
+		type="TimecardInfo">
 		<result column="tcId" property="tcId" jdbcType="INTEGER" />
 		<result column="empId" property="empId" jdbcType="INTEGER" />
 		<result column="weekStart" property="weekStart" jdbcType="DATE" />
@@ -16,8 +16,8 @@
 		<result column="addedOn" property="addedOn" jdbcType="DATE" />
 		<result column="lastModifiedOn" property="lastModifiedOn"
 			jdbcType="DATE" />
-		<collection property="timeCardDetails"
-			ofType="com.awcsoftware.app.timesheet.TimeCardSummaryInfo"
+		<collection property="timecardDetails"
+			ofType="com.awcsoftware.app.timesheet.TimecardInfo"
 			select="getTimecardById" column="tcId">
 			<id column="tcdId" property="tcdId" />
 		</collection>
@@ -47,8 +47,8 @@
 	</resultMap>
 
 
-	<insert id="addTCSummaryInfo"
-		parameterType="TimecardSummaryInfo" useGeneratedKeys='true'
+	<insert id="addTimecardInfo"
+		parameterType="TimecardInfo" useGeneratedKeys='true'
 		keyProperty='tcId'>
 		insert into
 		TimeCardSummaryInfo
@@ -60,11 +60,11 @@
 		#{weekEnd},#{yearWeek},#{totalHours},#{status},#{addedOn},now())
 	</insert>
 
-	<insert id="addTCDetails" parameterType="list"
+	<insert id="addTimecardDetails" parameterType="list"
 		useGeneratedKeys='true' keyProperty='tcdId' keyColumn="tcdId">
 		insert into
 		TimeCardDetails(tcId,projectId,activityId,workingDay,workingDate,
-		workingHours,comments,status,addedOn,lastModifiedOn,taskDetails)
+		workingHours,comments,status,addedOn,lastModifiedOn,taskDetails,startTime,endTime  )
 		values
 
 		<foreach collection="list" item="TimecardDetails"
@@ -72,17 +72,18 @@
 			(#{TimecardDetails.tcId},#{TimecardDetails.projectId},#{TimecardDetails.activityId},
 			#{TimecardDetails.workingDay},#{TimecardDetails.workingDate},
 			#{TimecardDetails.workingHours},#{TimecardDetails.comments},#{TimecardDetails.status},
-			#{TimecardDetails.addedOn},now(),#{TimecardDetails.taskDetails})
+			#{TimecardDetails.addedOn},now(),#{TimecardDetails.taskDetails},#{TimecardDetails.startTime},
+			#{TimecardDetails.endTime})
 		</foreach>
 	</insert>
 
-	<update id="updTCSummaryInfo"
-		parameterType="TimecardSummaryInfo"	keyProperty="tcId">
+	<update id="updateTimecardInfo"
+		parameterType="TimecardInfo"	keyProperty="tcId">
 		UPDATE TimeCardSummaryInfo SET yearWeek = #{yearWeek}, totalHours =	#{totalHours},
 		status=#{status}, lastModifiedOn=now()	WHERE tcId=#{tcId} and empId=#{empId}
 	</update>
 
-	<update id="updTCDetails"
+	<update id="updateTimecardDetails"
 		parameterType="TimecardDetails"
 		useGeneratedKeys="true" keyProperty="tcdId">
 		UPDATE TimeCardDetails SET
@@ -99,42 +100,31 @@
 		WHERE tcdId=#{tcdId} and tcId = #{tcId} and workingDay= #{workingDay}
 	</update>
 
-	<select id="srhTCSummaryById" parameterType="int"
-		resultType="TimecardSummaryInfo" resultMap="TCSummaryInfo">
-		SELECT ifnull(tcid,'-1')
-		FROM TimeCardSummaryInfo WHERE tcId= #{tcId}
-	</select>
 
-	<select id="vldTCDate" parameterType="TimecardSummaryInfo"
-		resultType="TCDBValidate">
-			<![CDATA[select tcId, weekStart, weekEnd, dateDiff(weekEnd,weekStart) dateDiffVal, status from 
-				timecardsummaryinfo where empId= #{empId} and 
-				(((weekStart< #{weekStart} or weekStart= #{weekStart} ) and 
-				(weekend> #{weekEnd} or weekend=#{weekEnd} )) or 
-				(( weekStart > #{weekStart} or weekStart= #{weekStart} ) and 
-				(weekend>#{weekStart} or weekend=#{weekStart}) and (weekStart<#{weekStart} OR weekStart=#{weekStart} )) or 
+	<select id="isDataForEmployeeForCurrentWeekExists" parameterType="TimecardInfo"
+		resultType="int">
+			<![CDATA[
+			select ifnull((select tcId from timecardsummaryinfo where empId= #{empId} and 
+				(((weekStart<= #{weekStart} or weekStart= #{weekStart} ) and 
+				(weekend>= #{weekEnd} or weekend=#{weekEnd} )) or 
+				(( weekStart >= #{weekStart} or weekStart= #{weekStart} ) and 
+				(weekend>= #{weekStart} or weekend<=#{weekStart}) and (weekStart<=#{weekStart} OR weekStart=#{weekStart} )) or 
 				((weekStart<#{weekStart} or weekStart=#{weekStart} ) and 
-				(weekend<#{weekEnd} or weekend=#{weekEnd} ) and (weekend>#{weekStart} or weekend=#{weekEnd}))) limit 0,1
-			 ]]>
+				(weekend<#{weekEnd} or weekend=#{weekEnd} ) 
+				and (weekend>#{weekStart} or weekend=#{weekEnd}))) limit 0,1),'-1') from dual ]]>
+			 
 	</select>
 
-	<select id="vldTCDTTime" parameterType="TimecardDetails"
-		resultType="TCTimeValidate">
-
-			<![CDATA[select tcdId, tcId, projectId, activityId, workingDate, startTime , endTime , workingHours,  status from 
-				timecarddetails where tcId = #{tcId} and workingDate=#{workingDate} 
-				and startTime>=#{startTime} and endTime<=#{endTime}  
-			 ]]>
+	<select id="isDataForEmployeeForCurrentDateTimeExists"
+		parameterType="TimecardDetails" resultType="int">
+		<![CDATA[
+		select ifnull((select tcdId from
+		timecarddetails where tcId = #{tcId} and workingDate= #{workingDate}
+		and startTime>=#{startTime} and endTime<=#{endTime} limit 0,1),'-1') from dual ]]>
 	</select>	
 
-	<select id="srhTCByID" parameterType="int"
-		resultType="TimecardDetails" resultMap="TCDetails">
-		SELECT ifnull(tcdid,'-1')
-		FROM TimeCardDetails WHERE tcdId= #{tcdId} and
-		tcId= #{tcId}
-	</select>
 
-	<select id="getTCView" resultType="TimeCardView" >
+	<select id="getTimecardView" parameterType="int" resultType="TimeCardView" >
 
 		select tcId,ifnull(weekStart,' ') as weekstartDT,ifnull(weekEnd,' ') as weekEndDT, ifnull(status,' ') as status,
 		ifnull(concat(date_format(weekStart,'%d %b'),' to ',date_format(weekend,'%d %b')),' ') WeekPeriod,
@@ -146,7 +136,7 @@
 		timecardapprovaldetails tcad ,
 		timecarddetails tcd where
 		tcd.tcId=tcsi.tcid and tcad.tcdId= tcd.tcdid ),' ')	managerComment
-		from timecardsummaryinfo tcsi;
+		from timecardsummaryinfo tcsi where empId=#{empId};
 
 	</select>
 

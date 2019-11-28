@@ -8,14 +8,17 @@ package com.awcsoftware.app;
  *
  */
 public enum ErrorConstants {
-	BlankApprovalDetails("approval details is empty, kindly contact adminstrator and try again"),
-	DailyWorkingLimit("please enter working hours between 0-23.59"),
-	BlankWorkingDate("working date is blank, please enter a valid working date"),
-	BlankActivity("please enter a valid activity"), 
-	BlankProject("please enter a valid project"),
-	MimimunTimecards("please send atleast 5 timecard details for submitting a time card"),
-	BlankTimecardDetails("kindly enter atleast one day for saving a timecard");
-	
+
+	BlankApprovalDetails("approval details is empty, kindly contact adminstrator and try again!!!"),
+	DailyWorkingLimit("Working hours cannot exceed by 24 hours for a day!!!"),
+	BlankWorkingDate("Invalid working date!!!"),
+	BlankActivity("Invalid activity!!!"), 
+	BlankProject("Invalid project!!!"),
+	MimimunTimecards("Please add 5 days data to submit a timesheet!!!"),
+	BlankTimecardDetails("kindly enter atleast one day for saving a timecard"),
+	TimecardDataExist("Data already exist for the selected week"),		//Need to discuss with Punit Sir Whether to show this message when user select previous week data during add timesheet
+	TimecardTimeDataExist("Data already exist for the selected date and time"),		//Need to discuss with Punit Sir Whether to show this message when user select previous week data during add timesheet
+	TimecardSuccessMessage("Timesheet added successfully");		//Need to discuss with Punit Sir Whether to show this message when user select previous week data during add timesheet
 
 	private final String label;
 

@@ -11,12 +11,12 @@ import org.hibernate.validator.constraints.Range;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-public class TimeCardDetails 
+public class TimecardDetails 
 {
 	private static final long serialVersionUID = -2190013203632489950L;
 
 	@JsonBackReference
-	private TimeCardSummaryInfo tc;
+	private TimecardInfo tc;
 	private int tcdId;
 	private int tcId;
 	
@@ -58,12 +58,12 @@ public class TimeCardDetails
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
 	private LocalDateTime lastModifiedOn;
 
-	private TimeCardApprovalDetails timeCardApprovalDetails;
+	private TimecardApproval timeCardApprovalDetails;
 
-	public TimeCardDetails() {
+	public TimecardDetails() {
 	}
 	
-	public TimeCardDetails(String comments,String workingHours,String taskDetails,String endTime,String startTime) {
+/*	public TimeCardDetails(String comments,String workingHours,String taskDetails,String endTime,String startTime) {
 	this.comments=comments;
 	this.workingHours=workingHours;
 	this.taskDetails=taskDetails;
@@ -71,7 +71,7 @@ public class TimeCardDetails
 	this.startTime=startTime;
 	
 	}
-
+*/
 	/**
 	 * @param tcdId
 	 * @param tcId
@@ -202,11 +202,11 @@ public class TimeCardDetails
 		return serialVersionUID;
 	}
 
-	public TimeCardApprovalDetails getTimeCardApprovalDetails() {
+	public TimecardApproval getTimeCardApprovalDetails() {
 		return timeCardApprovalDetails;
 	}
 
-	public void setTimeCardApprovalDetails(TimeCardApprovalDetails timeCardApprovalDetails) {
+	public void setTimeCardApprovalDetails(TimecardApproval timeCardApprovalDetails) {
 		this.timeCardApprovalDetails = timeCardApprovalDetails;
 	}
 
