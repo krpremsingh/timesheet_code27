@@ -3,7 +3,6 @@ package com.awcsoftware.spring.security.auth.user;
 import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
-
 import org.apache.log4j.Logger;
 
 import com.awcsoftware.app.AppException;
@@ -49,7 +48,6 @@ public class UserDao {
 
 	}
 
-
 	public boolean resetPassword(User user) {
 		SqlSession session = MyBatisManager.openSession();
 		try {
@@ -65,7 +63,7 @@ public class UserDao {
 
 	}
 
-	public ConfirmationToken findByToken(String token)throws AppException,DbException {
+	public ConfirmationToken findByToken(String token) throws AppException, DbException {
 		SqlSession session = MyBatisManager.openSession();
 		try {
 			ConfirmationToken result = session.selectOne("User.findByToken", token);
