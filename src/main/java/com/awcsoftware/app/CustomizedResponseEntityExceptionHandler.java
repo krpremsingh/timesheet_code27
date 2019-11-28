@@ -5,6 +5,8 @@ import java.time.LocalDate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,8 +19,11 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
 	  @Override
 	  protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
 	      HttpHeaders headers, HttpStatus status, WebRequest request) {
-	    ErrorDetails errorDetails = new ErrorDetails(LocalDate.now(),"Validation Failed",
-	        ex.getBindingResult().toString());
+		  BindingResult errors = ex.getBindingResult();
+		   FieldError error = errors.getFieldError();
+		   logger.debug(error.getDefaultMessage());  
+	    ErrorDetails errorDetails = new ErrorDetails(LocalDate.now(),
+	    		ex.getBindingResult().toString(),ex.getBindingResult().getFieldError().getDefaultMessage());
 	    return new ResponseEntity(errorDetails, HttpStatus.BAD_REQUEST);
 	  }
 }
