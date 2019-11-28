@@ -10,6 +10,7 @@ import com.awcsoftware.spring.security.auth.user.Role;
 
 public class UserAuthenticationDetail extends UsernamePasswordAuthenticationToken {
 	private List<Role> role;
+    private int firstLoginStatus;
 	private String token;
 	private int empId;
 	private String empCode;
@@ -35,6 +36,7 @@ public class UserAuthenticationDetail extends UsernamePasswordAuthenticationToke
 	public void setRole(List<Role> role) {
 		this.role = role;
 	}
+	
 
 	public String getToken() {
 		return token;
@@ -67,5 +69,14 @@ public class UserAuthenticationDetail extends UsernamePasswordAuthenticationToke
 	public void setDesignationId(int designationId) {
 		this.designationId = designationId;
 	}
+
+	public int getFirstLoginStatus() {
+		return firstLoginStatus;
+	}
+
+	public void setFirstLoginStatus(int firstLoginStatus) {
+		this.firstLoginStatus = firstLoginStatus;
+	}
+	
 
 }

@@ -1,9 +1,9 @@
 package com.awcsoftware.app.common;
 
 import java.util.List;
-import java.util.Set;
 
 public class ParentBasePojo {
+
 	private int id;
 	private String name;
 	private List<BasePojo> basepojo;

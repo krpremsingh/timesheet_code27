@@ -3,6 +3,11 @@ package com.awcsoftware.app.timesheet;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+
+import org.hibernate.validator.constraints.Range;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -14,15 +19,36 @@ public class TimeCardDetails
 	private TimeCardSummaryInfo tc;
 	private int tcdId;
 	private int tcId;
+	
+	@NotNull(message= "please select a project")
+	@Range(min = 1,max=100)
 	private int projectId;
+	
+	@NotNull(message= "please select an activity")
+	@Range(min = 1,max=100)
 	private int activityId;
+
+	@NotNull(message="{user.project.taskDetails}")
 	private String taskDetails;
+	
 	private String workingDay;
 	private LocalDate workingDate;
-	private float workingHours;
+
+	@NotNull(message="please enter working hours")
+	@Range(min=1,max=24,message= "{user.project.workingHours}")
+	private String workingHours;
+	
 	private String status;
+	
+	/*@NotNull(message="{user.project.comments}")*/
 	private String comments;
-	private String startTime ;
+	
+	@NotNull(message="{user.project.startTime}")
+	@Pattern(regexp ="^([0-1]?\\d|2[0-3])(?::([0-5]?\\d))?(?::([0-5]?\\d))?$",message="{user.project.startTime.format}")
+	private String startTime;
+	
+	@NotNull(message="{user.project.endTime}")
+	@Pattern(regexp ="^([0-1]?\\d|2[0-3])(?::([0-5]?\\d))?(?::([0-5]?\\d))?$",message="{user.project.endTime.format}")
 	private String endTime;
 
 
@@ -35,6 +61,15 @@ public class TimeCardDetails
 	private TimeCardApprovalDetails timeCardApprovalDetails;
 
 	public TimeCardDetails() {
+	}
+	
+	public TimeCardDetails(String comments,String workingHours,String taskDetails,String endTime,String startTime) {
+	this.comments=comments;
+	this.workingHours=workingHours;
+	this.taskDetails=taskDetails;
+	this.endTime=endTime;
+	this.startTime=startTime;
+	
 	}
 
 	/**
@@ -114,11 +149,11 @@ public class TimeCardDetails
 		this.workingDate = workingDate;
 	}
 
-	public float getWorkingHours() {
+	public String getWorkingHours() {
 		return workingHours;
 	}
 
-	public void setWorkingHours(float workingHours) {
+	public void setWorkingHours(String workingHours) {
 		this.workingHours = workingHours;
 	}
 

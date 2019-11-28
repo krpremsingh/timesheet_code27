@@ -78,6 +78,7 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
 				authDetail.setRole(roles);
 				authDetail.setEmpId(user.getEmpId());
 				authDetail.setEmpCode(user.getEmpCode());
+				authDetail.setFirstLoginStatus(user.getFirstLoginStatus());
 				authDetail.setDesignationId(user.getDesignationId());
 
 				return authDetail;

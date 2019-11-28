@@ -2,6 +2,8 @@ package com.awcsoftware.app.timesheet;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.apache.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +29,7 @@ public class TimeCardController {
 
 
 	@RequestMapping(value = "/tc-add", method = RequestMethod.POST, headers = "Accept=application/json")
-	public ResponseEntity<String> addTimeSheetDetails(@RequestBody TimeCardSummaryInfo tcSumaryInfo) {
+	public ResponseEntity<String> addTimeSheetDetails( @Valid @RequestBody TimeCardSummaryInfo tcSumaryInfo) {
 		TimeCardService service = new TimeCardService();
 		String strTimeCardServiceRet="";
 		try {
@@ -42,7 +44,7 @@ public class TimeCardController {
 
 	
 	@RequestMapping(value = "/tc-edit", method = RequestMethod.POST, headers ="Accept=application/json")
-	public ResponseEntity<String> updTimeSheetDetails(@RequestBody TimeCardSummaryInfo tcSumaryInfo) 
+	public ResponseEntity<String> updTimeSheetDetails(@Valid @RequestBody TimeCardSummaryInfo tcSumaryInfo) 
 	{
 		TimeCardService service = new TimeCardService();
 		String strTimeCardServiceRet="";
@@ -57,7 +59,7 @@ public class TimeCardController {
 	}	 
 
 	@RequestMapping(value = "/tc-search", method = RequestMethod.GET, headers = "Accept=application/json")
-	public ResponseEntity<List<TimeCardView>> TimeCardView(@RequestBody TimeCardView tcVwObj) {
+	public ResponseEntity<List<TimeCardView>> TimeCardView(@Valid @RequestBody TimeCardView tcVwObj) {
 		logger.debug("Inside tc-search 0");
 		TimeCardService service = new TimeCardService();
 		logger.debug("Inside tc-search 0-1-0");

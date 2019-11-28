@@ -1,4 +1,4 @@
-package com.awcsoftware.mail;
+package com.awcsoftware.spring.mail;
 
 import java.util.Properties;
 

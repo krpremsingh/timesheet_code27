@@ -15,6 +15,7 @@ public enum ErrorConstants {
 	BlankProject("please enter a valid project"),
 	MimimunTimecards("please send atleast 5 timecard details for submitting a time card"),
 	BlankTimecardDetails("kindly enter atleast one day for saving a timecard");
+	
 
 	private final String label;
 
