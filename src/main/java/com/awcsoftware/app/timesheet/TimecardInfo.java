@@ -4,6 +4,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -15,9 +18,11 @@ public class TimecardInfo {
 	private LocalDate weekStart;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	private LocalDate weekEnd;
-	private int yearWeek;			//Not Required
-	private float totalHours;
-	private String status;			// Put in enum
+	private int yearWeek;
+	@NotNull
+	@Size(min=1,max=2)
+	private String totalHours;
+	private String status;
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
 	private LocalDateTime addedOn;
@@ -66,11 +71,12 @@ public class TimecardInfo {
 		this.yearWeek = yearWeek;
 	}
 
-	public float getTotalHours() {
+
+	public String getTotalHours() {
 		return totalHours;
 	}
 
-	public void setTotalHours(float totalHours) {
+	public void setTotalHours(String totalHours) {
 		this.totalHours = totalHours;
 	}
 
@@ -99,6 +105,7 @@ public class TimecardInfo {
 	}
 	
 
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -108,7 +115,7 @@ public class TimecardInfo {
 		result = prime * result + ((status == null) ? 0 : status.hashCode());
 		result = prime * result + tcId;
 		result = prime * result + ((timeCardDetails == null) ? 0 : timeCardDetails.hashCode());
-		result = prime * result + Float.floatToIntBits(totalHours);
+		result = prime * result + ((totalHours == null) ? 0 : totalHours.hashCode());
 		result = prime * result + ((weekEnd == null) ? 0 : weekEnd.hashCode());
 		result = prime * result + ((weekStart == null) ? 0 : weekStart.hashCode());
 		result = prime * result + yearWeek;
@@ -143,7 +150,10 @@ public class TimecardInfo {
 				return false;
 		} else if (!timeCardDetails.equals(other.timeCardDetails))
 			return false;
-		if (Float.floatToIntBits(totalHours) != Float.floatToIntBits(other.totalHours))
+		if (totalHours == null) {
+			if (other.totalHours != null)
+				return false;
+		} else if (!totalHours.equals(other.totalHours))
 			return false;
 		if (weekEnd == null) {
 			if (other.weekEnd != null)

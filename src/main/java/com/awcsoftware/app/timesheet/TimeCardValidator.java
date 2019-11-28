@@ -81,9 +81,9 @@ public class TimeCardValidator {
 		if (tcd.getWorkingDate() == null) {
 			errorMsg.add(ErrorConstants.BlankWorkingDate.getLabel());
 		}
-		if (Util.validateDailyHours.test(tcd.getWorkingHours())) {
+/*		if (Util.validateDailyHours.test(tcd.getWorkingHours())) {
 			errorMsg.add(ErrorConstants.DailyWorkingLimit.getLabel());
-		}
+		}*/
 		if (flag.equals("submit")) {
 			if (tcd.getTimeCardApprovalDetails() == null) {
 				errorMsg.add(ErrorConstants.BlankApprovalDetails.getLabel());

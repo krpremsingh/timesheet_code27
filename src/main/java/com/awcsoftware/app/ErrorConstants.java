@@ -8,6 +8,7 @@ package com.awcsoftware.app;
  *
  */
 public enum ErrorConstants {
+
 	BlankApprovalDetails("approval details is empty, kindly contact adminstrator and try again!!!"),
 	DailyWorkingLimit("Working hours cannot exceed by 24 hours for a day!!!"),
 	BlankWorkingDate("Invalid working date!!!"),

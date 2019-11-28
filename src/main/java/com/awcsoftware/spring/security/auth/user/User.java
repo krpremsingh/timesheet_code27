@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.hibernate.validator.constraints.Email;
+
 public class User {
 
 	private int empId;
@@ -23,7 +25,8 @@ public class User {
 	private LocalDateTime addedOn;
 
 	private LocalDateTime lastModifiedOn;
-
+	
+    @Email(message="{user.email}")
 	private String email;
 
 	private String password;

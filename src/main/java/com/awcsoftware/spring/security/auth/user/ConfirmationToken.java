@@ -1,9 +1,8 @@
-package com.awcsoftware.app.password;
+package com.awcsoftware.spring.security.auth.user;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
-import com.awcsoftware.spring.security.auth.user.User;
+import com.awcsoftware.spring.security.auth.token.TokenManager;
 
 public class ConfirmationToken {
 	private User user;
@@ -14,7 +13,7 @@ public class ConfirmationToken {
 
 	public ConfirmationToken(User user) {
 		this.user = user;
-		this.token = UUID.randomUUID().toString();
+		this.token = TokenManager.generateToken(user.getEmail(), user.getPassword());
 		this.tokenCreationDate = LocalDateTime.now();
 		this.tokenExpiryDate = tokenCreationDate.plusHours(24);
 	}

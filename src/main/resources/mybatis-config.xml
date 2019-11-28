@@ -6,30 +6,40 @@
 <configuration>
 	<typeAliases>
 
-		<typeAlias alias="User"
-			type="com.awcsoftware.spring.security.auth.user.User" />
+	<typeAlias alias="User"
+		type="com.awcsoftware.spring.security.auth.user.User" />
 
-		<typeAlias alias="ConfirmationToken"
-			type="com.awcsoftware.app.password.ConfirmationToken" />
+	<typeAlias alias="ConfirmationToken"
+		type="com.awcsoftware.spring.security.auth.user.ConfirmationToken" />
 
-		<typeAlias alias="TimecardInfo"
-			type="com.awcsoftware.app.timesheet.TimecardInfo" />
+	<typeAlias alias="TimecardInfo"
+		type="com.awcsoftware.app.timesheet.TimecardInfo" />
 
-		<typeAlias alias="TimecardDetails"
-			type="com.awcsoftware.app.timesheet.TimecardDetails" />
+	<typeAlias alias="TimecardDetails"
+		type="com.awcsoftware.app.timesheet.TimecardDetails" />
 
-		<typeAlias alias="TimeCardView"
-			type="com.awcsoftware.app.timesheet.TimecardView" />
+	<typeAlias alias="User"
+		type="com.awcsoftware.spring.security.auth.user.User" />
 
-		<typeAlias alias="TCDBValidate"
-			type="com.awcsoftware.app.timesheet.TimeCardDBValidate" />
+	<typeAlias type="com.awcsoftware.app.common.BasePojo"
+		alias="BasePojo" />
 
-		<typeAlias alias="TCTimeValidate"
-			type="com.awcsoftware.app.timesheet.TimeCardTimeValidate" />
+	<typeAlias type="com.awcsoftware.app.common.ParentBasePojo"
+		alias="ParentBasePojo" />
+
+
+	<typeAlias alias="TimeCardView"
+		type="com.awcsoftware.app.timesheet.TimecardView" />
+
+	<typeAlias alias="TCDBValidate"
+		type="com.awcsoftware.app.timesheet.TimeCardDBValidate" />
+
+	<typeAlias alias="TCTimeValidate"
+		type="com.awcsoftware.app.timesheet.TimeCardTimeValidate" />
 
 
 
-	</typeAliases>
+</typeAliases>
 
 	<environments default="development">
 		<environment id="development">
@@ -50,7 +60,7 @@
 			resource="com/awcsoftware/app/common/BaseRepositoryMapper.xml" />
 		<mapper
 			resource="com/awcsoftware/spring/security/auth/user/UserMapper.xml" />
-		<mapper
-			resource="com/awcsoftware/app/password/UserPasswordMapper.xml" />
+<!-- 		<mapper
+			resource="com/awcsoftware/spring/password/user/UserPasswordMapper.xml" /> -->
 	</mappers>
 </configuration>

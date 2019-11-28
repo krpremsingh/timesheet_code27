@@ -1,7 +1,11 @@
 package com.awcsoftware.app.common;
 
+import javax.validation.constraints.Min;
+
 public class BasePojo {
+	@Min(value=1,message="{user.project}")
 	private int id;
+	
 	private String name;
 
 	public BasePojo() {

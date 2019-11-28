@@ -17,7 +17,7 @@ public class TimeCardValidatorTest {
 		tci.setEmpId(1277);
 		tci.setWeekStart(LocalDate.now());
 		tci.setWeekEnd(LocalDate.now().plusDays(7));
-		tci.setTotalHours(20);
+		tci.setTotalHours("20");
 		
 		TimecardDetails tcd1=new TimecardDetails();
 		tcd1.setWorkingDate(LocalDate.now());
