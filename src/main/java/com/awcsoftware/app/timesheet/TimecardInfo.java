@@ -1,5 +1,6 @@
 package com.awcsoftware.app.timesheet;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -10,7 +11,11 @@ import javax.validation.constraints.Size;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
-public class TimecardInfo {
+public class TimecardInfo implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	// Field mapped for table TimeCardSummaryInfo
 	private int tcId;
 	private int empId;

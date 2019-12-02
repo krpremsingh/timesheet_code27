@@ -15,15 +15,11 @@
 	<typeAlias alias="TimecardDetails"
 		type="com.awcsoftware.app.timesheet.TimecardDetails" />
 
-	<typeAlias alias="User"
-		type="com.awcsoftware.spring.security.auth.user.User" />
-
 	<typeAlias type="com.awcsoftware.app.common.BasePojo"
 		alias="BasePojo" />
 
 	<typeAlias type="com.awcsoftware.app.common.ParentBasePojo"
 		alias="ParentBasePojo" />
-
 
 	<typeAlias alias="TimeCardView"
 		type="com.awcsoftware.app.timesheet.TimecardView" />

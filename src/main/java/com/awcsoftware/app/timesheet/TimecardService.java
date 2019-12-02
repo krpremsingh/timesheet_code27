@@ -10,7 +10,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import com.awcsoftware.app.AppException;
 import com.awcsoftware.mybatis.DbException;
 import com.awcsoftware.spring.security.auth.UserAuthenticationDetail;
-import com.awcsoftware.app.Util;
 
 public class TimecardService {
 	static Logger logger = Logger.getLogger(TimecardService.class);
@@ -62,5 +61,17 @@ public class TimecardService {
 		UserAuthenticationDetail auth = (UserAuthenticationDetail) authentication;
 		TimecardDao dao = new TimecardDao();
 		return  (List<TimecardView>)dao.getTimecardView(auth.getEmpId());
+	}
+	
+	public List<TimecardInfo> getTimecardViewByManager(int approverId)throws DbException, AppException{
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		UserAuthenticationDetail auth = (UserAuthenticationDetail) authentication;
+
+			TimecardDao dao = new TimecardDao();
+			List<TimecardInfo> result = dao.getTimecardByManager(approverId);
+			return result;
+		
+		
+		
 	}
 }

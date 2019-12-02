@@ -9,8 +9,7 @@ import org.apache.log4j.Logger;
 
 public class MyBatisManager {
 	static Logger log = Logger.getLogger(MyBatisManager.class.getName());
-	static InputStream inputStream=null;
-	protected static SqlSessionFactory sqlSessionFactory=null;
+	protected static SqlSessionFactory sqlSessionFactory;
 
 	static {
 		log.info("read mybatis config");

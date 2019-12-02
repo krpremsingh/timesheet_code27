@@ -1,6 +1,7 @@
 package com.awcsoftware.spring.security.auth;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,6 +18,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 
 import com.awcsoftware.session.store.TokenSession;
@@ -28,7 +30,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class LoginFilter extends AbstractAuthenticationProcessingFilter {
 	static Logger log = Logger.getLogger(LoginFilter.class.getName());
-
 
 	public LoginFilter(String defaultProcessUrl) {
 		super(defaultProcessUrl);
@@ -70,12 +71,12 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
 			log.debug("User Found " + uSrv.isExists(username));
 
 			if (user.getEmail().equals(username) && user.getPassword().equals(password)) {
-				//List<GrantedAuthority> authorityList = Collections.<GrantedAuthority>emptyList();
-				  List<GrantedAuthority> authorityList = roles.stream().map(role -> new
-				  SimpleGrantedAuthority("ROLE_" + role.getRole()))
-				  .collect(Collectors.toList());	 
+				// List<GrantedAuthority> authorityList =
+				// Collections.<GrantedAuthority>emptyList();
+				List<GrantedAuthority> authorityList = roles.stream()
+						.map(role -> new SimpleGrantedAuthority("ROLE_" + role.getRole())).collect(Collectors.toList());
 				UserAuthenticationDetail authDetail = new UserAuthenticationDetail(username, password, authorityList);
-				log.debug("role   " + roles + " " + authorityList);
+				// log.debug("role " + roles.get(0) + " " + authorityList.get(0));
 				authDetail.setRole(roles);
 				authDetail.setEmpId(user.getEmpId());
 				authDetail.setEmpCode(user.getEmpCode());
@@ -100,11 +101,13 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
 		ObjectMapper mapper = new ObjectMapper();
 		String token = TokenManager.generateToken(auth.getName(), auth.getCredentials().toString());
 		auth.setToken(token);
-		TokenSession.getTokenStore().addAuthenticaionDetail(auth);
 
+		TokenSession.getTokenStore().addAuthenticaionDetail(auth);
 		response.setStatus(HttpStatus.OK.value());
 		response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 		mapper.writeValue(response.getWriter(), auth);
+		SecurityContextHolder.getContext().setAuthentication(auth);
+		chain.doFilter(request, response);
 	}
 
 	@Override
