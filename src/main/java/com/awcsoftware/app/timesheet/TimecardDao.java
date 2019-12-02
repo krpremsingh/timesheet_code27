@@ -8,7 +8,6 @@ import org.apache.log4j.Logger;
 import com.awcsoftware.app.AppException;
 import com.awcsoftware.mybatis.DbException;
 import com.awcsoftware.mybatis.MyBatisManager;
-import com.awcsoftware.spring.security.auth.UserAuthenticationDetail;
 
 public class TimecardDao {
 	static Logger logger = Logger.getLogger(TimecardDao.class);
@@ -219,5 +218,19 @@ public class TimecardDao {
 			session.close();
 		}
 	}
+	
+	public List<TimecardInfo> getTimecardByManager(int approverId){
+		SqlSession session = MyBatisManager.openSession();
 
+		try {
+			List<TimecardInfo> result = session.selectList("TimeSheetSummaryMapper.getTimecardByManager",approverId);
+			if (result!=null)
+				return result;
+			else
+				return null;
+		} finally {
+			session.close();
+		}
+		
+	}
 }

@@ -17,12 +17,12 @@ import com.awcsoftware.spring.security.auth.TokenFilter;
 @Configuration
 @EnableWebSecurity
 @ComponentScan(basePackages = "com.awcsoftware")
-@EnableGlobalMethodSecurity(prePostEnabled=true)
+@EnableGlobalMethodSecurity(prePostEnabled=true,proxyTargetClass=true)
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
-	public static final String CREDENTIAL_BASED_LOGIN_ENTRY_POINT = "/auth/login";
-	public static final String TOKEN_BASED_AUTH_ENTRY_POINT = "/**";
-	public static final String LOGOUT_ENTRY_POINT = "/auth/logout";
+	public static final String CREDENTIAL_BASED_LOGIN_ENTRY_POINT = "/login";
+	public static final String TOKEN_BASED_AUTH_ENTRY_POINT = "/*";
+	public static final String LOGOUT_ENTRY_POINT = "/logout";
 
 	@Bean
 	protected LoginFilter getLoginFilter() throws Exception {
@@ -46,12 +46,22 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 	
 	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-		http.csrf().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-				.authorizeRequests().antMatchers(CREDENTIAL_BASED_LOGIN_ENTRY_POINT).permitAll()
-				.antMatchers(LOGOUT_ENTRY_POINT).authenticated().anyRequest().authenticated().and()
-				.addFilterBefore(getLoginFilter(), UsernamePasswordAuthenticationFilter.class)
-				.addFilterBefore(getLogoutFilter(), UsernamePasswordAuthenticationFilter.class)
-				.addFilterBefore(getTokenFilter(), UsernamePasswordAuthenticationFilter.class);
-	}
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+        .csrf().disable()
+	        .sessionManagement()
+	        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+	        .and()
+            	.authorizeRequests()
+				.antMatchers(CREDENTIAL_BASED_LOGIN_ENTRY_POINT).permitAll()
+				.antMatchers(LOGOUT_ENTRY_POINT).authenticated()
+				.anyRequest().authenticated()
+				.and()
+				.anonymous()
+			.and()
+         	.addFilterBefore(getLoginFilter(), UsernamePasswordAuthenticationFilter.class)
+         	.addFilterBefore(getTokenFilter(), UsernamePasswordAuthenticationFilter.class)
+         	.addFilterBefore(getLogoutFilter(), UsernamePasswordAuthenticationFilter.class);
+        	
+    }
 }

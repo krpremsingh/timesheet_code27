@@ -3,12 +3,16 @@ package com.awcsoftware.spring.security.auth;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 import com.awcsoftware.spring.security.auth.user.Role;
 
 public class UserAuthenticationDetail extends UsernamePasswordAuthenticationToken {
+	static Logger log = Logger.getLogger(UserAuthenticationDetail.class.getName());
+	
 	private List<Role> role;
     private int firstLoginStatus;
 	private String token;
@@ -20,13 +24,12 @@ public class UserAuthenticationDetail extends UsernamePasswordAuthenticationToke
 
 	public UserAuthenticationDetail(Object principal, Object credentials) {
 		super(principal, credentials);
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	public UserAuthenticationDetail(Object principal, Object credentials,
 			Collection<? extends GrantedAuthority> authorities) {
 		super(principal, credentials, authorities);
-		// TODO Auto-generated constructor stub
 	}
 
 	public List<Role> getRole() {

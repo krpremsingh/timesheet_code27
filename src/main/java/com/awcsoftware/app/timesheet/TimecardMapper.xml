@@ -13,6 +13,12 @@
 		<result column="addedOn" property="addedOn" jdbcType="DATE" />
 		<result column="lastModifiedOn" property="lastModifiedOn"
 			jdbcType="DATE" />
+		<collection property="timecardDetails"
+			ofType="com.awcsoftware.app.timesheet.TimecardInfo"
+			select="getTimecardById" column="tcId">
+			<id column="tcdId" property="tcdId" />
+		</collection>
+
 	</resultMap>
 
 	<resultMap id="TimecardDayInfoMap" type="TimecardDayInfo">		
@@ -284,6 +290,10 @@
 			concat(substr(dayname(workingdate),1,3),' ',date_format(workingdate,'%b %d')) , 
 			sum(workingHours) from timecarddayinfo a inner join timecarddaydetails b 
 			on a.tcid=b.tcid and a.tcdid=b.tcdid  where a.tcid=#{tcId} group by 1,2,3,4;
+	</select>
+
+	<select id="getTimecardByManager" parameterType="int" resultType="TimecardInfo">
+	select  e.empId,e.firstName,ti.totalHours,ti.status,ti.weekStart,ti.weekEnd,tad.comments,tad.status from TimeCardApprovalDetails tad,EmployeeInfo e inner join TimeCardSummaryInfo ti on ti.empId=e.empId where tad.approverId=#{approverId};
 	</select>
 
 </mapper> 

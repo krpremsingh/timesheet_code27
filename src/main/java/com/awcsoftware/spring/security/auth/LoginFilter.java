@@ -1,16 +1,15 @@
 package com.awcsoftware.spring.security.auth;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
-import org.omg.CORBA.Request;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -19,6 +18,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 
 import com.awcsoftware.session.store.TokenSession;
@@ -71,12 +71,12 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
 			log.debug("User Found " + uSrv.isExists(username));
 
 			if (user.getEmail().equals(username) && user.getPassword().equals(password)) {
-				//List<GrantedAuthority> authorityList = Collections.<GrantedAuthority>emptyList();
-				  List<GrantedAuthority> authorityList = roles.stream().map(role -> new
-				  SimpleGrantedAuthority("ROLE_" + role.getRole()))
-				  .collect(Collectors.toList());	 
+				// List<GrantedAuthority> authorityList =
+				// Collections.<GrantedAuthority>emptyList();
+				List<GrantedAuthority> authorityList = roles.stream()
+						.map(role -> new SimpleGrantedAuthority("ROLE_" + role.getRole())).collect(Collectors.toList());
 				UserAuthenticationDetail authDetail = new UserAuthenticationDetail(username, password, authorityList);
-				log.debug("role   " + roles + " " + authorityList);
+				// log.debug("role " + roles.get(0) + " " + authorityList.get(0));
 				authDetail.setRole(roles);
 				authDetail.setEmpId(user.getEmpId());
 				authDetail.setEmpCode(user.getEmpCode());
@@ -101,11 +101,13 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
 		ObjectMapper mapper = new ObjectMapper();
 		String token = TokenManager.generateToken(auth.getName(), auth.getCredentials().toString());
 		auth.setToken(token);
-		TokenSession.getTokenStore().addAuthenticaionDetail(auth);
 
+		TokenSession.getTokenStore().addAuthenticaionDetail(auth);
 		response.setStatus(HttpStatus.OK.value());
 		response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 		mapper.writeValue(response.getWriter(), auth);
+		SecurityContextHolder.getContext().setAuthentication(auth);
+		chain.doFilter(request, response);
 	}
 
 	@Override
