@@ -11,7 +11,6 @@ public class TimecardView  implements Serializable
 	private int tcId;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private LocalDate weekstartDT;
-	
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private LocalDate weekEndDT;
 	private String status;

@@ -33,7 +33,7 @@ public class TimeCardValidatorTest {
 		List<TimecardDetails> list=new ArrayList<TimecardDetails>();
 		list.add(tcd1);list.add(tcd2);list.add(tcd3);list.add(tcd4);//list.add(tcd5);
 		tci.setTimeCardDetails(list);
-		TimeCardValidator tcv=new TimeCardValidator();
+		TimecardValidator tcv=new TimecardValidator();
 		
 		System.out.println("Submit Validation :"+tcv.validateSubmitTimeCard(tci));
 		System.out.println("Save Validation :"+tcv.validateSaveTimeCard(tci));

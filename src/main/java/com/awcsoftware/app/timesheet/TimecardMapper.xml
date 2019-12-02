@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="TimecardMapper">
+	<cache />
+	<resultMap id="TimecardInfoMap" type="TimecardInfo">
+		<result column="tcId" property="tcId" jdbcType="INTEGER" />
+		<result column="empId" property="empId" jdbcType="INTEGER" />
+		<result column="weekStart" property="weekStart" jdbcType="DATE" />
+		<result column="weekEnd" property="weekEnd" jdbcType="DATE" />
+		<result column="totalHours" property="totalHours"
+			jdbcType="DECIMAL" />
+		<result column="status" property="status" jdbcType="VARCHAR" />
+		<result column="addedOn" property="addedOn" jdbcType="DATE" />
+		<result column="lastModifiedOn" property="lastModifiedOn"
+			jdbcType="DATE" />
+	</resultMap>
+
+	<resultMap id="TimecardDayInfoMap" type="TimecardDayInfo">		
+		<id column="tcdId" property="tcdId" jdbcType="INTEGER" />
+		<result column="tcId" property="tcId" jdbcType="INTEGER" />
+		<result column="workingDate" property="workingDate"
+			jdbcType="DATE" />
+		<result column="workingDay" property="workingDay"
+			jdbcType="VARCHAR" />
+		<result column="totalWeekWorkHours" property="totalWeekWorkHours"
+			jdbcType="DECIMAL" />
+		<result column="status" property="workingHours"
+			jdbcType="VARCHAR" />
+		<result column="addedOn" property="addedOn" jdbcType="DATE" />
+		<result column="lastModifiedOn" property="lastModifiedOn"
+			jdbcType="DATE" />
+	</resultMap>
+
+	<resultMap id="TimecardDayDetailsMap" type="TimecardDayDetails">		
+		<id column="tcddId" property="tcddId" jdbcType="INTEGER" />
+		<result column="tcdId" property="tcdId" jdbcType="INTEGER" />
+		<result column="tcId" property="tcId" jdbcType="INTEGER" />
+		<result column="projectId" property="projectId"
+			jdbcType="INTEGER" />
+		<result column="activityId" property="activityId"
+			jdbcType="INTEGER" />
+		<result column="location" property="location"
+			jdbcType="VARCHAR" />
+		<result column="startTime" property="startTime"
+			jdbcType="VARCHAR" />
+		<result column="endTime" property="endTime"
+			jdbcType="VARCHAR" />
+		<result column="workingHours" property="workingHours"
+			jdbcType="DECIMAL" />
+		<result column="status" property="status" jdbcType="VARCHAR" />
+		<result column="onLeave" property="onLeave" jdbcType="VARCHAR" />
+		<result column="taskDetails" property="taskDetails"
+			jdbcType="VARCHAR" />
+		<result column="addedOn" property="addedOn" jdbcType="DATE" />
+		<result column="lastModifiedOn" property="lastModifiedOn"
+			jdbcType="DATE" />
+	</resultMap>
+
+	<resultMap id="TimecardDayInfoViewMap" type="TimecardDayInfo">		
+		<id column="tcId" property="tcId" jdbcType="INTEGER" />
+		<id column="tcdId" property="tcdId" jdbcType="INTEGER" />
+		<result column="workingdate" property="workingdate" jdbcType="DATE" />
+	    <collection property="timecardDayDetails" column="tcId" javaType="ArrayList" ofType="TimecardDayDetails">
+	    	<id property="tcId" column="tcId"/>
+	    	<id property="tcdId" column="tcdId"/>
+	    	<result property="projectId" column="projectId"/>
+	    	<result property="activityId" column="activityId"/>
+	    	<result property="location" column="location"/>
+	    	<result property="taskDetails" column="taskDetails"/>
+	    </collection>			
+	</resultMap>
+
+
+<!-- Insert data into table  TimecardInfo -->
+
+	<insert id="addTimecardInfo" parameterType="TimecardInfo"
+		useGeneratedKeys='true' keyProperty='tcId'>
+		insert into TimecardInfo 
+		(empId,weekStart,weekEnd,totalHours,status,addedOn)
+		values
+		(#{empId},
+		#{weekStart},
+		#{weekEnd},#{totalHours},#{status},now())
+	</insert>
+<!-- Insert Ended for table  TimecardInfo -->
+
+<!-- Insert data into table  TimecardDayInfo -->
+
+	<insert id="addIndividualTimecardDayInfo" parameterType="TimecardDayInfo"
+		useGeneratedKeys='true' keyProperty='tcdId' keyColumn="tcdId">
+		insert into
+		TimecardDayInfo(tcId,workingDate,workingDay,
+		totalWeekWorkHours,status,addedOn)
+		values
+			(#{tcId},#{workingDate}, #{workingDay}, #{totalWeekWorkHours},
+			#{status}, now())
+	</insert>
+
+	<insert id="addBatchTimecardDayInfo" parameterType="list"
+		useGeneratedKeys='true' keyProperty='tcdId' keyColumn="tcdId">
+		insert into
+		TimecardDayInfo(tcId,workingDate,workingDay,
+		totalWeekWorkHours,status,addedOn)
+		values
+		<foreach collection="list" item="TimecardDayInfo"
+			index="index" separator=",">
+			(#{TimecardDayInfo.tcId},#{TimecardDayInfo.workingDate},#{TimecardDayInfo.workingDay},
+			#{TimecardDayInfo.totalWeekWorkHours},#{TimecardDayInfo.status},now())
+		</foreach>
+	</insert>
+<!-- Ended of Insert for table  TimecardDayInfo -->
+
+<!-- Start of Insert data into table  TimecardDayDetails -->
+
+	<insert id="addIndividualTimecardDayDetails" parameterType="TimecardDayDetails"
+		useGeneratedKeys='true' keyProperty='tcddId' keyColumn="tcddId">
+		insert into
+		TimecardDayDetails(tcdId,tcId,projectId,activityId,location,startTime,endTime,workingHours,
+		status,taskDetails,lastModifiedon)
+		values
+			(#{tcdId},#{tcId},#{projectId},#{activityId},#{location}
+			,#{startTime},#{endTime},#{workingHours},#{status},#{taskDetails}, now())
+	</insert>
+
+	<insert id="addBatchTimecardDayDetails" parameterType="list"
+		useGeneratedKeys='true' keyProperty='tcdId' keyColumn="tcdId">
+		insert into
+		TimecardDayDetails(tcdId,tcId,projectId,activityId,location,startTime,endTime,workingHours,
+		status,taskDetails,addedOn)
+		values
+
+		<foreach collection="list" item="TimecardDayDetails"
+			index="index" separator=",">
+
+			(#{TimecardDayDetails.tcdId},#{TimecardDayDetails.tcId},#{TimecardDayDetails.projectId},
+			#{TimecardDayDetails.activityId},#{TimecardDayDetails.location},
+			#{TimecardDayDetails.startTime},#{TimecardDayDetails.endTime},
+			#{TimecardDayDetails.workingHours},#{TimecardDayDetails.status},
+			#{TimecardDayDetails.taskDetails}, now())
+		</foreach>
+	</insert>
+<!-- Ended of Insert for table  TimecardDayDetai -->
+
+<!-- 
+	<insert id="addIndividualTimecardDetails" parameterType="TimecardDetails"
+		useGeneratedKeys='true' keyProperty='tcdId' keyColumn="tcdId">
+		insert into
+		TimeCardDetails(tcId,projectId,activityId,workingDay,workingDate,
+		workingHours,comments,status,addedOn,taskDetails,startTime,endTime)
+		values
+			(#{tcId},#{projectId},#{activityId}, #{workingDay},#{workingDate},#{workingHours},
+			#{comments},#{status}, #{addedOn},#{taskDetails},#{startTime},#{endTime})
+	</insert>
+
+	<insert id="addTimecardDetails" parameterType="list"
+		useGeneratedKeys='true' keyProperty='tcdId' keyColumn="tcdId">
+		insert into
+		TimeCardDetails(tcId,projectId,activityId,workingDay,workingDate,
+		workingHours,comments,status,addedOn,taskDetails,startTime,endTime
+		)
+		values
+
+		<foreach collection="list" item="TimecardDetails"
+			index="index" separator=",">
+			(#{TimecardDetails.tcId},#{TimecardDetails.projectId},#{TimecardDetails.activityId},
+			#{TimecardDetails.workingDay},#{TimecardDetails.workingDate},
+			#{TimecardDetails.workingHours},#{TimecardDetails.comments},#{TimecardDetails.status},
+			#{TimecardDetails.addedOn},#{TimecardDetails.taskDetails},#{TimecardDetails.startTime},
+			#{TimecardDetails.endTime})
+		</foreach>
+	</insert>
+-->
+<!-- Start of Update Operations -->
+	<update id="updateTimecardInfo" parameterType="TimecardInfo"
+		keyProperty="tcId">
+		UPDATE TimecardInfo SET status=#{status}, lastModifiedOn=now()
+		WHERE tcId=#{tcId} and empId=#{empId}
+	</update>
+
+	<update id="updateTimecardInfoHour" parameterType="TimecardInfo"
+		keyProperty="tcId">
+		UPDATE TimecardInfo SET totalHours = #{totalHours}
+		WHERE tcId=#{tcId} and empId=#{empId}
+	</update>
+
+
+	<update id="updateTimecardDayInfo"
+		parameterType="TimecardDayInfo" useGeneratedKeys="true"
+		keyProperty="tcdId">
+		UPDATE TimeCardDayInfo SET
+		status = #{status},
+		lastModifiedOn = now()
+		WHERE tcdId=#{tcdId} and tcId = #{tcId} and
+		workingDate= #{workingDate}
+	</update>
+
+	<update id="updateTimecardDayHourInfo"
+		parameterType="TimecardDayInfo" useGeneratedKeys="true"
+		keyProperty="tcdId">
+		UPDATE TimeCardDayInfo SET
+		status = #{status},
+		totalWeekWorkHours = #{totalWeekWorkHours}		
+		WHERE tcdId=#{tcdId} and tcId = #{tcId} and
+		workingDate= #{workingDate}
+	</update>
+
+	<update id="updateTimecardDayDetails"
+		parameterType="TimecardDayDetails" useGeneratedKeys="true"
+		keyProperty="tcddId">
+		UPDATE TimecardDayDetails SET
+		projectId=#{projectId},
+		activityId=#{activityId},
+		location=#{location},
+		startTime=#{startTime},
+		endTime=#{endTime},
+		workingHours=#{workingHours},
+		status	=#{status},
+		taskDetails=#{taskDetails},
+		lastModifiedOn = now()
+		WHERE tcddId=#{tcddId} and tcdId=#{tcdId} and tcId = #{tcId} 
+	</update>
+
+<!-- End of Update Operations -->
+
+<!-- Queries writted for validation on Timesheet -->
+
+	<select id="isCurrentTimecardExist"
+		parameterType="TimecardInfo" resultType="int">
+		select ifnull(
+		(select tcId from TimecardInfo where empId=#{empId} and tcId =#{tcId}
+		),-1) from dual;
+	</select>
+
+	<select id="isDataForCurrentWeekExists"
+		parameterType="TimecardInfo" resultType="int">
+		select ifnull(
+		(select tcId from TimecardInfo where empId=#{empId} and
+		(weekStart between #{weekStart} and #{weekEnd})
+		),-1) from dual;
+	</select>
+
+	<select id="isDataForCurrentDateExists"
+		parameterType="TimecardDayInfo" resultType="int">
+		select ifnull(
+		(select tcdId from TimecardDayInfo where tcId = #{tcId} and 
+		workingDate=#{workingDate} limit 0,1),-1) from dual;
+	</select>
+
+	<select id="isDataForCurrentDateTimeExists"
+		parameterType="TimecardDayDetails" resultType="int">
+
+		select ifnull((select tcddId from TimecardDayDetails where tcddId not in (#{tcddId}) and  tcdId=#{tcdId} and tcId = #{tcId} and
+		starttime between #{startTime} and #{endTime}
+		union
+		select tcddId from TimecardDayDetails where tcddId  not in (#{tcddId}) and  tcdId=#{tcdId} and tcId = #{tcId} and 
+		endtime between #{startTime} and #{endTime}  limit 0,1),-1) from dual
+	</select>
+
+	<select id="isDataForCurrentTimecardExists"
+		parameterType="TimecardDayDetails" resultType="int">
+
+		select ifnull((select tcddId from TimecardDayDetails where tcId = #{tcId} and
+		starttime between #{startTime} and #{endTime}
+		union
+		select tcddId from TimecardDayDetails where tcId = #{tcId} and 
+		endtime between #{startTime} and #{endTime} limit 0,1),-1) from dual
+	</select>
+
+<!-- Select query to show data on view page for logged in employee -->
+	<select id="getTimecardView" parameterType="int"
+		resultType="TimeCardView">
+		select tcId,ifnull(weekStart,' ') as
+		weekstartDT,ifnull(weekEnd,' ') as weekEndDT, ifnull(status,' ') as
+		status,
+		ifnull(concat(date_format(weekStart,'%d %b'),' to
+		',date_format(weekend,'%d %b')),' ') WeekPeriod,
+		ifnull(totalHours,' ')
+		totalHour,ifnull(status,' ') statusGrid	from TimecardInfo tcsi where
+		empId=#{empId};
+	</select>
+
+	<select id="getTimecardDetailView" resultMap="TimecardDayInfoViewMap">
+			select a.tcdid,projectId ,activityId ,location ,taskDetails ,
+			concat(substr(dayname(workingdate),1,3),' ',date_format(workingdate,'%b %d')) , 
+			sum(workingHours) from timecarddayinfo a inner join timecarddaydetails b 
+			on a.tcid=b.tcid and a.tcdid=b.tcdid  where a.tcid=#{tcId} group by 1,2,3,4;
+	</select>
+
+</mapper> 
+ 
+ 

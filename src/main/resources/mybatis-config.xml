@@ -6,40 +6,35 @@
 <configuration>
 	<typeAliases>
 
-	<typeAlias alias="User"
-		type="com.awcsoftware.spring.security.auth.user.User" />
+		<typeAlias alias="User"
+			type="com.awcsoftware.spring.security.auth.user.User" />
 
-	<typeAlias alias="ConfirmationToken"
-		type="com.awcsoftware.spring.security.auth.user.ConfirmationToken" />
+		<typeAlias alias="ConfirmationToken"
+			type="com.awcsoftware.spring.security.auth.user.ConfirmationToken" />
 
-	<typeAlias alias="TimecardInfo"
-		type="com.awcsoftware.app.timesheet.TimecardInfo" />
+		<typeAlias type="com.awcsoftware.app.common.BasePojo"
+			alias="BasePojo" />
 
-	<typeAlias alias="TimecardDetails"
-		type="com.awcsoftware.app.timesheet.TimecardDetails" />
+		<typeAlias type="com.awcsoftware.app.common.ParentBasePojo"
+			alias="ParentBasePojo" />
 
-	<typeAlias alias="User"
-		type="com.awcsoftware.spring.security.auth.user.User" />
+		<!-- Start of Mapping classes with Timesheet package -->
 
-	<typeAlias type="com.awcsoftware.app.common.BasePojo"
-		alias="BasePojo" />
+		<typeAlias alias="TimecardInfo"
+			type="com.awcsoftware.app.timesheet.TimecardInfo" />
 
-	<typeAlias type="com.awcsoftware.app.common.ParentBasePojo"
-		alias="ParentBasePojo" />
+		<typeAlias alias="TimecardDayInfo"
+			type="com.awcsoftware.app.timesheet.TimecardDayInfo" />
 
+		<typeAlias alias="TimecardDayDetails"
+			type="com.awcsoftware.app.timesheet.TimecardDayDetails" />
 
-	<typeAlias alias="TimeCardView"
-		type="com.awcsoftware.app.timesheet.TimecardView" />
+		<typeAlias alias="TimeCardView"
+			type="com.awcsoftware.app.timesheet.TimecardView" />
 
-	<typeAlias alias="TCDBValidate"
-		type="com.awcsoftware.app.timesheet.TimeCardDBValidate" />
+		<!-- End of Mapping classes with Timesheet package -->
 
-	<typeAlias alias="TCTimeValidate"
-		type="com.awcsoftware.app.timesheet.TimeCardTimeValidate" />
-
-
-
-</typeAliases>
+	</typeAliases>
 
 	<environments default="development">
 		<environment id="development">
@@ -47,20 +42,21 @@
 			<dataSource type="POOLED">
 				<property name="driver" value="com.mysql.jdbc.Driver" />
 				<property name="url"
-					value="jdbc:mysql://127.0.0.1:3306/timesheet" />
+					value="jdbc:mysql://192.168.1.32:3306/timesheet" />
 				<property name="username" value="root" />
 				<property name="password" value="root" />
 			</dataSource>
 		</environment>
 	</environments>
 	<mappers>
+<!-- Mapper Definition for Timecard functionality -->
 		<mapper
-			resource="com/awcsoftware/app/timesheet/TimeCardRepositoryMapper.xml" />
+			resource="com/awcsoftware/app/timesheet/TimecardMapper.xml" />
 		<mapper
 			resource="com/awcsoftware/app/common/BaseRepositoryMapper.xml" />
 		<mapper
 			resource="com/awcsoftware/spring/security/auth/user/UserMapper.xml" />
-<!-- 		<mapper
-			resource="com/awcsoftware/spring/password/user/UserPasswordMapper.xml" /> -->
+		<!-- <mapper resource="com/awcsoftware/spring/password/user/UserPasswordMapper.xml" 
+			/> -->
 	</mappers>
 </configuration>

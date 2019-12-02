@@ -5,13 +5,12 @@ import java.time.LocalDateTime;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class TimecardApproval {
+	
 	private int tcadId;
-
 	private int tcdId;
 	private int approverId;
 	private int levelId;
 	private String comments;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
 	private LocalDateTime addedOn;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
 	private LocalDateTime lastModifiedOn;
