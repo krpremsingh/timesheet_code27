@@ -223,7 +223,7 @@ public class TimecardDao {
 		SqlSession session = MyBatisManager.openSession();
 
 		try {
-			List<TimecardInfo> result = session.selectList("TimeSheetSummaryMapper.getTimecardByManager",approverId);
+			List<TimecardInfo> result = session.selectList("TimecardMapper.getTimecardByManager",approverId);
 			if (result!=null)
 				return result;
 			else

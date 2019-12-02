@@ -193,7 +193,7 @@
 	<update id="updateTimecardDayInfo"
 		parameterType="TimecardDayInfo" useGeneratedKeys="true"
 		keyProperty="tcdId">
-		UPDATE TimeCardDayInfo SET
+		UPDATE TimecardDayInfo SET
 		status = #{status},
 		lastModifiedOn = now()
 		WHERE tcdId=#{tcdId} and tcId = #{tcId} and
@@ -203,7 +203,7 @@
 	<update id="updateTimecardDayHourInfo"
 		parameterType="TimecardDayInfo" useGeneratedKeys="true"
 		keyProperty="tcdId">
-		UPDATE TimeCardDayInfo SET
+		UPDATE TimecardDayInfo SET
 		status = #{status},
 		totalWeekWorkHours = #{totalWeekWorkHours}		
 		WHERE tcdId=#{tcdId} and tcId = #{tcId} and
@@ -292,9 +292,14 @@
 			on a.tcid=b.tcid and a.tcdid=b.tcdid  where a.tcid=#{tcId} group by 1,2,3,4;
 	</select>
 
-	<select id="getTimecardByManager" parameterType="int" resultType="TimecardInfo">
-	select  e.empId,e.firstName,ti.totalHours,ti.status,ti.weekStart,ti.weekEnd,tad.comments,tad.status from TimeCardApprovalDetails tad,EmployeeInfo e inner join TimeCardSummaryInfo ti on ti.empId=e.empId where tad.approverId=#{approverId};
-	</select>
+	<select id="getTimecardByManager" parameterType="int"
+	resultType="TimecardInfo">
+	select
+	e.empId,e.firstName,ti.totalHours,ti.status,ti.weekStart,ti.weekEnd,tad.comments,tad.status
+	from TimecardApproverDetails tad,EmployeeInfo e inner join
+	TimeCardSummaryInfo ti on ti.empId=e.empId where
+	tad.approverId=#{approverId};
+</select>
 
 </mapper> 
  
