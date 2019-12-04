@@ -294,8 +294,8 @@
 
 	<select id="getProjectApproverList" parameterType="TimecardDayDetails"
 		resultType="TimecardApproverDetails">
-			select pdId projectId,tcApprover approverId,level levelId from ProjectApproverDetails 
-				where pdId=#{projectId} and startDate &lt;=#{workingDate} and endDate &gt;=#{workingDate} 
+			select pId projectId,tcApprover approverId,level levelId from ProjectApproverDetails 
+				where pId=#{projectId} and startDate &lt;=#{workingDate} and endDate &gt;=#{workingDate} 
 	</select>	
 
 	<select id="isApproverExistforCurrentTimecardProject" parameterType="TimecardApproverDetails"
