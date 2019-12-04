@@ -2,6 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="TimecardMapper">
 	<cache />
+<!--	 ********************************************** 
+				Start Of Defining Result Map 
+		 **********************************************				
+-->
 	<resultMap id="TimecardInfoMap" type="TimecardInfo">
 		<result column="tcId" property="tcId" jdbcType="INTEGER" />
 		<result column="empId" property="empId" jdbcType="INTEGER" />
@@ -18,7 +22,6 @@
 			select="getTimecardById" column="tcId">
 			<id column="tcdId" property="tcdId" />
 		</collection>
-
 	</resultMap>
 
 	<resultMap id="TimecardDayInfoMap" type="TimecardDayInfo">		
@@ -76,8 +79,9 @@
 	    </collection>			
 	</resultMap>
 
+<!-- End Of Defining Result Map -->
 
-<!-- Insert data into table  TimecardInfo -->
+<!-- Operations Made on TimecardInfo table -->
 
 	<insert id="addTimecardInfo" parameterType="TimecardInfo"
 		useGeneratedKeys='true' keyProperty='tcId'>
@@ -88,9 +92,37 @@
 		#{weekStart},
 		#{weekEnd},#{totalHours},#{status},now())
 	</insert>
-<!-- Insert Ended for table  TimecardInfo -->
 
-<!-- Insert data into table  TimecardDayInfo -->
+	<update id="updateTimecardInfo" parameterType="TimecardInfo"
+		keyProperty="tcId">
+		UPDATE TimecardInfo SET status=#{status}, lastModifiedOn=now()
+		WHERE tcId=#{tcId} and empId=#{empId}
+	</update>
+
+	<update id="updateTimecardInfoHour" parameterType="TimecardInfo"
+		keyProperty="tcId">
+		UPDATE TimecardInfo SET totalHours = #{totalHours}
+		WHERE tcId=#{tcId} and empId=#{empId}
+	</update>
+
+	<select id="isCurrentTimecardExist"
+		parameterType="TimecardInfo" resultType="int">
+		select ifnull(
+		(select tcId from TimecardInfo where empId=#{empId} and tcId =#{tcId}
+		),-1) from dual;
+	</select>
+
+	<select id="isDataForCurrentWeekExists"
+		parameterType="TimecardInfo" resultType="int">
+		select ifnull(
+		(select tcId from TimecardInfo where empId=#{empId} and
+		(weekStart between #{weekStart} and #{weekEnd})
+		),-1) from dual;
+	</select>
+
+<!-- Operation Ended for table TimecardInfo -->
+
+<!-- Operation Ended for table TimecardDayInfo -->
 
 	<insert id="addIndividualTimecardDayInfo" parameterType="TimecardDayInfo"
 		useGeneratedKeys='true' keyProperty='tcdId' keyColumn="tcdId">
@@ -114,81 +146,6 @@
 			#{TimecardDayInfo.totalWeekWorkHours},#{TimecardDayInfo.status},now())
 		</foreach>
 	</insert>
-<!-- Ended of Insert for table  TimecardDayInfo -->
-
-<!-- Start of Insert data into table  TimecardDayDetails -->
-
-	<insert id="addIndividualTimecardDayDetails" parameterType="TimecardDayDetails"
-		useGeneratedKeys='true' keyProperty='tcddId' keyColumn="tcddId">
-		insert into
-		TimecardDayDetails(tcdId,tcId,projectId,activityId,location,startTime,endTime,workingHours,
-		status,taskDetails,lastModifiedon)
-		values
-			(#{tcdId},#{tcId},#{projectId},#{activityId},#{location}
-			,#{startTime},#{endTime},date_format(TimeDiff(#{endTime},#{startTime}),'%H:%i'),#{status},#{taskDetails}, now())
-	</insert>
-
-	<insert id="addBatchTimecardDayDetails" parameterType="list"
-		useGeneratedKeys='true' keyProperty='tcdId' keyColumn="tcdId">
-		insert into
-		TimecardDayDetails(tcdId,tcId,projectId,activityId,location,startTime,endTime,workingHours,
-		status,taskDetails,addedOn)
-		values
-
-		<foreach collection="list" item="TimecardDayDetails"
-			index="index" separator=",">
-
-			(#{TimecardDayDetails.tcdId},#{TimecardDayDetails.tcId},#{TimecardDayDetails.projectId},
-			#{TimecardDayDetails.activityId},#{TimecardDayDetails.location},
-			#{TimecardDayDetails.startTime},#{TimecardDayDetails.endTime},
-			#{TimecardDayDetails.workingHours},#{TimecardDayDetails.status},
-			#{TimecardDayDetails.taskDetails}, now())
-		</foreach>
-	</insert>
-<!-- Ended of Insert for table  TimecardDayDetai -->
-
-<!-- 
-	<insert id="addIndividualTimecardDetails" parameterType="TimecardDetails"
-		useGeneratedKeys='true' keyProperty='tcdId' keyColumn="tcdId">
-		insert into
-		TimeCardDetails(tcId,projectId,activityId,workingDay,workingDate,
-		workingHours,comments,status,addedOn,taskDetails,startTime,endTime)
-		values
-			(#{tcId},#{projectId},#{activityId}, #{workingDay},#{workingDate},#{workingHours},
-			#{comments},#{status}, #{addedOn},#{taskDetails},#{startTime},#{endTime})
-	</insert>
-
-	<insert id="addTimecardDetails" parameterType="list"
-		useGeneratedKeys='true' keyProperty='tcdId' keyColumn="tcdId">
-		insert into
-		TimeCardDetails(tcId,projectId,activityId,workingDay,workingDate,
-		workingHours,comments,status,addedOn,taskDetails,startTime,endTime
-		)
-		values
-
-		<foreach collection="list" item="TimecardDetails"
-			index="index" separator=",">
-			(#{TimecardDetails.tcId},#{TimecardDetails.projectId},#{TimecardDetails.activityId},
-			#{TimecardDetails.workingDay},#{TimecardDetails.workingDate},
-			#{TimecardDetails.workingHours},#{TimecardDetails.comments},#{TimecardDetails.status},
-			#{TimecardDetails.addedOn},#{TimecardDetails.taskDetails},#{TimecardDetails.startTime},
-			#{TimecardDetails.endTime})
-		</foreach>
-	</insert>
--->
-<!-- Start of Update Operations -->
-	<update id="updateTimecardInfo" parameterType="TimecardInfo"
-		keyProperty="tcId">
-		UPDATE TimecardInfo SET status=#{status}, lastModifiedOn=now()
-		WHERE tcId=#{tcId} and empId=#{empId}
-	</update>
-
-	<update id="updateTimecardInfoHour" parameterType="TimecardInfo"
-		keyProperty="tcId">
-		UPDATE TimecardInfo SET totalHours = #{totalHours}
-		WHERE tcId=#{tcId} and empId=#{empId}
-	</update>
-
 
 	<update id="updateTimecardDayInfo"
 		parameterType="TimecardDayInfo" useGeneratedKeys="true"
@@ -210,6 +167,43 @@
 		workingDate= #{workingDate}
 	</update>
 
+	<select id="isDataForCurrentDateExists"
+		parameterType="TimecardDayInfo" resultType="int">
+		select ifnull(
+		(select tcdId from TimecardDayInfo where tcId = #{tcId} and 
+		workingDate=#{workingDate} limit 0,1),-1) from dual;
+	</select>
+
+<!--  Operation ended for table TimecardDayInfo -->
+
+	<insert id="addIndividualTimecardDayDetails" parameterType="TimecardDayDetails"
+		useGeneratedKeys='true' keyProperty='tcddId' keyColumn="tcddId">
+		insert into
+		TimecardDayDetails(tcdId,tcId,projectId,activityId,location,startTime,endTime,workingHours,
+		status,taskDetails,lastModifiedon)
+		values
+			(#{tcdId},#{tcId},#{projectId},#{activityId},#{location}
+			,#{startTime},#{endTime},date_format(TimeDiff(#{endTime},#{startTime}),'%H:%i'),#{status},#{taskDetails}, now())
+	</insert>
+
+	<insert id="addBatchTimecardDayDetails" parameterType="list"
+		useGeneratedKeys='true' keyProperty='tcdId' keyColumn="tcdId">
+		insert into
+		TimecardDayDetails(tcdId,tcId,projectId,activityId,location,startTime,endTime,workingHours,
+		status,taskDetails,addedOn,recordType)
+		values
+
+		<foreach collection="list" item="TimecardDayDetails"
+			index="index" separator=",">
+
+			(#{TimecardDayDetails.tcdId},#{TimecardDayDetails.tcId},#{TimecardDayDetails.projectId},
+			#{TimecardDayDetails.activityId},#{TimecardDayDetails.location},
+			#{TimecardDayDetails.startTime},#{TimecardDayDetails.endTime},
+			#{TimecardDayDetails.workingHours},#{TimecardDayDetails.status},
+			#{TimecardDayDetails.taskDetails}, now(),'A')
+		</foreach>
+	</insert>
+
 	<update id="updateTimecardDayDetails"
 		parameterType="TimecardDayDetails" useGeneratedKeys="true"
 		keyProperty="tcddId">
@@ -226,31 +220,15 @@
 		WHERE tcddId=#{tcddId} and tcdId=#{tcdId} and tcId = #{tcId} 
 	</update>
 
-<!-- End of Update Operations -->
+	<update id="DeactivateTimecardDayDetails"
+		parameterType="int" useGeneratedKeys="true"
+		keyProperty="tcdId">
+		UPDATE TimecardDayDetails SET
+		recordType='D',
+		lastModifiedOn = now()
+		WHERE tcId = #{tcId} 
+	</update>
 
-<!-- Queries writted for validation on Timesheet -->
-
-	<select id="isCurrentTimecardExist"
-		parameterType="TimecardInfo" resultType="int">
-		select ifnull(
-		(select tcId from TimecardInfo where empId=#{empId} and tcId =#{tcId}
-		),-1) from dual;
-	</select>
-
-	<select id="isDataForCurrentWeekExists"
-		parameterType="TimecardInfo" resultType="int">
-		select ifnull(
-		(select tcId from TimecardInfo where empId=#{empId} and
-		(weekStart between #{weekStart} and #{weekEnd})
-		),-1) from dual;
-	</select>
-
-	<select id="isDataForCurrentDateExists"
-		parameterType="TimecardDayInfo" resultType="int">
-		select ifnull(
-		(select tcdId from TimecardDayInfo where tcId = #{tcId} and 
-		workingDate=#{workingDate} limit 0,1),-1) from dual;
-	</select>
 
 	<select id="isDataForCurrentDateTimeExists"
 		parameterType="TimecardDayDetails" resultType="int">
@@ -265,10 +243,10 @@
 	<select id="isDataForCurrentTimecardExists"
 		parameterType="TimecardDayDetails" resultType="int">
 
-		select ifnull((select tcddId from TimecardDayDetails where tcId = #{tcId} and tcdId = #{tcdId} and
+		select ifnull((select tcddId from TimecardDayDetails where tcId = #{tcId} and tcdId = #{tcdId} and recordType='A' and  
 		starttime between #{startTime} and #{endTime}
 		union
-		select tcddId from TimecardDayDetails where tcId = #{tcId}  and tcdId = #{tcdId} and 
+		select tcddId from TimecardDayDetails where tcId = #{tcId}  and tcdId = #{tcdId}  and recordType='A' and 
 		endtime between #{startTime} and #{endTime} limit 0,1),-1) from dual
 	</select>
 
@@ -292,6 +270,12 @@
 			on a.tcid=b.tcid and a.tcdid=b.tcdid  where a.tcid=#{tcId} group by 1,2,3,4;
 	</select>
 
+<!--  ***********************************************************************
+		Operation to fetch Project approver details for case of submit 
+		to insert data into table TimecardApprover Details 
+	  ***********************************************************************			
+-->
+
 	<select id="getProjectApproverList" parameterType="TimecardDayDetails"
 		resultType="TimecardApproverDetails">
 			select pId projectId,tcApprover approverId,level levelId from ProjectApproverDetails 
@@ -309,6 +293,8 @@
 			insert ignore into TimecardApproverDetails (tcId,projectId,approverId,levelId,status,comments,addedOn) 
 			values (#{tcId},#{projectId},#{approverId},#{levelId},'Pending',' ',now())
 	</insert>	
+
+<!--  Operation ended for submit data into table TimecardApprover Details -->
 
 	<select id="getTimecardByManager" parameterType="int"
 	resultType="TimecardInfo">

@@ -22,6 +22,7 @@ public enum TimecardErrorConstants {
 	BlankLocation("Please select a location"),
 	BlankProject("Please select a project"),
 	MimimunTimecards("Please add 5 days data to submit a timesheet"),
+	SingleDayWorkingHourValidationDuringSubmit("Single day working hours can't be less than 8 hours"),
 	BlankTimecardDetails("kindly enter atleast one day for saving a timecard"),
 	EditApplicableforDraftAndRejected("Edit is only allowed for draft and rejected status"),
 	DifferentEmployeeIdAndLoggedInUser("Logged-in user and update employee are not equal"),
