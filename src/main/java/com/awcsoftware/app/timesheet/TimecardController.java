@@ -4,6 +4,7 @@ package com.awcsoftware.app.timesheet;
  * 
  */
 
+import java.text.ParseException;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -32,6 +33,8 @@ public class TimecardController {
 		try {
 			strTimeCardServiceRet = service.saveTimecard(timecardInfo);
 			return new ResponseEntity<String>(strTimeCardServiceRet, HttpStatus.OK);
+		} catch (ParseException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		} catch (AppException e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		} catch (DbException e) {
@@ -47,6 +50,8 @@ public class TimecardController {
 		try {
 			strTimeCardServiceRet = service.updateTimeCard(timecardInfo);
 			return new ResponseEntity<String>(strTimeCardServiceRet, HttpStatus.OK);
+		} catch (ParseException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		} catch (AppException e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		} catch (DbException e) {
@@ -61,6 +66,8 @@ public class TimecardController {
 		try {
 			strTimeCardServiceRet = service.submitTimeCard(timecardInfo);
 			return new ResponseEntity<String>(strTimeCardServiceRet, HttpStatus.OK);
+		} catch (ParseException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		} catch (AppException e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		} catch (DbException e) {
@@ -97,7 +104,7 @@ public class TimecardController {
 	}
     
 	@RequestMapping(value="/getTimecardsByManager",method=RequestMethod.POST,headers = "Accept=application/json")
-	public ResponseEntity<List<TimecardInfo>> TimecardViewByManager(@RequestBody TimecardApproval timecardapproval ){
+	public ResponseEntity<List<TimecardInfo>> TimecardViewByManager(@RequestBody TimecardApproverDetails timecardapproval ){
 		TimecardService service = new TimecardService();
 		try {
 			List<TimecardInfo> result = service.getTimecardViewByManager(timecardapproval.getApproverId());

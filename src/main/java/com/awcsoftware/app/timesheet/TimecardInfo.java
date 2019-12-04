@@ -22,7 +22,7 @@ public class TimecardInfo implements Serializable {
 	private int empId;
 	private LocalDate weekStart;
 	private LocalDate weekEnd;
-	private float totalHours;
+	private String totalHours;
 	private String status;
 	private LocalDateTime addedOn;
 	private List<TimecardDayInfo> timecardDayInfo;
@@ -59,11 +59,12 @@ public class TimecardInfo implements Serializable {
 		this.weekEnd = weekEnd;
 	}
 
-	public float getTotalHours() {
+
+	public String getTotalHours() {
 		return totalHours;
 	}
 
-	public void setTotalHours(float totalHours) {
+	public void setTotalHours(String totalHours) {
 		this.totalHours = totalHours;
 	}
 

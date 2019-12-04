@@ -1,6 +1,7 @@
 package com.awcsoftware.app.timesheet;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import javax.validation.constraints.Min;
@@ -13,9 +14,10 @@ public class TimecardDayDetails implements Serializable {
 	private int projectId;
 	private int activityId;
 	private int location;
-	private String startTime;
+	private LocalDate workingDate;
+	private String startTime;	
 	private String endTime;
-	private float workingHours;
+	private String workingHours;
 	private String status;
 	private String taskDetails;
 	private LocalDateTime addedOn;
@@ -69,10 +71,10 @@ public class TimecardDayDetails implements Serializable {
 	public void setEndTime(String endTime) {
 		this.endTime = endTime;
 	}
-	public float getWorkingHours() {
+	public String getWorkingHours() {
 		return workingHours;
 	}
-	public void setWorkingHours(float workingHours) {
+	public void setWorkingHours(String workingHours) {
 		this.workingHours = workingHours;
 	}
 	public String getStatus() {
@@ -101,15 +103,18 @@ public class TimecardDayDetails implements Serializable {
 		this.lastModifiedOn = lastModifiedOn;
 	}
 	
-	
-	
+	public LocalDate getWorkingDate() {
+		return workingDate;
+	}
+	public void setWorkingDate(LocalDate workingDate) {
+		this.workingDate = workingDate;
+	}
 	@Override
 	public String toString() {
 		return "TimecardDayDetails [tcddId=" + tcddId + ", tcdId=" + tcdId + ", tcId=" + tcId + ", projectId="
-				+ projectId + ", activityId=" + activityId + ", location=" + location + ", startTime=" + startTime
-				+ ", endTime=" + endTime + ", workingHours=" + workingHours + ", status=" + status + ", taskDetails="
-				+ taskDetails + ", addedOn=" + addedOn + ", lastModifiedOn=" + lastModifiedOn + "]";
-	}
-
-	
+				+ projectId + ", activityId=" + activityId + ", location=" + location + ", workingDate=" + workingDate
+				+ ", startTime=" + startTime + ", endTime=" + endTime + ", workingHours=" + workingHours + ", status="
+				+ status + ", taskDetails=" + taskDetails + ", addedOn=" + addedOn + ", lastModifiedOn="
+				+ lastModifiedOn + "]";
+	}	
 }

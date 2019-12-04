@@ -1,5 +1,6 @@
 package com.awcsoftware.app.timesheet;
 
+import java.text.ParseException;
 import java.util.List;
 import java.util.Set;
 
@@ -15,7 +16,7 @@ import com.awcsoftware.spring.security.auth.UserAuthenticationDetail;
 public class TimecardService {
 	static Logger logger = Logger.getLogger(TimecardService.class);
 
-	public String saveTimecard(TimecardInfo addTimecardInfo) throws DbException, AppException {
+	public String saveTimecard(TimecardInfo addTimecardInfo) throws DbException, AppException, ParseException {
 		TimecardValidator timecardValidator = new TimecardValidator();
 		Set validationValue = timecardValidator.validateSaveTimeCard(addTimecardInfo);
 		if (validationValue.size() == 0) {
@@ -28,7 +29,7 @@ public class TimecardService {
 			return validationValue.toString();
 	}
 
-	public String updateTimeCard(TimecardInfo updTimecardInfo) throws DbException, AppException {
+	public String updateTimeCard(TimecardInfo updTimecardInfo) throws DbException, AppException, ParseException {
 		UserAuthenticationDetail auth = Util.getLoggedinUser();
 		TimecardValidator timecardValidator = new TimecardValidator();
 		Set validationValue = timecardValidator.validateSaveTimeCard(updTimecardInfo);
@@ -38,9 +39,9 @@ public class TimecardService {
 				return dao.addTimecard(updTimecardInfo);
 			else {
 				if (auth.getEmpId() == updTimecardInfo.getEmpId()) {
-					if (updTimecardInfo.getStatus().equalsIgnoreCase("draft")
+					if (updTimecardInfo.getStatus().equalsIgnoreCase("Draft")
 							|| updTimecardInfo.getStatus().equalsIgnoreCase("Rejected")
-							|| updTimecardInfo.getStatus().equalsIgnoreCase("Submitted"))
+							|| updTimecardInfo.getStatus().equalsIgnoreCase("Pending"))
 						return dao.updateTimecard(updTimecardInfo);
 					else
 						return TimecardErrorConstants.EditApplicableforDraftAndRejected.getLabel();
@@ -51,12 +52,17 @@ public class TimecardService {
 			return validationValue.toString();
 	}
 
-	public String submitTimeCard(TimecardInfo submitTimecardInfo) throws DbException, AppException {
+	public String submitTimeCard(TimecardInfo submitTimecardInfo) throws DbException, AppException, ParseException {
 		TimecardValidator timecardValidator = new TimecardValidator();
 		Set validationValue = timecardValidator.validateSubmitTimeCard(submitTimecardInfo);
 		if (validationValue.size() == 0) {
 			TimecardDao dao = new TimecardDao();
-			return updateTimeCard(submitTimecardInfo);
+			if(submitTimecardInfo.getTcId()==0 &&
+					submitTimecardInfo.getStatus().equals("Pending"))				
+				return saveTimecard(submitTimecardInfo);
+			else
+				return updateTimeCard(submitTimecardInfo);
+			
 		} else
 			return validationValue.toString();
 	}

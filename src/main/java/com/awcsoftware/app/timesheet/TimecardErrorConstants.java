@@ -15,7 +15,8 @@ public enum TimecardErrorConstants {
 	BlankEndDate("Week end date is not valid "),
 	BlankApprovalDetails("approval details is empty, kindly contact adminstrator and try again"),
 	DailyWorkingLimit("Working hours cannot exceed by 24 hours for a day"),
-	WeeklyWorkingLimit("Weeklt working hours cannot exceed by 168 hours for a day"),
+	WeeklyWorkingLimit("Weekly working hours cannot exceed by 168 hours for a day"),
+	MinWeeklyWorkingLimit("Weekly work hour can't be less than 40 hours"),
 	BlankWorkingDate("Invalid working date"),
 	BlankActivity("Please select an activity"),
 	BlankLocation("Please select a location"),
@@ -25,13 +26,14 @@ public enum TimecardErrorConstants {
 	EditApplicableforDraftAndRejected("Edit is only allowed for draft and rejected status"),
 	DifferentEmployeeIdAndLoggedInUser("Logged-in user and update employee are not equal"),
 	WorkDateNotInWeekRange("Working date is not selected week range"),
+	WorkDateCantBeNull("Work date can't be null"),
 	StartEndTimeCantBeSame("Start time and end time can't be same"),
 	StartEndTimeCantBeNull("Start time and end time can't be null"),
 	TimeOverlapping("Time Period is overlapping"),
 	StartTimeBiggerThanEndTime("Start Time > End Time"),
 	
-	TimecardDateTimeExist("Data already exist for the selected week1"),		//Need to discuss with Punit Sir Whether to show this message when user select previous week data during add timesheet
-	TimecardDataExist("Data already exist for the selected week2"),		//Need to discuss with Punit Sir Whether to show this message when user select previous week data during add timesheet
+	TimecardDateTimeExist("Data already exist for the selected week"),		//Need to discuss with Punit Sir Whether to show this message when user select previous week data during add timesheet
+	TimecardDataExist("Data already exist for the selected week"),		//Need to discuss with Punit Sir Whether to show this message when user select previous week data during add timesheet
 	TimecardTimeDataExist("Data already exist for the selected date and time"),		//Need to discuss with Punit Sir Whether to show this message when user select previous week data during add timesheet
 	TimecardDateDataExist("Data already exist for the selected date"),		//Need to discuss with Punit Sir Whether to show this message when user select previous week data during add timeshee
 	TimecardSuccessMessage("Timecard has been added"),		//Need to discuss with Punit Sir Whether to show this message when user select previous week data during add timesheet

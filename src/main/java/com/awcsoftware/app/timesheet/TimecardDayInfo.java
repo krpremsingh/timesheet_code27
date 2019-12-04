@@ -13,7 +13,7 @@ public class TimecardDayInfo implements Serializable {
 	
 	private LocalDate workingDate;
 	private String workingDay;
-	private float totalWeekWorkHours;
+	private String totalWeekWorkHours;
 	private String status;
 	private LocalDateTime addedOn;
 	private LocalDateTime lastModifiedOn;
@@ -52,11 +52,12 @@ public class TimecardDayInfo implements Serializable {
 		this.workingDay = workingDay;
 	}
 
-	public float getTotalWeekWorkHours() {
+
+	public String getTotalWeekWorkHours() {
 		return totalWeekWorkHours;
 	}
 
-	public void setTotalWeekWorkHours(float totalWeekWorkHours) {
+	public void setTotalWeekWorkHours(String totalWeekWorkHours) {
 		this.totalWeekWorkHours = totalWeekWorkHours;
 	}
 
@@ -90,64 +91,6 @@ public class TimecardDayInfo implements Serializable {
 
 	public void setTimecardDayDetails(List<TimecardDayDetails> timecardDayDetails) {
 		this.timecardDayDetails = timecardDayDetails;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((addedOn == null) ? 0 : addedOn.hashCode());
-		result = prime * result + ((lastModifiedOn == null) ? 0 : lastModifiedOn.hashCode());
-		result = prime * result + ((status == null) ? 0 : status.hashCode());
-		result = prime * result + tcId;
-		result = prime * result + tcdId;
-		result = prime * result + Float.floatToIntBits(totalWeekWorkHours);
-		result = prime * result + ((workingDate == null) ? 0 : workingDate.hashCode());
-		result = prime * result + ((workingDay == null) ? 0 : workingDay.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		TimecardDayInfo other = (TimecardDayInfo) obj;
-		if (addedOn == null) {
-			if (other.addedOn != null)
-				return false;
-		} else if (!addedOn.equals(other.addedOn))
-			return false;
-		if (lastModifiedOn == null) {
-			if (other.lastModifiedOn != null)
-				return false;
-		} else if (!lastModifiedOn.equals(other.lastModifiedOn))
-			return false;
-		if (status == null) {
-			if (other.status != null)
-				return false;
-		} else if (!status.equals(other.status))
-			return false;
-		if (tcId != other.tcId)
-			return false;
-		if (tcdId != other.tcdId)
-			return false;
-		if (Float.floatToIntBits(totalWeekWorkHours) != Float.floatToIntBits(other.totalWeekWorkHours))
-			return false;
-		if (workingDate == null) {
-			if (other.workingDate != null)
-				return false;
-		} else if (!workingDate.equals(other.workingDate))
-			return false;
-		if (workingDay == null) {
-			if (other.workingDay != null)
-				return false;
-		} else if (!workingDay.equals(other.workingDay))
-			return false;
-		return true;
 	}
 
 	@Override
