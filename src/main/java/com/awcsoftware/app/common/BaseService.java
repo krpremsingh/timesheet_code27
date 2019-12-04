@@ -8,9 +8,9 @@ import org.springframework.stereotype.Service;
 public class BaseService{
 
 	
-	public List<BasePojo> getActivities(int designationId) {
+	public List<BasePojo> getActivities() {
 		BaseDao dao=new BaseDao();
-		List<BasePojo> setofactivities = dao.getActivities(designationId);
+		List<BasePojo> setofactivities = dao.getActivities();
 		return setofactivities;
 	}
 

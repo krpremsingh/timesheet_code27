@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,10 +17,9 @@ public class BaseController {
 
 	BaseService baseservice = new BaseService();
 
-	@PostMapping("/getActivities")
-	@PreAuthorize("hasRole('EMPLOYEE')")
-	public ResponseEntity<List<BasePojo>> getActivitiesList(@RequestBody BasePojo basepojo) throws AppException, DbException {
-		List<BasePojo> setofactivities = baseservice.getActivities(basepojo.getId());
+	@GetMapping("/getActivities")
+	public ResponseEntity<List<BasePojo>> getActivitiesList() throws AppException, DbException {
+		List<BasePojo> setofactivities = baseservice.getActivities();
 		return new ResponseEntity<List<BasePojo>>(setofactivities,HttpStatus.OK);
 	}
 

@@ -12,11 +12,11 @@ import com.awcsoftware.mybatis.MyBatisManager;
 public class BaseDao {
 	static Logger log = Logger.getLogger(BaseDao.class.getName());
 	
-	public List<BasePojo> getActivities(int designationId){
+	public List<BasePojo> getActivities(){
 		
 		SqlSession session = MyBatisManager.openSession();
 		try {
-			List<BasePojo> activities = session.selectList("ParentBasePojo.getActivities", designationId);
+			List<BasePojo> activities = session.selectList("ParentBasePojo.getActivities");
 			return activities;
 		} finally {
 			session.close();
