@@ -63,124 +63,63 @@ public class TimecardDao {
 	public int processTimecardDayDetails(TimecardInfo timecardInfo, SqlSession sqlSession, String strAction)
 			throws DbException {
 		SqlSession session = sqlSession;
-		int iProjectId=0;
-		int iSubmitReturn=0;
+		int iProjectId = 0;
+		int iSubmitReturn = 0;
 		try {
 			float totalWeekHour = 0, totalDayHour = 0;
 			if (strAction.equals("Insert")) {
 				for (TimecardDayInfo timecardDayInfo : timecardInfo.getTimecardDayInfo()) {
 
 					totalDayHour = 0;
-//Setting tcId of parent (TimecardInfo) table into TimecardDayInfo.
 					timecardDayInfo.setTcId(timecardInfo.getTcId());
 
-//Validate current date data is already lying in table TimecardDayInfo
 					if (isDataForCurrentDateExists(timecardDayInfo) == false) {
 						return 0;
 					}
 					session.insert("TimecardMapper.addIndividualTimecardDayInfo", timecardDayInfo);
 
-//Iterating TimecardDayDetails
 					for (TimecardDayDetails timecardDayDetails : timecardDayInfo.getTimecardDayDetails()) {
 						timecardDayDetails.setTcId(timecardDayInfo.getTcId());
 						timecardDayDetails.setTcdId(timecardDayInfo.getTcdId());
-						if(timecardInfo.getStatus().equals("Pending"))
-						{
-							if(iProjectId!=timecardDayDetails.getProjectId())
-							{
-								iSubmitReturn=submitTimecardDetails(timecardDayDetails,session);							
+						if (timecardInfo.getStatus().equals("Pending")) {
+							if (iProjectId != timecardDayDetails.getProjectId()) {
+								iSubmitReturn = submitTimecardDetails(timecardDayDetails, session);
 							}
-							iProjectId=timecardDayDetails.getProjectId();
+							iProjectId = timecardDayDetails.getProjectId();
 						}
 					}
 
-//					timecardDayInfo.setTotalWeekWorkHours(totalDayHour);
-//					timecardInfo.setTotalHours(totalWeekHour);
 					session.update("TimecardMapper.updateTimecardInfoHour", timecardInfo);
 					session.update("TimecardMapper.updateTimecardDayHourInfo", timecardDayInfo);
 					session.insert("TimecardMapper.addBatchTimecardDayDetails",
 							timecardDayInfo.getTimecardDayDetails());
 				}
 			} else if (strAction.equals("Update")) {
-				// Iterating list of Daywise details of time card
+
+				session.update("TimecardMapper.DeactivateTimecardDayDetails", timecardInfo.getTcId());
 				for (TimecardDayInfo timecardDayInfo : timecardInfo.getTimecardDayInfo()) {
 					totalDayHour = 0;
-
-					// Checking data exist for current timecard id and current entered date. true
-					// means data doesn't exist
-					if (isDataForCurrentDateExists(timecardDayInfo) == false) {
-						if (timecardDayInfo.getTcdId() == 0)
-							return 0;
-						session.update("TimecardMapper.updateTimecardDayInfo", timecardDayInfo);
-						// Iterating list of per day details.
-						for (TimecardDayDetails timecardDayDetails : timecardDayInfo.getTimecardDayDetails()) {
-							if (timecardDayDetails.getTcddId() != 0) {
-								timecardDayDetails.setTcId(timecardInfo.getTcId());
-								timecardDayDetails.setTcdId(timecardDayInfo.getTcdId());
-								// Updating timecard details per row
-								session.update("TimecardMapper.updateTimecardDayDetails", timecardDayDetails);
-								if(timecardInfo.getStatus().equals("Pending"))
-								{
-									if(iProjectId!=timecardDayDetails.getProjectId())
-									{
-										iSubmitReturn=submitTimecardDetails(timecardDayDetails,session);							
-									}
-									iProjectId=timecardDayDetails.getProjectId();
-								}
-
-							} else {
-								if (isDataForCurrentTimecardExists(timecardDayDetails) == false) {
-									return 2;
-								}
-								/*
-								 * totalWeekHour += timecardDayDetails.getWorkingHours(); totalDayHour +=
-								 * timecardDayDetails.getWorkingHours();
-								 */
-								// Insert daywise details If data doesn't exist for new record
-								session.insert("TimecardMapper.addIndividualTimecardDayDetails", timecardDayDetails);
-								if(timecardInfo.getStatus().equals("Pending"))
-								{
-									if(iProjectId==0 &&
-											iProjectId!=timecardDayDetails.getProjectId())
-									{
-										iSubmitReturn=submitTimecardDetails(timecardDayDetails,session);							
-									}
-									iProjectId=timecardDayDetails.getProjectId();
-								}
-
+					if(timecardDayInfo.getTcdId()==0)
+					{
+						session.insert("TimecardMapper.addIndividualTimecardDayInfo",timecardDayInfo);						
+					}
+					for (TimecardDayDetails timecardDayDetails : timecardDayInfo.getTimecardDayDetails()) {
+						timecardDayDetails.setTcId(timecardDayInfo.getTcId());
+						timecardDayDetails.setTcdId(timecardDayInfo.getTcdId());
+						if (timecardInfo.getStatus().equals("Pending")) {
+							if (iProjectId != timecardDayDetails.getProjectId()) {
+								iSubmitReturn = submitTimecardDetails(timecardDayDetails, session);
 							}
+							iProjectId = timecardDayDetails.getProjectId();
 						}
-					} else {
-						// Insert new day details If data doesn't exist for new record
-						session.insert("TimecardMapper.addIndividualTimecardDayInfo", timecardDayInfo);
-						for (TimecardDayDetails timecardDayDetails : timecardDayInfo.getTimecardDayDetails()) {
-
-							/*
-							 * totalWeekHour += timecardDayDetails.getWorkingHours(); totalDayHour +=
-							 * timecardDayDetails.getWorkingHours();
-							 */							timecardDayDetails.setTcId(timecardDayInfo.getTcId());
-							timecardDayDetails.setTcdId(timecardDayInfo.getTcdId());
-							if(timecardInfo.getStatus().equals("Pending"))
-							{
-								if(iProjectId!=timecardDayDetails.getProjectId())
-								{
-									iSubmitReturn=submitTimecardDetails(timecardDayDetails,session);							
-								}
-								iProjectId=timecardDayDetails.getProjectId();
-							}
-
-						}
-						// Insert new daywise details If data doesn't exist for new record
-						session.insert("TimecardMapper.addBatchTimecardDayDetails",
-								timecardDayInfo.getTimecardDayDetails());
 
 					}
-					// Update total day work hour
-	//				timecardDayInfo.setTotalWeekWorkHours(totalDayHour);
+					// Insert new daywise details If data doesn't exist for new record
+					session.insert("TimecardMapper.addBatchTimecardDayDetails",
+							timecardDayInfo.getTimecardDayDetails());
+
 					session.update("TimecardMapper.updateTimecardDayHourInfo", timecardDayInfo);
 				}
-				// Update total Week work hour
-//				timecardInfo.setTotalHours(totalWeekHour);
 				session.update("TimecardMapper.updateTimecardInfoHour", timecardInfo);
 			}
 		} finally {
@@ -188,21 +127,19 @@ public class TimecardDao {
 		return 1;
 	}
 
-	public int submitTimecardDetails(TimecardDayDetails timecardDayDetails, SqlSession sqlSession)
-			throws DbException {
+	public int submitTimecardDetails(TimecardDayDetails timecardDayDetails, SqlSession sqlSession) throws DbException {
 		SqlSession session = sqlSession;
 		try {
 			List<TimecardApproverDetails> lsttimecardApproverDetails = session
 					.selectList("TimecardMapper.getProjectApproverList", timecardDayDetails);
-			for(int iApprover=0;iApprover<lsttimecardApproverDetails.size();iApprover++)
-			{
-				TimecardApproverDetails  timecardApproverDetails=lsttimecardApproverDetails.get(iApprover);
+			for (int iApprover = 0; iApprover < lsttimecardApproverDetails.size(); iApprover++) {
+				TimecardApproverDetails timecardApproverDetails = lsttimecardApproverDetails.get(iApprover);
 				timecardApproverDetails.setTcId(timecardDayDetails.getTcId());
-				if(isApproverExistforCurrentTimecardProject(timecardApproverDetails)==false)
-					session.insert("TimecardMapper.addTimecardApproverDetails",timecardApproverDetails);			
+				if (isApproverExistforCurrentTimecardProject(timecardApproverDetails) == false)
+					session.insert("TimecardMapper.addTimecardApproverDetails", timecardApproverDetails);
 			}
-			
-		} finally {			
+
+		} finally {
 		}
 		return 1;
 	}
@@ -303,7 +240,8 @@ public class TimecardDao {
 		SqlSession session = MyBatisManager.openSession();
 		int tcId = 0;
 		try {
-			tcId = session.selectOne("TimecardMapper.isApproverExistforCurrentTimecardProject", timecardApproverDetails);
+			tcId = session.selectOne("TimecardMapper.isApproverExistforCurrentTimecardProject",
+					timecardApproverDetails);
 			if (tcId == -1)
 				return false;
 			else
