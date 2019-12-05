@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.awcsoftware.app.AppException;
 import com.awcsoftware.mybatis.DbException;
+import com.awcsoftware.spring.security.auth.user.User;
 
 @RestController
 public class TimecardController {
@@ -104,18 +105,31 @@ public class TimecardController {
 	}
     
 	@RequestMapping(value="/getTimecardsByManager",method=RequestMethod.POST,headers = "Accept=application/json")
-	public ResponseEntity<List<TimecardInfo>> TimecardViewByManager(@RequestBody TimecardApproverDetails timecardapproval ){
+	public ResponseEntity<List<TimecardManagerView>> TimecardViewByManager(@RequestBody TimecardManagerView view ){
 		TimecardService service = new TimecardService();
 		try {
-			List<TimecardInfo> result = service.getTimecardViewByManager(timecardapproval.getApproverId());
+			List<TimecardManagerView> result = service.getTimecardViewByManager(view);
 			logger.debug("result   "+result);
-			return new ResponseEntity<List<TimecardInfo>>(result, HttpStatus.OK); 
+			return new ResponseEntity<List<TimecardManagerView>>(result, HttpStatus.OK); 
 		} catch (DbException | AppException e) {
-			return new ResponseEntity<List<TimecardInfo>>(HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<List<TimecardManagerView>>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
 
 }
+	@RequestMapping(value="/getEmployees",method=RequestMethod.POST,headers = "Accept=application/json")
+	public ResponseEntity<List<User>>getEmployees(@RequestBody User user){
+		TimecardService service = new TimecardService();
+		try {
+			List<User> result = service.getEmployees(user.getEmpId());
+			logger.debug("result   "+result);
+			return new ResponseEntity<List<User>>(result, HttpStatus.OK); 
+		} catch (DbException | AppException e) {
+			return new ResponseEntity<List<User>>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+	}
+	
     @GetMapping("/sample")
     @PreAuthorize("hasRole('EMPLOYEE')")
 	public String sample() {

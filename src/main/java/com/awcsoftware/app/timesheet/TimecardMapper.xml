@@ -296,13 +296,33 @@
 
 <!--  Operation ended for submit data into table TimecardApprover Details -->
 
-	<select id="getTimecardByManager" parameterType="int"
+<!-- 	<select id="getTimecardByManager" parameterType="int"
 	resultType="TimecardInfo">
 		select
 		e.empId,e.firstName,ti.totalHours,ti.status,ti.weekStart,ti.weekEnd,tad.comments,tad.status
 		from TimecardApproverDetails tad,EmployeeInfo e inner join
 		TimeCardSummaryInfo ti on ti.empId=e.empId where
 		tad.approverId=#{approverId};
+	</select> -->
+
+	<select id="getEmployeeNames" parameterType="int" resultType="User">		
+		SELECT PTM.empId,ei.firstName,ei.lastName,ei.empCode,ei.designationId,ei.dob,ei.doj FROM
+		ProjectTeamDetails PTM, ProjectApproverDetails PAD, EmployeeInfo ei
+		WHERE PAD.pId=PTM.pId AND PTM.empId &lt;&gt; TCAPPROVER AND ei.empId=PTM.empId
+		and TCAPPROVER=#{empId};
+	</select>
+
+	<select id="getTimecardByManager"
+		resultType="TimecardManagerView">
+	select distinct ti.tcId, ti.empId,ti.weekStart,ti.weekEnd ,DAYNAME(workingDate) dayName,workingDate, projectId, sec_to_time(sum(Time_to_sec(workingHours))) totalWeekHours from 
+    TimecardDayDetails a, TimecardDayInfo b, TimecardInfo ti,ProjectApproverDetails where 
+    <if test="empId!= null">
+    	ti.empId=#{empId} and 
+    </if>
+    weekStart=#{weekStart} 
+   and weekEnd=#{weekEnd} and a.tcId=b.tcId and 
+   a.tcdId=b.tcdId and ti.tcId=a.tcId and ti.tcId=b.tcId and ti.status='draft' and pId=projectId  
+   group by ti.tcId, projectId,workingDate order by ti.tcId,workingDate;
 	</select>
 
 </mapper> 

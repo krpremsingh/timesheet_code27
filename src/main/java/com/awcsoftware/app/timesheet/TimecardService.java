@@ -12,6 +12,7 @@ import com.awcsoftware.app.AppException;
 import com.awcsoftware.app.Util;
 import com.awcsoftware.mybatis.DbException;
 import com.awcsoftware.spring.security.auth.UserAuthenticationDetail;
+import com.awcsoftware.spring.security.auth.user.User;
 
 public class TimecardService {
 	static Logger logger = Logger.getLogger(TimecardService.class);
@@ -77,13 +78,19 @@ public class TimecardService {
 		TimecardDao dao = new TimecardDao();
 		return (List<TimecardView>) dao.getTimecardDetailsView(tcId);
 	}
+	
+	public List<User> getEmployees(int approverId)throws DbException, AppException{
+		TimecardDao dao = new TimecardDao();
+		return (List<User>)dao.getEmployeeNames(approverId);
+		
+	}
 
-	public List<TimecardInfo> getTimecardViewByManager(int approverId) throws DbException, AppException {
+	public List<TimecardManagerView> getTimecardViewByManager(TimecardManagerView view) throws DbException, AppException {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		UserAuthenticationDetail auth = (UserAuthenticationDetail) authentication;
 
 		TimecardDao dao = new TimecardDao();
-		List<TimecardInfo> result = dao.getTimecardByManager(approverId);
+		List<TimecardManagerView> result = dao.getTimecardByManager(view);
 		return result;
 	}
 
