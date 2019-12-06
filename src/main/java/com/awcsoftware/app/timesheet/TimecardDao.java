@@ -239,6 +239,21 @@ public class TimecardDao {
 		}
 
 	}
+	
+	public List<User> getEmployeeNames(int approverId){
+		SqlSession session = MyBatisManager.openSession();
+
+		try {
+			List<User> result = session.selectList("TimecardMapper.getEmployeeNames", approverId);
+			if (result != null)
+				return result;
+			else
+				return null;
+		} finally {
+			session.close();
+		}
+		
+	}
 
 	public List<TimecardManagerView> getTimecardByManager(TimecardManagerView view) {
 		SqlSession session = MyBatisManager.openSession();

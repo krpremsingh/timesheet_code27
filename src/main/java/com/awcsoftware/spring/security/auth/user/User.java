@@ -1,12 +1,18 @@
 package com.awcsoftware.spring.security.auth.user;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
 import org.hibernate.validator.constraints.Email;
 
-public class User {
+public class User implements Serializable {
+
+	/**
+	 * Author by Arun
+	 */
+	private static final long serialVersionUID = 1L;
 
 	private int empId;
 	

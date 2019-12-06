@@ -28,7 +28,8 @@
 </resultMap>
 
 <select id="getActivities"  resultMap="ActivitiesResult">
-select distinct a.activity,a.activityId from ActivitiesInfo a,DesignationInfo d where a.designationId=#{designationId};
+<!-- select distinct a.activity,a.activityId from ActivitiesInfo a,DesignationInfo d where a.designationId=#{designationId}; -->
+select distinct activity,activityId from ActivitiesInfo
 </select>
 	
 <select id="getProjects" resultMap="projectResult">
