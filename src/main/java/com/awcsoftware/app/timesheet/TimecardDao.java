@@ -17,16 +17,20 @@ public class TimecardDao {
 	public String saveTimecard(TimecardInfo timecardInfo) throws DbException, AppException {
 		SqlSession session = MyBatisManager.openSession();
 		try {
-			return addTimecard(timecardInfo, session);
+			if(timecardInfo.getTcId()==0)
+				return addTimecard(timecardInfo, session);
+			else
+				return updateTimecardByView(timecardInfo, session);
 		} finally {
 			session.close();
 		}
 	}
 
+
 	public String submitTimecard(TimecardInfo timecardInfo) throws DbException, AppException {
 		SqlSession session = MyBatisManager.openSession();
 		try {
-			return addTimecard(timecardInfo, session);
+			return updateTimecardByView(timecardInfo, session);
 		} finally {
 			session.close();
 		}
@@ -44,16 +48,30 @@ public class TimecardDao {
 			if (isTimecardExistsForCurrentWeekForCurrentEmployee(timecardInfo) == false) {
 				addTimecardInfo(timecardInfo, session);
 				addTimecardDayInfo(timecardInfo, session);
+				session.update("TimecardMapper.updateTimecardInfoHour", timecardInfo);
+				session.commit();
+				return TimecardMessageConstant.TimecardSuccessMessage.getLabel();
 			} else {
-				session.update("TimecardMapper.DeactivateTimecardDayDetails", timecardInfo.getTcId());
-				addTimecardDayInfo(timecardInfo, session);
+				return TimecardMessageConstant.TimecardDataExist.getLabel();	
 			}
-			session.update("TimecardMapper.updateTimecardInfoHour", timecardInfo);
-			session.commit();
-			return TimecardMessageConstant.TimecardSuccessMessage.getLabel();
 
 		} finally {
 		}
+	}
+	
+	private String updateTimecardByView(TimecardInfo timecardInfo, SqlSession sessionParam) throws DbException, AppException {
+		SqlSession session = sessionParam;
+		try
+		{
+			session.update("TimecardMapper.DeactivateTimecardDayDetails", timecardInfo.getTcId());
+			addTimecardDayInfo(timecardInfo, session);
+			session.update("TimecardMapper.updateTimecardInfoHour", timecardInfo);
+			session.commit();
+			return TimecardMessageConstant.TimecardUpdateMessage.getLabel();			
+		}
+		finally
+		{}
+		
 	}
 
 	private void addTimecardInfo(TimecardInfo timecardInfo, SqlSession sessionParam) throws DbException, AppException {
@@ -67,14 +85,19 @@ public class TimecardDao {
 	private void addTimecardDayInfo(TimecardInfo timecardInfo, SqlSession sessionParam)
 			throws DbException, AppException {
 		SqlSession session = sessionParam;
+		int timecardDayInfoCtr=-1;
 		try {
 			for (TimecardDayInfo timecardDayInfo : timecardInfo.getTimecardDayInfo()) {
-				if (isTimecardExistsForCurrentDateForCurrentEmployee(timecardDayInfo) == false) {
-					timecardDayInfo.setTcId(timecardInfo.getTcId());
+				timecardDayInfo.setTcId(timecardInfo.getTcId());
+				timecardDayInfoCtr=isTimecardExistsForCurrentDateForCurrentEmployee(timecardDayInfo);
+				if ( timecardDayInfoCtr== -1) {
 					session.insert("TimecardMapper.addIndividualTimecardDayInfo", timecardDayInfo);
 					addTimecardDayDetails(timecardDayInfo, session);
 				} else
+				{
+					timecardDayInfo.setTcdId(timecardDayInfoCtr);
 					addTimecardDayDetails(timecardDayInfo, session);
+				}
 			}
 
 		} finally {
@@ -86,7 +109,6 @@ public class TimecardDao {
 		SqlSession session = sessionParam;
 		int ProjectId = 0, submitReturn = 0;
 		try {
-
 			for (TimecardDayDetails timecardDayDetails : timecardDayInfoParam.getTimecardDayDetails()) {
 				timecardDayDetails.setTcId(timecardDayInfoParam.getTcId());
 				timecardDayDetails.setTcdId(timecardDayInfoParam.getTcdId());
@@ -157,16 +179,13 @@ public class TimecardDao {
 		}
 	}
 
-	public boolean isTimecardExistsForCurrentDateForCurrentEmployee(TimecardDayInfo timecardDayInfo) {
+	public int isTimecardExistsForCurrentDateForCurrentEmployee(TimecardDayInfo timecardDayInfo) {
 		SqlSession session = MyBatisManager.openSession();
 		int tcdId = 0;
 		try {
 			tcdId = session.selectOne("TimecardMapper.isTimecardExistsForCurrentDateForCurrentEmployee",
 					timecardDayInfo);
-			if (tcdId == -1)
-				return false;
-			else
-				return true;
+			return tcdId;
 		} finally {
 			session.close();
 		}

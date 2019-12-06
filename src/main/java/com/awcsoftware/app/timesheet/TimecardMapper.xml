@@ -102,7 +102,7 @@
 	<update id="updateTimecardInfoHour" parameterType="TimecardInfo"
 		keyProperty="tcId">
 		UPDATE TimecardInfo ti SET totalHours = ifnull((select sec_to_time(sum(Time_to_sec(workingHours))) from 
-		TimecardDayDetails tcdd where tcdd.tcid=ti.tcId and recordType='A' ),'00:00')
+		TimecardDayDetails tcdd where tcdd.tcid=ti.tcId and recordType='Active' ),'00:00')
 		WHERE tcId=#{tcId} and empId=#{empId}
 	</update>
 
@@ -165,7 +165,7 @@
 		status = #{status},
 		totalWeekWorkHours =ifnull((select sec_to_time(sum(Time_to_sec(workingHours))) 
 		from TimecardDayDetails tcdd where tcdi.tcId=tcdd.tcId and tcdi.tcdId=tcdd.tcdid 
-		and recordType='A' ),'00:00:00')
+		and recordType='Active' ),'00:00:00')
 		WHERE tcdId=#{tcdId} and tcId = #{tcId} and
 		workingDate= #{workingDate}
 	</update>
@@ -203,7 +203,7 @@
 			#{TimecardDayDetails.activityId},#{TimecardDayDetails.location},
 			#{TimecardDayDetails.startTime},#{TimecardDayDetails.endTime},
 			#{TimecardDayDetails.workingHours},#{TimecardDayDetails.status},
-			#{TimecardDayDetails.taskDetails}, now(),'A')
+			#{TimecardDayDetails.taskDetails}, now(),'Active')
 		</foreach>
 	</insert>
 
@@ -227,7 +227,7 @@
 		parameterType="int" useGeneratedKeys="true"
 		keyProperty="tcdId">
 		UPDATE TimecardDayDetails SET
-		recordType='D',
+		recordType='Discard',
 		lastModifiedOn = now()
 		WHERE tcId = #{tcId} 
 	</update>
@@ -260,7 +260,7 @@
 			select tcdd.tcdid,tcdd.projectid,tcdd.activityId ,tcdd.location , sec_to_time(sum(Time_to_sec(workingHours))) weekWorkingHours,
 			ifnull((select concat(firstName,' ',middleName,' ',lastName) from employeeInfo where empId=approverId),' ')
 			from TimecardDayDetails tcdd left join TimecardApproverDetails tcad 
-			on tcdd.tcid=tcad.tcid and tcdd.projectid=tcad.projectid where tcdd.tcid=#{tcId} and tcdd.recordtype='A' 
+			on tcdd.tcid=tcad.tcid and tcdd.projectid=tcad.projectid where tcdd.tcid=#{tcId} and tcdd.recordtype='Active' 
 			group by tcdd.tcdid,tcdd.projectid,tcdd.activityId ,tcdd.location;
 	</select>
 

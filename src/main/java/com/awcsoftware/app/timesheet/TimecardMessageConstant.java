@@ -22,6 +22,7 @@ public enum TimecardMessageConstant {
 	MimimunTimecards("Add 5 days data to submit a timesheet"),
 	SingleDayWorkingHourValidationDuringSubmit("Single day working hours can't be less than 8 hours"),
 	BlankTimecardDetails("Enter atleast one day to save a timecard"),
+	BlankDayTimecardDetails("Enter atleast one day to save a timecard"),
 	EditApplicableforDraftAndRejected("Edit is only allowed for draft and rejected status"),
 
 	//Logged-in user and update employee are not equal
@@ -41,7 +42,7 @@ public enum TimecardMessageConstant {
 	RejectCommentIsEmpty("Add comment for rejection"),
 
 	
-	TimecardDateTimeExist("Data already exist for the selected week"),		
+	TimecardDateTimeExist("Data already exist for the selected Time"),		
 	TimecardDataExist("Data already exist for the selected week"),		
 	TimecardTimeDataExist("Data already exist for the selected date and time"),		
 	TimecardDateDataExist("Data already exist for the selected date"),		

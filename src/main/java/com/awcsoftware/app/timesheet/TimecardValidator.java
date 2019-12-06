@@ -60,6 +60,11 @@ public class TimecardValidator extends AppValidator {
 		if (timecardInfo.getTimecardDayInfo() == null) {
 			errorMsg.add(TimecardMessageConstant.BlankTimecardDetails.getLabel());
 		}
+
+		if (timecardInfo.getTimecardDayInfo().size() == 0) {
+			errorMsg.add(TimecardMessageConstant.BlankTimecardDetails.getLabel());
+		}
+
 		timecardInfo.setStatus(draftFlag);
 		validateTimecardDayInfo(timecardInfo.getTimecardDayInfo(), timecardInfo.getWeekStart().toString(),
 				timecardInfo.getWeekEnd().toString());
@@ -110,6 +115,11 @@ public class TimecardValidator extends AppValidator {
 			if (Util.validateDateRange(timecardDayInfo.getWorkingDate().toString(), weekStartDate,
 					weekEndDate) == false)
 				errorMsg.add(TimecardMessageConstant.WorkDateNotInWeekRange.getLabel());
+
+			if (timecardDayInfo.getTimecardDayDetails().size() == 0) {
+				errorMsg.add(TimecardMessageConstant.BlankDayTimecardDetails.getLabel());
+				return errorMsg;
+			}
 
 			timecardDayInfo.setStatus(draftFlag);
 			validateTimecardDayDetailsData(timecardDayInfo.getTimecardDayDetails());
