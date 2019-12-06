@@ -1,5 +1,7 @@
 package com.awcsoftware.app;
 
+import java.text.ParseException;
+
 public class AppException extends Exception {
 	private static final long serialVersionUID = 1L;
 	private String message = null;
@@ -17,6 +19,10 @@ public class AppException extends Exception {
         super(cause);
     }
 	
+	public AppException(ParseException cause) {
+        super(cause);
+    }
+
 	@Override
     public String toString() {
         return message;

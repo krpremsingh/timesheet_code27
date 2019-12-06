@@ -2,6 +2,7 @@ package com.awcsoftware.app.timesheet;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -20,6 +21,8 @@ public class TimecardView  implements Serializable
 	private String managerName;
 	private String statusGrid;
 	private String managerComment;
+	
+	private List<TimecardDayDetails> timecardDayDetails;
 
 	public int getTcId() {
 		return tcId;
@@ -93,10 +96,16 @@ public class TimecardView  implements Serializable
 	public void setManagerComment(String managerComment) {
 		this.managerComment = managerComment;
 	}
-
-
 	  
-	  @Override public String toString() { return "TimeCardView [weekstartDT=" +
+	public List<TimecardDayDetails> getTimecardDayDetails() {
+		return timecardDayDetails;
+	}
+
+	public void setTimecardDayDetails(List<TimecardDayDetails> timecardDayDetails) {
+		this.timecardDayDetails = timecardDayDetails;
+	}
+
+	@Override public String toString() { return "TimeCardView [weekstartDT=" +
 	  weekstartDT + ", weekEndDT=" + weekEndDT + ", status=" + status +
 	  ", weekPeriod=" + weekPeriod + ", totalHour=" + totalHour + ", managerName="
 	  + managerName + ", statusGrid=" + statusGrid + ", managerComment=" +

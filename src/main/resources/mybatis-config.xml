@@ -33,6 +33,8 @@
 		<typeAlias alias="TimecardApproverDetails"
 			type="com.awcsoftware.app.timesheet.TimecardApproverDetails" />
 
+		<typeAlias alias="TimecardManagerView"
+			type="com.awcsoftware.app.timesheet.TimecardManagerView" />
 		<!-- End of Mapping classes with Timesheet package -->
 
 	</typeAliases>

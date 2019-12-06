@@ -63,36 +63,51 @@ public class Util {
 		return ((target.compareTo(start) >= 0) && (target.compareTo(end) <= 0));
 	}
 
-	public static String TimeAdd(String strStartTime, String strEndTime) throws ParseException {
+	public static String TimeAdd(String strStartTime, String strEndTime)  {
 		String date3 = "";
-		String time1 = strStartTime;
-		String time2 = strEndTime;
-
-		SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
-		timeFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-
-		Date date1 = timeFormat.parse(time1);
-		Date date2 = timeFormat.parse(time2);
-
-		long sum = date1.getTime() + date2.getTime();
-
-		date3 = timeFormat.format(new Date(sum));
+		try
+		{
+			String time1 = strStartTime;
+			String time2 = strEndTime;
+	
+			SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+			timeFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+	
+			Date date1 = timeFormat.parse(time1);
+			Date date2 = timeFormat.parse(time2);
+	
+			long sum = date1.getTime() + date2.getTime();
+	
+			date3 = timeFormat.format(new Date(sum)).toString();
+		}
+		catch(ParseException ex)
+		{
+			return new AppException(ex).toString();
+		}
 		return date3;
 	}
 
-	public static String TimeDiff(String strStartTime, String strEndTime) throws ParseException {
-		String time1 = strStartTime;
-		String time2 = strEndTime;
-
-		SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
-		timeFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-
-		Date date1 = timeFormat.parse(time1);
-		Date date2 = timeFormat.parse(time2);
-
-		long diff = date2.getTime() - date1.getTime();
-
-		String date4 = timeFormat.format(new Date(diff));
+	public static String TimeDiff(String strStartTime, String strEndTime) {
+		String date4 ="";
+		try
+		{
+			String time1 = strStartTime;
+			String time2 = strEndTime;
+	
+			SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+			timeFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+	
+			Date date1 = timeFormat.parse(time1);
+			Date date2 = timeFormat.parse(time2);
+	
+			long diff = date2.getTime() - date1.getTime();
+	
+			date4 = timeFormat.format(new Date(diff));
+		}
+		catch(ParseException ex)
+		{
+			return new AppException(ex).toString();
+		}
 		return date4;
 	}
 

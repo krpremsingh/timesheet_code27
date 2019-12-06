@@ -12,62 +12,33 @@ import com.awcsoftware.app.AppException;
 import com.awcsoftware.app.Util;
 import com.awcsoftware.mybatis.DbException;
 import com.awcsoftware.spring.security.auth.UserAuthenticationDetail;
+import com.awcsoftware.spring.security.auth.user.User;
 
 public class TimecardService {
 	static Logger logger = Logger.getLogger(TimecardService.class);
 
 	public String saveTimecard(TimecardInfo addTimecardInfo) throws DbException, AppException, ParseException {
-		TimecardValidator timecardValidator = new TimecardValidator();
-		Set validationValue = timecardValidator.validateSaveTimeCard(addTimecardInfo);
+		TimecardValidator validator = new TimecardValidator();
+		Set validationValue = validator.validateTimeCard(addTimecardInfo);
 		if (validationValue.size() == 0) {
 			TimecardDao dao = new TimecardDao();
-			if (addTimecardInfo.getTcId() == 0)
-				return dao.addTimecard(addTimecardInfo);
-			else
-				return dao.updateTimecard(addTimecardInfo);
-		} else
-			return validationValue.toString();
-	}
-
-	public String updateTimeCard(TimecardInfo updTimecardInfo) throws DbException, AppException, ParseException {
-		UserAuthenticationDetail auth = Util.getLoggedinUser();
-		TimecardValidator timecardValidator = new TimecardValidator();
-		Set validationValue = timecardValidator.validateSaveTimeCard(updTimecardInfo);
-		if (validationValue.size() == 0) {
-			TimecardDao dao = new TimecardDao();
-			if (updTimecardInfo.getTcId() == 0)
-				return dao.addTimecard(updTimecardInfo);
-			else {
-				if (auth.getEmpId() == updTimecardInfo.getEmpId()) {
-					if (updTimecardInfo.getStatus().equalsIgnoreCase("Draft")
-							|| updTimecardInfo.getStatus().equalsIgnoreCase("Rejected")
-							|| updTimecardInfo.getStatus().equalsIgnoreCase("Pending"))
-						return dao.updateTimecard(updTimecardInfo);
-					else
-						return TimecardErrorConstants.EditApplicableforDraftAndRejected.getLabel();
-				} else
-					return TimecardErrorConstants.DifferentEmployeeIdAndLoggedInUser.getLabel();
-			}
+			return dao.saveTimecard(addTimecardInfo);
 		} else
 			return validationValue.toString();
 	}
 
 	public String submitTimeCard(TimecardInfo submitTimecardInfo) throws DbException, AppException, ParseException {
-		TimecardValidator timecardValidator = new TimecardValidator();
-		Set validationValue = timecardValidator.validateSubmitTimeCard(submitTimecardInfo);
+		TimecardValidator validator = new TimecardValidator();
+		Set validationValue = validator.validateSubmitTimeCard(submitTimecardInfo);
 		if (validationValue.size() == 0) {
 			TimecardDao dao = new TimecardDao();
-			if(submitTimecardInfo.getTcId()==0 &&
-					submitTimecardInfo.getStatus().equals("Pending"))				
-				return saveTimecard(submitTimecardInfo);
-			else
-				return updateTimeCard(submitTimecardInfo);
-			
+				return dao.saveTimecard(submitTimecardInfo);
+
 		} else
 			return validationValue.toString();
 	}
 
-	public List<TimecardView> getTimecardView() throws DbException, AppException {
+	public List<TimecardView> getCurrentWeekTimecard() throws DbException, AppException {
 		UserAuthenticationDetail auth = Util.getLoggedinUser();
 		TimecardDao dao = new TimecardDao();
 		return (List<TimecardView>) dao.getTimecardView(auth.getEmpId());
@@ -78,6 +49,13 @@ public class TimecardService {
 		return (List<TimecardView>) dao.getTimecardDetailsView(tcId);
 	}
 
+	/*
+	 * 
+	 * Methods are created for Manager view, approve and Reject Functionality
+	 * 
+	 * 
+	 */
+
 	public List<TimecardInfo> getTimecardViewByManager(int approverId) throws DbException, AppException {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		UserAuthenticationDetail auth = (UserAuthenticationDetail) authentication;
@@ -87,4 +65,31 @@ public class TimecardService {
 		return result;
 	}
 
+	public String approveRejectTimecard(TimecardApproverDetails timecardApproverDetails)
+			throws DbException, AppException, ParseException {
+		TimecardValidator timecardValidator = new TimecardValidator();
+		Set validationValue = timecardValidator.validateTimecardApprovalData(timecardApproverDetails);
+		if (validationValue.size() == 0) {
+			TimecardDao dao = new TimecardDao();
+			dao.approveRejectTimecard(timecardApproverDetails);
+			return "S";
+		} else
+			return validationValue.toString();
+	}
+
+	public List<User> getEmployeesUnderLoggedInManager(int approverId) throws DbException, AppException {
+		TimecardDao dao = new TimecardDao();
+		return (List<User>) dao.getEmployeesUnderLoggedInManager(approverId);
+
+	}
+
+	public List<TimecardManagerView> getTimecardViewByManager(TimecardManagerView view)
+			throws DbException, AppException {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		UserAuthenticationDetail auth = (UserAuthenticationDetail) authentication;
+
+		TimecardDao dao = new TimecardDao();
+		List<TimecardManagerView> result = dao.getTimecardByManager(view);
+		return result;
+	}
 }
