@@ -308,7 +308,7 @@
 		ifnull(concat(date_format(weekStart,'%d %b'),' to ',date_format(weekend,'%d %b')),' ') WeekPeriod,
 		ifnull(totalHours,' ') totalHours,ifnull(tci.status,' ')
 		statusGrid,ifnull((select group_concat(concat(firstName,' ',middleName,' ',lastName)) from 
-		TimecardApproverDetails tcad, employeeInfo ei where tci.tcId=tcad.tcId and ei.empId=tcad.approverId),' ') managerName
+		TimecardApproverDetails tcad, EmployeeInfo ei where tci.tcId=tcad.tcId and ei.empId=tcad.approverId),' ') managerName
 		from TimecardInfo tci  where tci.empId=#{empId} 
 
 			<if test="status!= null">
@@ -323,15 +323,20 @@
 	</select>
 
 	<select id="getTimecardDetailView" parameterType="int" resultType="TimeCardView">
-		select tcdd.tcid tcId,	tcdd.tcdid tcdId,	tcdd.projectid projectId,tcdd.activityId activityId ,
-		tcdd.location location ,
-		sec_to_time(sum(Time_to_sec(workingHours))) weekWorkingHours,
-		ifnull((select concat(firstName,' ',middleName,' ',lastName) from employeeInfo where
-		empId=approverId),' ') managerName, tcdd.status status,tcad.comments managerComment 
-		from TimecardDayDetails tcdd left join TimecardApproverDetails tcad
-		on tcdd.tcid=tcad.tcid and tcdd.projectid=tcad.projectid
-		where tcdd.tcid=#{tcId} and tcdd.recordtype='Active' group by
-		tcdd.tcdid,tcdd.projectid,tcdd.activityId ,tcdd.location;
+			select Date_format(tcdi.workingDate,'%d %b') workingdate,tcdd.tcid tcId,tcdd.tcdid	tcdId,
+			tcdd.projectid projectId,tcdd.activityId activityId ,
+			tcdd.location location ,
+			sec_to_time(sum(Time_to_sec(workingHours))) weekWorkingHours,
+			ifnull((select concat(firstName,' ',middleName,' ',lastName) from employeeInfo where
+			empId=approverId),' ') managerName, tcdd.status status,tcad.comments
+			managerComment
+			from TimecardDayInfo tcdi left join TimecardDayDetails tcdd on
+			tcdi.tcdId=tcdd.tcdId
+			left join TimecardApproverDetails tcad
+			on tcdd.tcid=tcad.tcid and tcdd.projectid=tcad.projectid
+			where tcdd.tcid=#{tcId} and tcdd.recordtype='Active' group by
+			tcdd.tcdid,tcdd.projectid,tcdd.activityId ,tcdd.location order by
+			tcdd.projectid,tcdd.activityId ,tcdd.location 
 	</select>
 
 <!-- *********************************************************************** 
@@ -343,10 +348,10 @@
 	<select id="getProjectApproverList"
 		parameterType="TimecardDayDetails"
 		resultType="TimecardApproverDetails">
-		select pId projectId,tcApprover approverId,level levelId from
-		ProjectApproverDetails
-		where pId=#{projectId} and startDate &lt;=#{workingDate} and endDate
-		&gt;=#{workingDate}
+			select pId projectId,tcApprover approverId,level levelId from
+			ProjectApproverDetails
+			where pId=#{projectId} and startDate &lt;=#{workingDate} and endDate
+			&gt;=#{workingDate}
 	</select>
 
 	<select id="isApproverExistforCurrentTimecardProject"
@@ -415,7 +420,18 @@
 	<select id="getTimecardInfoPerTCID"
 		parameterType="TimecardInfo" resultMap="TimecardInfoMap">
 		select tcId,empId,weekStart,weekEnd,totalHours,status from
-		TimecardInfo where	tcId=#{tcId}
+		TimecardInfo where empId=#{empId}  
+
+			<if test="tcId!= 0">
+				and tcId=#{tcId} 
+			</if>
+			<if test="weekStart!= null">
+				and weekStart &gt;=#{weekStart,jdbcType=VARCHAR}
+			</if>
+			<if test="weekEnd!= null">
+				and weekEnd &lt;=#{weekEnd,jdbcType=VARCHAR};
+			</if>	
+		
 	</select>
 
 	<select id="getTimecardDayInfoPerTCID"
