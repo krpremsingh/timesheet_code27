@@ -327,7 +327,7 @@
 			tcdd.projectid projectId,tcdd.activityId activityId ,
 			tcdd.location location ,
 			sec_to_time(sum(Time_to_sec(workingHours))) weekWorkingHours,
-			ifnull((select concat(firstName,' ',middleName,' ',lastName) from employeeInfo where
+			ifnull((select concat(firstName,' ',middleName,' ',lastName) from EmployeeInfo where
 			empId=approverId),' ') managerName, tcdd.status status,tcad.comments
 			managerComment
 			from TimecardDayInfo tcdi left join TimecardDayDetails tcdd on
