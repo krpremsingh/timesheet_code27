@@ -33,11 +33,13 @@ select distinct activity,activityId from ActivitiesInfo
 </select>
 	
 <select id="getProjects" resultMap="projectResult">
-select p.projectName,p.projectId from ProjectsInfo p inner join EmployeesProjects ep on ep.projectId=p.projectId where ep.empId=#{empId} ;
+select p.projectName,p.projectId from ProjectsInfo p inner join ProjectTeamDetails ep on ep.pId=p.projectId where ep.empId=#{empId};
 </select>
 
 <select id="getProjectLocations" resultMap="locationResult">
-select distinct wl.location,wl.workLocationId from WorkLocationsInfo wl inner join ProjectLocationDetails pld on pld.workLocationId=wl.workLocationId where pld.projectId=#{projectId};
+ select distinct wl.location,wl.workLocationId from worklocationsinfo wl,projectteamdetails ptd where ptd.workingLocation=wl.workLocationId and ptd.pId=#{pId};
+<!-- select distinct wl.location,wl.workLocationId from WorkLocationsInfo wl inner join ProjectLocationDetails pld on pld.workLocationId=wl.workLocationId where pld.projectId=#{projectId}; -->
 </select>
+<!--  select distinct wl.location from worklocationsinfo wl,projectteamdetails ptd where ptd.workingLocation=wl.workLocationId and ptd.pId=1; -->
 	
 </mapper>

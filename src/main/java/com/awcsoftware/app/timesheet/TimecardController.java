@@ -130,8 +130,8 @@ public class TimecardController {
 		
 	}
 	
-    @GetMapping("/sample")
-    @PreAuthorize("hasRole('EMPLOYEE')")
+    @RequestMapping(value="/sample",headers = "Accept=application/json",method=RequestMethod.GET)
+    @PreAuthorize("hasRole('MANAGER')")
 	public String sample() {
 		return "hello world";
 		

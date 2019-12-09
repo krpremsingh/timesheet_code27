@@ -1,7 +1,6 @@
 package com.awcsoftware.spring.security.auth;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -71,12 +70,12 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
 			log.debug("User Found " + uSrv.isExists(username));
 
 			if (user.getEmail().equals(username) && user.getPassword().equals(password)) {
-				// List<GrantedAuthority> authorityList =
-				// Collections.<GrantedAuthority>emptyList();
+				// List<GrantedAuthority> authorityList = Collections.<GrantedAuthority>emptyList();
+			
 				List<GrantedAuthority> authorityList = roles.stream()
 						.map(role -> new SimpleGrantedAuthority("ROLE_" + role.getRole())).collect(Collectors.toList());
-				UserAuthenticationDetail authDetail = new UserAuthenticationDetail(username, password, authorityList);
-				// log.debug("role " + roles.get(0) + " " + authorityList.get(0));
+
+				UserAuthenticationDetail authDetail = new UserAuthenticationDetail(username, password, authorityList); 
 				authDetail.setRole(roles);
 				authDetail.setEmpId(user.getEmpId());
 				authDetail.setEmpCode(user.getEmpCode());

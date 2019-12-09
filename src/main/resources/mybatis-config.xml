@@ -8,7 +8,7 @@
 			type="com.awcsoftware.spring.security.auth.user.User" />
 
 		<typeAlias alias="ConfirmationToken"
-			type="com.awcsoftware.spring.security.auth.user.ConfirmationToken" />
+			type="com.awcsoftware.app.employee.ConfirmationToken" />
 
 		<typeAlias type="com.awcsoftware.app.common.BasePojo"
 			alias="BasePojo" />
@@ -58,10 +58,10 @@
 			resource="com/awcsoftware/app/timesheet/TimecardMapper.xml" />
 		<mapper
 			resource="com/awcsoftware/app/common/BaseRepositoryMapper.xml" />
+			
+<!-- Mapper Definition for employee password functionality -->			
 		<mapper
-			resource="com/awcsoftware/spring/security/auth/user/UserMapper.xml" />
-		<!-- <mapper resource="com/awcsoftware/spring/password/user/UserPasswordMapper.xml" 
-			/> -->
+			resource="com/awcsoftware/app/employee/EmployeeMapper.xml" />
 	</mappers>
 
 </configuration>

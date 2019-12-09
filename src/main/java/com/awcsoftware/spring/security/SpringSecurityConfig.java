@@ -20,10 +20,12 @@ import com.awcsoftware.spring.security.auth.TokenFilter;
 @EnableGlobalMethodSecurity(prePostEnabled=true,proxyTargetClass=true)
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
-	public static final String CREDENTIAL_BASED_LOGIN_ENTRY_POINT = "/login";
+	public static final String CREDENTIAL_BASED_LOGIN_ENTRY_POINT = "/auth/login";
 	public static final String TOKEN_BASED_AUTH_ENTRY_POINT = "/*";
-	public static final String LOGOUT_ENTRY_POINT = "/logout";
-
+	public static final String LOGOUT_ENTRY_POINT = "/auth/logout";
+	public static final String FORGOT_PASSWORD="/auth/forgotPassword";
+	public static final String CONFIRM_RESET="/auth/confirm-reset";
+	public static final String CHANGE_PASSWORD="/auth/changePassword";
 	@Bean
 	protected LoginFilter getLoginFilter() throws Exception {
 		LoginFilter filter = new LoginFilter(CREDENTIAL_BASED_LOGIN_ENTRY_POINT);
@@ -47,21 +49,24 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
-        .csrf().disable()
-	        .sessionManagement()
-	        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-	        .and()
-            	.authorizeRequests()
+	       http
+	           .csrf().disable()
+	     	   .addFilterBefore(getLoginFilter(), UsernamePasswordAuthenticationFilter.class)
+         	    .addFilterBefore(getLogoutFilter(), UsernamePasswordAuthenticationFilter.class)
+        	    .addFilterBefore(getTokenFilter(), UsernamePasswordAuthenticationFilter.class)
+		        .sessionManagement()
+		        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+		        .and()
+	            .authorizeRequests()
+	            .antMatchers(FORGOT_PASSWORD).permitAll()
+	            .antMatchers(CONFIRM_RESET).permitAll()
+	            .antMatchers(CHANGE_PASSWORD).permitAll()
+	            .and()
+	            .authorizeRequests()
 				.antMatchers(CREDENTIAL_BASED_LOGIN_ENTRY_POINT).permitAll()
 				.antMatchers(LOGOUT_ENTRY_POINT).authenticated()
-				.anyRequest().authenticated()
-				.and()
-				.anonymous()
-			.and()
-         	.addFilterBefore(getLoginFilter(), UsernamePasswordAuthenticationFilter.class)
-         	.addFilterBefore(getTokenFilter(), UsernamePasswordAuthenticationFilter.class)
-         	.addFilterBefore(getLogoutFilter(), UsernamePasswordAuthenticationFilter.class);
-        	
-    }
+			    .anyRequest().authenticated()
+				
+	        ;
+	    }
 }

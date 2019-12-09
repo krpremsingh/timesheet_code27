@@ -1,9 +1,17 @@
-package com.awcsoftware.spring.security.auth.user;
+package com.awcsoftware.app.employee;
 
 import java.time.LocalDateTime;
 
-import com.awcsoftware.spring.security.auth.token.TokenManager;
+import org.springframework.stereotype.Component;
 
+import com.awcsoftware.spring.security.auth.token.TokenManager;
+import com.awcsoftware.spring.security.auth.user.User;
+/*
+ * set the token expiry time in confirmation token
+ * set current date as tokencreationdate
+ * take instance of principal in constructor 
+ */
+@Component("confirmationtoken")
 public class ConfirmationToken {
 	private User user;
 	private int tokenId;

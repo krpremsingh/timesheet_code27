@@ -32,11 +32,22 @@ public class User implements Serializable {
 
 	private LocalDateTime lastModifiedOn;
 	
-    @Email(message="{user.email}")
 	private String email;
 
 	private String password;
 	
+	private String currentPassword;
+	
+	private String confirmPassword;
+	
+	private String newPassword;
+	
+	public String getNewPassword() {
+		return newPassword;
+	}
+	public void setNewPassword(String newPassword) {
+		this.newPassword = newPassword;
+	}
 	private int firstLoginStatus;
 
 	private String status;
@@ -134,6 +145,18 @@ public class User implements Serializable {
 	}
 	public void setRole(List<Role> role) {
 		this.role = role;
+	}
+	public String getCurrentPassword() {
+		return currentPassword;
+	}
+	public void setCurrentPassword(String currentPassword) {
+		this.currentPassword = currentPassword;
+	}
+	public String getConfirmPassword() {
+		return confirmPassword;
+	}
+	public void setConfirmPassword(String confirmPassword) {
+		this.confirmPassword = confirmPassword;
 	}
 
 

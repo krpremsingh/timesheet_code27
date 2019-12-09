@@ -5,20 +5,14 @@
 <mapper namespace="User">
 	<resultMap
 		type="User" id="User">
-		<id column="empId" property="empId" jdbcType="INTEGER" />
-		<result column="password" property="password"
-			jdbcType="VARCHAR" />
-		<result column="firstLoginStatus" property="firstLoginStatus"
-			jdbcType="INTEGER" />
-	</resultMap>
-	
-	<select id="getUser" parameterType="string" resultType="User">
+     </resultMap>
+    <select id="getUser" parameterType="string" resultType="User">
 		select
 		e.empId,e.firstName,e.email,e.password,e.designationId,e.empCode,e.firstLoginStatus
 		from EmployeeInfo e where e.email=#{email}
-	</select>
-
-	<select id="isExists" parameterType="string" resultType="int">
+    </select>
+    
+		<select id="isExists" parameterType="string" resultType="int">
 		SELECT
 		CASE WHEN count(email) > 0 THEN 1 ELSE 0 END FROM EmployeeInfo WHERE
 		email = #{email}
@@ -29,26 +23,33 @@
 		select r.roleId ,r.role from EmployeeRole er inner join RolesInfo r on
 		er.roleId=r.roleId where er.empId=#{empId};
 	</select>
-	
-<!-- <select id="checkToken" resultType="ConfirmationToken">
+			
+<select id="checkToken" resultType="ConfirmationToken">
  select t.empId ,t.token,e.email,t.tokenExpiryDate from ConfirmationToken t inner join EmployeeInfo e on e.empId=t.empId where e.email=#{user.email} 
 </select>
+
 <update id="resetPassword" parameterType="User">
  update EmployeeInfo set password=#{newPassword}, firstLoginStatus=1 where email=#{email};
 </update>
+
 <update id="updatePassword" parameterType="User">
  update EmployeeInfo set password=#{newPassword} where email=#{email};
-</update>	
+</update>
+	
 <insert id="saveToken" parameterType="ConfirmationToken" keyProperty="tokenId" useGeneratedKeys="true"> 
 insert into ConfirmationToken(token,tokenCreationDate,tokenExpiryDate,empId) values(#{token},#{tokenCreationDate},#{tokenExpiryDate},(select empId from EmployeeInfo where email=#{user.email}))
  </insert>
+ 
  <update id="updateToken" parameterType="ConfirmationToken">
   update ConfirmationToken t inner join EmployeeInfo e on t.empId=e.empId set t.token=#{token},t.tokenCreationDate=#{tokenCreationDate},t.tokenExpiryDate=#{tokenExpiryDate} where e.email=#{user.email} 
  </update>
+ 
  <select id="findByToken" resultType="ConfirmationToken"> 
  select t.tokenExpiryDate,t.token,t.empId from ConfirmationToken t inner join EmployeeInfo e on e.empId=t.empId where t.token=#{token} 
  </select>
+ 
 <delete id="deleteToken" parameterType="ConfirmationToken">
 delete t from ConfirmationToken t inner join EmployeeInfo e on e.empId=t.empId where e.email=#{email}
-</delete> -->
+</delete>
+
 </mapper>
