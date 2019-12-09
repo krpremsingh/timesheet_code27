@@ -20,6 +20,7 @@ public class TimecardDayInfo implements Serializable {
 
 	private List<TimecardDayDetails> timecardDayDetails;
 
+
 	public int getTcdId() {
 		return tcdId;
 	}

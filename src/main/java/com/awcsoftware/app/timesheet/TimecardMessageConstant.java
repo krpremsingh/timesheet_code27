@@ -1,21 +1,15 @@
-/**
- * 
- */
 package com.awcsoftware.app.timesheet;
 
-/**
- * @author Prem Shankar Kumar
- *
- */
+
 public enum TimecardMessageConstant {
 
-	InvalidTimecard("Selected Timecard doesn't exist"),
-	BlankEmpId("Invalid employee"),
-	BlankStartDate("Week start date is not valid "),
-	BlankEndDate("Week end date is not valid "),
-	BlankApprovalDetails("approval details is empty, kindly contact adminstrator and try again"),
-	DailyWorkingLimit("Working hours cannot exceed by 24 hours for a day"),	
-	BlankWorkingDate("Invalid working date"),
+	Invalid_Timecard("Selected Timecard doesn't exist"),
+	Blank_Emp_Id("Invalid employee"),
+	Blank_Start_Date("Week start date is not valid "),
+	Blank_End_Date("Week end date is not valid "),
+	Blank_Approval_Details("approval details is empty, kindly contact adminstrator and try again"),
+	Daily_Working_Limit("Working hours cannot exceed by 24 hours for a day"),	
+	Blank_Working_Date("Invalid working date"),
 	BlankActivity("Select an activity"),
 	BlankLocation("Select a location"),
 	BlankProject("Select a project"),
@@ -36,6 +30,7 @@ public enum TimecardMessageConstant {
 	TimeOverlapping("Working hours for same day is overlapping"),
 	
 	StartTimeBiggerThanEndTime("Start Time can not be greater than End Time"),
+	Enter_Time_is_not_wrong("Enter time is wrong"),
 	
 	TimecardNotExistDuringApproval("Invalid timecard"),
 	ProjectIdBlankDuringApproval("Project id is blank"),
@@ -47,11 +42,10 @@ public enum TimecardMessageConstant {
 	TimecardTimeDataExist("Data already exist for the selected date and time"),		
 	TimecardDateDataExist("Data already exist for the selected date"),		
 	TimecardSuccessMessage("Timecard saved successfully"),		
-
-	TimecardDateTimeNotExist("Data does not exist for the selected week"),		
+			
 	TimecardUpdateMessage("Timecard updated successfully"),			
-	TimecardSubmitMessage("Timecard submitted successfully");			
-	
+	TimecardSubmitMessage("Timecard submitted successfully"),			
+	TimecardAlreadySubmitMessage("Timecard is already submitted");	
 
 	
 	private final String label;

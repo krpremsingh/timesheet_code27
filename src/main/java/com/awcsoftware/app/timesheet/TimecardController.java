@@ -6,9 +6,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -25,13 +23,13 @@ public class TimecardController {
 
 	TimecardService service;
 
-	@RequestMapping(value = "/tc-add", method = RequestMethod.POST, headers = "Accept=application/json")
+	@RequestMapping(value = "/tc-add", method = RequestMethod.POST, headers = "Accept=application/json")	 
 	public ResponseEntity<String> saveTimecard(@RequestBody TimecardInfo timecardInfo) {
 		service = new TimecardService();
-		String strTimeCardServiceRet = "";
+		String timecardSaveResult = "";
 		try {
-			strTimeCardServiceRet = service.saveTimecard(timecardInfo);
-			return new ResponseEntity<String>(strTimeCardServiceRet, HttpStatus.OK);
+			timecardSaveResult = service.saveTimecard(timecardInfo);
+			return new ResponseEntity<String>(timecardSaveResult, HttpStatus.OK);
 		} catch (DbException | AppException | ParseException e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
@@ -40,36 +38,48 @@ public class TimecardController {
 	@RequestMapping(value = "/tc-submit", method = RequestMethod.POST, headers = "Accept=application/json")
 	public ResponseEntity<String> submitTimecard(@RequestBody TimecardInfo timecardInfo) {
 		service = new TimecardService();
-		String strTimeCardServiceRet = "";
+		String timecardSubmitResult = "";
 		try {
-			strTimeCardServiceRet = service.submitTimeCard(timecardInfo);
-			return new ResponseEntity<String>(strTimeCardServiceRet, HttpStatus.OK);
+			timecardSubmitResult = service.submitTimeCard(timecardInfo);
+			return new ResponseEntity<String>(timecardSubmitResult, HttpStatus.OK);
 		} catch (DbException | AppException | ParseException e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
 	@RequestMapping(value = "/tc-search", method = RequestMethod.GET, headers = "Accept=application/json")
-	public ResponseEntity<List<TimecardView>> TimeCardView(@RequestBody TimecardView tcVwObj) {
+	public ResponseEntity<List<TimecardInfo>> TimeCardView(@RequestBody TimecardInfo timecardInfoParam) {
 		service = new TimecardService();
-		List<TimecardView> lstTimecardView = null;
+		List<TimecardInfo> timecardInfo = null;
 		try {
-			lstTimecardView = (List<TimecardView>) service.getCurrentWeekTimecard();
-			return new ResponseEntity<List<TimecardView>>(lstTimecardView, HttpStatus.OK);
+			timecardInfo = (List<TimecardInfo>) service.getEmployeeTimeCard(timecardInfoParam);
+			return new ResponseEntity<List<TimecardInfo>>(timecardInfo, HttpStatus.OK);
+		} catch (DbException | AppException e) {
+			return new ResponseEntity<List<TimecardInfo>>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@RequestMapping(value = "/tc-detail-search", method = RequestMethod.GET, headers = "Accept=application/json")
+	public ResponseEntity<List<TimecardView>> TimecardDetailsView(@RequestBody TimecardView timecardDetailsViewParam) {
+		service = new TimecardService();
+		List<TimecardView> timecardDetailsView = null;
+		try {
+			timecardDetailsView = (List<TimecardView>) service.getTimecardDetailsView(timecardDetailsViewParam.getTcId());
+			return new ResponseEntity<List<TimecardView>>(timecardDetailsView, HttpStatus.OK);
 		} catch (DbException | AppException e) {
 			return new ResponseEntity<List<TimecardView>>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
-	@RequestMapping(value = "/tc-detail-search", method = RequestMethod.GET, headers = "Accept=application/json")
-	public ResponseEntity<List<TimecardView>> TimecardDetailsView(@RequestBody TimecardView timecardDetailsView) {
+	@RequestMapping(value = "/tc-savedData", method = RequestMethod.GET, headers = "Accept=application/json")
+	public ResponseEntity<TimecardInfo> getTimecardRecord(@RequestBody TimecardInfo timecardInfoParam) {
 		service = new TimecardService();
-		List<TimecardView> lstTimecardDetailsView = null;
+		TimecardInfo timecardInfo = null;
 		try {
-			lstTimecardDetailsView = (List<TimecardView>) service.getTimecardDetailsView(timecardDetailsView.getTcId());
-			return new ResponseEntity<List<TimecardView>>(lstTimecardDetailsView, HttpStatus.OK);
+			timecardInfo = (TimecardInfo) service.getTimecardRecord(timecardInfoParam);
+			return new ResponseEntity<TimecardInfo>(timecardInfo, HttpStatus.OK);
 		} catch (DbException | AppException e) {
-			return new ResponseEntity<List<TimecardView>>(HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<TimecardInfo>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
