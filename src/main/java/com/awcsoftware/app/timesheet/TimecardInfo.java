@@ -26,6 +26,11 @@ public class TimecardInfo implements Serializable {
 	private String status;
 	private LocalDateTime addedOn;
 	private List<TimecardDayInfo> timecardDayInfo;
+	private String WeekPeriod;
+	private String statusGrid;
+	private String managerName;
+	
+	private List<TimecardDetailSearch> timecardDetailSearch;
 	
 	public int getTcId() {
 		return tcId;
@@ -90,6 +95,31 @@ public class TimecardInfo implements Serializable {
 
 	public void setTimecardDayInfo(List<TimecardDayInfo> timecardDayInfo) {
 		this.timecardDayInfo = timecardDayInfo;
+	}
+
+	
+	public String getWeekPeriod() {
+		return WeekPeriod;
+	}
+
+	public void setWeekPeriod(String weekPeriod) {
+		WeekPeriod = weekPeriod;
+	}
+
+	public String getStatusGrid() {
+		return statusGrid;
+	}
+
+	public void setStatusGrid(String statusGrid) {
+		this.statusGrid = statusGrid;
+	}
+
+	public String getManagerName() {
+		return managerName;
+	}
+
+	public void setManagerName(String managerName) {
+		this.managerName = managerName;
 	}
 
 	@Override

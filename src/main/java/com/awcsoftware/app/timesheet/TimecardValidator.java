@@ -3,15 +3,12 @@ package com.awcsoftware.app.timesheet;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Comparator;
-import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-
 import org.apache.log4j.Logger;
 
+import com.awcsoftware.app.AppConstant;
 import com.awcsoftware.app.AppValidator;
 import com.awcsoftware.app.Util;
 import com.awcsoftware.spring.security.auth.UserAuthenticationDetail;
@@ -20,20 +17,10 @@ public class TimecardValidator extends AppValidator {
 	static Logger logger = Logger.getLogger(TimecardValidator.class);
 
 	static Set<String> errorMsg;
-	static String draftFlag;
-	private String strWeeklyTimeSum = "00:00:00", strDailyTimeSum = "00:00:00";
-
-	public String getStrWeeklyTimeSum() {
-		return strWeeklyTimeSum;
-	}
-
-	public void setStrWeeklyTimeSum(String strWeeklyTimeSum) {
-		this.strWeeklyTimeSum = strWeeklyTimeSum;
-	}
+	private String draftFlag = AppConstant.TIME_CARD_STATUS.Draft.toString();
 
 	static {
 		errorMsg = new LinkedHashSet<String>();
-		draftFlag = "draft";
 	}
 
 	public Set<String> validateTimeCard(TimecardInfo timecardInfo) {
@@ -41,7 +28,7 @@ public class TimecardValidator extends AppValidator {
 		errorMsg.clear();
 
 		if (timecardInfo.getEmpId() == 0) {
-			errorMsg.add(TimecardMessageConstant.BlankEmpId.getLabel());
+			errorMsg.add(TimecardMessageConstant.Blank_Emp_Id.getLabel());
 		}
 
 		UserAuthenticationDetail auth = Util.getLoggedinUser();
@@ -50,11 +37,11 @@ public class TimecardValidator extends AppValidator {
 		}
 
 		if (timecardInfo.getWeekStart() == null || timecardInfo.getWeekStart().toString().length() < 10) {
-			errorMsg.add(TimecardMessageConstant.BlankStartDate.getLabel());
+			errorMsg.add(TimecardMessageConstant.Blank_Start_Date.getLabel());
 		}
 
 		if (timecardInfo.getWeekEnd() == null || timecardInfo.getWeekEnd().toString().length() < 10) {
-			errorMsg.add(TimecardMessageConstant.BlankEndDate.getLabel());
+			errorMsg.add(TimecardMessageConstant.Blank_End_Date.getLabel());
 		}
 
 		if (timecardInfo.getTimecardDayInfo() == null) {
@@ -65,18 +52,16 @@ public class TimecardValidator extends AppValidator {
 			errorMsg.add(TimecardMessageConstant.BlankTimecardDetails.getLabel());
 		}
 
-		timecardInfo.setStatus(draftFlag);
 		validateTimecardDayInfo(timecardInfo.getTimecardDayInfo(), timecardInfo.getWeekStart().toString(),
 				timecardInfo.getWeekEnd().toString());
-		timecardInfo.setTotalHours(this.getStrWeeklyTimeSum());
+//		timecardInfo.setTotalHours(this.getStrWeeklyTimeSum());
 		return errorMsg;
 	}
 
 	public Set<String> validateSubmitTimeCard(TimecardInfo timecardInfo) {
 		errorMsg.clear();
 
-		draftFlag = "Pending";
-
+		draftFlag = AppConstant.TIME_CARD_STATUS.Pending.toString();
 		validateTimeCard(timecardInfo);
 		if (timecardInfo.getTimecardDayInfo().size() < 5) {
 			errorMsg.add(TimecardMessageConstant.MimimunTimecards.getLabel());
@@ -121,42 +106,55 @@ public class TimecardValidator extends AppValidator {
 				return errorMsg;
 			}
 
-			timecardDayInfo.setStatus(draftFlag);
 			validateTimecardDayDetailsData(timecardDayInfo.getTimecardDayDetails());
-			timecardDayInfo.setTotalWeekWorkHours(strDailyTimeSum);
 		}
-		this.setStrWeeklyTimeSum(strWeeklyTimeSum);
 		return errorMsg;
 	}
 
 	public Set<String> validateTimecardDayDetailsData(List<TimecardDayDetails> timecardDayDetailsParam) {
-		int iBreakStatus = 0, dayDetailsCtr = 0;
-		String strTimeDiff = "00:00:00";
-		strDailyTimeSum = "00:00:00";
+		int loopBrkCtr = 0, dayDetCtr = 0;
+		String timeDiff = "00:00:00";
+		String dailyTimeHour = "00:00:00";
 		LocalTime currentRowStartTime = null, currentRowEndTime = null, nextRowStartTime = null, nextRowEndTime = null;
 		TimecardDayDetails timecardDayDetailsNextRow = null;
 
-		for (dayDetailsCtr = 0; dayDetailsCtr < (timecardDayDetailsParam.size()); dayDetailsCtr++) {
-			TimecardDayDetails timecardDayDetails = (TimecardDayDetails) timecardDayDetailsParam.get(dayDetailsCtr);
+		for (dayDetCtr = 0; dayDetCtr < (timecardDayDetailsParam.size()); dayDetCtr++) {
 			currentRowStartTime = null;
 			currentRowEndTime = null;
 			nextRowStartTime = null;
 			nextRowEndTime = null;
 
+			TimecardDayDetails timecardDayDetails = (TimecardDayDetails) timecardDayDetailsParam.get(dayDetCtr);
 			validateTimeCardDetails(timecardDayDetails);
 
-			timecardDayDetails.setStatus(draftFlag);
-			if ((dayDetailsCtr + 1) < (timecardDayDetailsParam.size())) {
-				timecardDayDetailsNextRow = (TimecardDayDetails) timecardDayDetailsParam.get(dayDetailsCtr + 1);
+			if (timecardDayDetails.getStartTime() == null || timecardDayDetails.getStartTime().trim().equals("")) {
+				errorMsg.add(TimecardMessageConstant.StartEndTimeCantBeNull.getLabel());
+				return errorMsg;
+			}
+
+			if (timecardDayDetails.getEndTime() == null || timecardDayDetails.getEndTime().trim().equals("")) {
+				errorMsg.add(TimecardMessageConstant.StartEndTimeCantBeNull.getLabel());
+				return errorMsg;
+			}
+
+			if(Util.isValidTime(timecardDayDetails.getStartTime().toString())==false)
+			{
+				errorMsg.add(TimecardMessageConstant.Enter_Time_is_not_wrong.getLabel());
+				return errorMsg;
+			}
+			
+			if(Util.isValidTime(timecardDayDetails.getEndTime().toString())==false)
+			{
+				errorMsg.add(TimecardMessageConstant.Enter_Time_is_not_wrong.getLabel());
+				return errorMsg;
+			}			
+				
+			if ((dayDetCtr + 1) < (timecardDayDetailsParam.size()) && (timecardDayDetailsParam.size() > 1)) {
+				timecardDayDetailsNextRow = (TimecardDayDetails) timecardDayDetailsParam.get(dayDetCtr + 1);
 				nextRowStartTime = LocalTime.parse(timecardDayDetailsNextRow.getStartTime() + ":00",
 						DateTimeFormatter.ISO_TIME);
 				nextRowEndTime = LocalTime.parse(timecardDayDetailsNextRow.getEndTime() + ":00",
 						DateTimeFormatter.ISO_TIME);
-			}
-
-			if (timecardDayDetails.getStartTime() == null || timecardDayDetails.getEndTime() == null) {
-				errorMsg.add(TimecardMessageConstant.StartEndTimeCantBeNull.getLabel());
-				return errorMsg;
 			}
 
 			currentRowStartTime = LocalTime.parse(timecardDayDetails.getStartTime() + ":00",
@@ -165,13 +163,13 @@ public class TimecardValidator extends AppValidator {
 
 			if (currentRowStartTime.compareTo(currentRowEndTime) == 0) {
 				errorMsg.add(TimecardMessageConstant.StartEndTimeCantBeSame.getLabel());
-				iBreakStatus = 1;
+				loopBrkCtr = 1;
 				break;
 			}
 
 			if (currentRowStartTime.isAfter(currentRowEndTime)) {
 				errorMsg.add(TimecardMessageConstant.StartTimeBiggerThanEndTime.getLabel());
-				iBreakStatus = 1;
+				loopBrkCtr = 1;
 				break;
 			}
 
@@ -180,22 +178,23 @@ public class TimecardValidator extends AppValidator {
 
 			if (nextRowStartTime.isBefore(currentRowEndTime)) {
 				errorMsg.add(TimecardMessageConstant.TimeOverlapping.getLabel());
-				iBreakStatus = 1;
+				loopBrkCtr = 1;
 				break;
 			}
 
-			strTimeDiff = Util.TimeDiff(timecardDayDetails.getStartTime() + ":00",
+			timeDiff = Util.TimeDiff(timecardDayDetails.getStartTime() + ":00",
 					timecardDayDetails.getEndTime() + ":00");
-			timecardDayDetails.setWorkingHours(strTimeDiff);
-			strDailyTimeSum = Util.TimeAdd(strDailyTimeSum, strTimeDiff);
-			strWeeklyTimeSum = Util.TimeAdd(strWeeklyTimeSum, strTimeDiff);
+			timecardDayDetails.setWorkingHours(timeDiff);
+
+			dailyTimeHour = Util.TimeAdd(dailyTimeHour, timeDiff);
 		}
 
-		if (Integer.parseInt(strDailyTimeSum.substring(0, 2)) > 24) {
-			errorMsg.add(TimecardMessageConstant.DailyWorkingLimit.getLabel());
+		if (Integer.parseInt(dailyTimeHour.substring(0, 2)) > 24) {
+			errorMsg.add(TimecardMessageConstant.Daily_Working_Limit.getLabel());
 		}
 
-		if (draftFlag.equals("Pending") && Integer.parseInt(strDailyTimeSum.substring(0, 2)) < 8)
+		if (draftFlag.equals(AppConstant.TIME_CARD_STATUS.Pending.toString())
+				&& Integer.parseInt(dailyTimeHour.substring(0, 2)) < 8)
 			errorMsg.add(TimecardMessageConstant.SingleDayWorkingHourValidationDuringSubmit.getLabel());
 
 		return errorMsg;

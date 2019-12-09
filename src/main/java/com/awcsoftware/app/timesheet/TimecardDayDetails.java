@@ -4,10 +4,9 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import javax.validation.constraints.Min;
 
 public class TimecardDayDetails implements Serializable {
-
+	
 	private int tcddId;
 	private int tcdId;
 	private int tcId;
@@ -22,6 +21,7 @@ public class TimecardDayDetails implements Serializable {
 	private String taskDetails;
 	private LocalDateTime addedOn;
 	private LocalDateTime lastModifiedOn;
+	private String recordType;
 	
 	public int getTcddId() {
 		return tcddId;
@@ -108,6 +108,15 @@ public class TimecardDayDetails implements Serializable {
 	}
 	public void setWorkingDate(LocalDate workingDate) {
 		this.workingDate = workingDate;
+	}
+
+	
+	
+	public String getRecordType() {
+		return recordType;
+	}
+	public void setRecordType(String recordType) {
+		this.recordType = recordType;
 	}
 	@Override
 	public String toString() {

@@ -16,13 +16,18 @@ public class TimecardView  implements Serializable
 	private LocalDate weekEndDT;
 	private String status;
 
+	private int tcdId;
+	private int projectId;
+	
 	private String weekPeriod;
 	private String totalHour;
 	private String managerName;
 	private String statusGrid;
 	private String managerComment;
+	private String weekWorkingHours;
 	
-	private List<TimecardDayDetails> timecardDayDetails;
+	
+	private List<TimecardDayDetails> timecardDaySummary;
 
 	public int getTcId() {
 		return tcId;
@@ -97,12 +102,38 @@ public class TimecardView  implements Serializable
 		this.managerComment = managerComment;
 	}
 	  
-	public List<TimecardDayDetails> getTimecardDayDetails() {
-		return timecardDayDetails;
+
+	public List<TimecardDayDetails> getTimecardDaySummary() {
+		return timecardDaySummary;
 	}
 
-	public void setTimecardDayDetails(List<TimecardDayDetails> timecardDayDetails) {
-		this.timecardDayDetails = timecardDayDetails;
+	public void setTimecardDaySummary(List<TimecardDayDetails> timecardDaySummary) {
+		this.timecardDaySummary = timecardDaySummary;
+	}
+
+	
+	public int getTcdId() {
+		return tcdId;
+	}
+
+	public void setTcdId(int tcdId) {
+		this.tcdId = tcdId;
+	}
+
+	public int getProjectId() {
+		return projectId;
+	}
+
+	public void setProjectId(int projectId) {
+		this.projectId = projectId;
+	}
+
+	public String getWeekWorkingHours() {
+		return weekWorkingHours;
+	}
+
+	public void setWeekWorkingHours(String weekWorkingHours) {
+		this.weekWorkingHours = weekWorkingHours;
 	}
 
 	@Override public String toString() { return "TimeCardView [weekstartDT=" +

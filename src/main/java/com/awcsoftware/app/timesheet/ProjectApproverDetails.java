@@ -59,7 +59,5 @@ public class ProjectApproverDetails {
 		return "TimecardApproverDetails [padId=" + padId + ", pId=" + pId + ", tcApprover=" + tcApprover + ", level="
 				+ level + ", startDate=" + startDate + ", endDate=" + endDate + ", status=" + status + "]";
 	}
-	
-	
 
 }
