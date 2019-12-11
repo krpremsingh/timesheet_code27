@@ -1,8 +1,8 @@
 package com.awcsoftware.spring.security.auth;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -15,11 +15,9 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 
+import com.awcsoftware.app.employee.EmployeeMessageConstants;
 import com.awcsoftware.session.store.TokenSession;
 import com.awcsoftware.spring.security.auth.token.TokenManager;
 import com.awcsoftware.spring.security.auth.user.Role;
@@ -41,12 +39,11 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
 
 		ObjectMapper oMapper = new ObjectMapper();
 		LoginRequest loginRequest = oMapper.readValue(request.getReader(), LoginRequest.class);
-
 		log.debug("credential " + loginRequest.getEmail());
 		log.debug("credential " + loginRequest.getPassword());
-
+		
 		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(loginRequest.getEmail(),
-				loginRequest.getPassword());
+				loginRequest.getPassword(),Collections.emptyList());
 		return authenticate(token);
 	}
 
@@ -54,7 +51,7 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
 		log.debug("LoginFilter - authenticate");
 		String username = auth.getName();
 		String password = auth.getCredentials().toString();
-
+        
 		log.debug("LoginFilter " + username);
 		log.debug("LoginFilter " + password);
 
@@ -70,23 +67,25 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
 			log.debug("User Found " + uSrv.isExists(username));
 
 			if (user.getEmail().equals(username) && user.getPassword().equals(password)) {
-				// List<GrantedAuthority> authorityList = Collections.<GrantedAuthority>emptyList();
-			
-				List<GrantedAuthority> authorityList = roles.stream()
-						.map(role -> new SimpleGrantedAuthority("ROLE_" + role.getRole())).collect(Collectors.toList());
-
-				UserAuthenticationDetail authDetail = new UserAuthenticationDetail(username, password, authorityList); 
+				
+				//List<GrantedAuthority>  authorityList = Collections.<GrantedAuthority>emptyList();
+			/*	  List<GrantedAuthority> authorityList = roles.stream() .map(role -> new
+				  SimpleGrantedAuthority("ROLE_" +
+				  role.getRole())).collect(Collectors.toList());*/
+				 
+				UserAuthenticationDetail authDetail = new UserAuthenticationDetail(username, password);
 				authDetail.setRole(roles);
+				authDetail.setName(user.getFirstName());
 				authDetail.setEmpId(user.getEmpId());
 				authDetail.setEmpCode(user.getEmpCode());
 				authDetail.setFirstLoginStatus(user.getFirstLoginStatus());
 				authDetail.setDesignationId(user.getDesignationId());
 				return authDetail;
 			} else {
-				throw new BadCredentialsException("902 - Credentials mismatch");
+				throw new BadCredentialsException(EmployeeMessageConstants.validatePassword.getLabel().toString());
 			}
 		} else {
-			throw new BadCredentialsException("901 - User doesn't exists");
+			throw new BadCredentialsException(EmployeeMessageConstants.ValidateEmail.getLabel().toString());
 		}
 	}
 
@@ -96,7 +95,6 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
 		log.debug("LoginFilter - successfulAuthentication " + authResult);
 
 		UserAuthenticationDetail auth = (UserAuthenticationDetail) authResult;
-
 		ObjectMapper mapper = new ObjectMapper();
 		String token = TokenManager.generateToken(auth.getName(), auth.getCredentials().toString());
 		auth.setToken(token);
@@ -105,8 +103,6 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
 		response.setStatus(HttpStatus.OK.value());
 		response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 		mapper.writeValue(response.getWriter(), auth);
-		SecurityContextHolder.getContext().setAuthentication(auth);
-		chain.doFilter(request, response);
 	}
 
 	@Override

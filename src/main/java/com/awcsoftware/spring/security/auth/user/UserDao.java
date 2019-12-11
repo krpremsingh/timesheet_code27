@@ -4,9 +4,11 @@ import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.Component;
 
 import com.awcsoftware.mybatis.MyBatisManager;
 
+@Component("userDao")
 public class UserDao {
 	static Logger logger = Logger.getLogger(UserDao.class.getName());
 

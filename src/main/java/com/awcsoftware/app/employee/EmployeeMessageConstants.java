@@ -4,16 +4,19 @@ public enum EmployeeMessageConstants {
     InvalidPassword("Confirm & new password should be same"),
 	InvalidCurrentPassword("Current password is wrong"),
 	WrongEmailId("Email id does not exist"),
-	SentEmail("Email send successfully"),
+	SendEmail("Email send successfully"),
 	PasswordChanged("Password changed successfully"),
-	TokenExpired("Token has expired"),
+	TokenExpired("Token expired"),
 	CheckToken("No token found"),
 	LinkValid("Link is valid"),
 	LinkExpired("Link has been expired"),
 	SameAsCurrentPassword("New and current password can't be same"),
 	ValidEmail("Email id is correct"),
-	ValidatePasswordPattern("Password must contain atleast one special character,one lower,one upper case ,one digit and length must be greater or equal to 8 characters");
-	
+	PasswordNotNull("Password can't be blank"),
+	AccessDenied("Access Denied"),
+	ValidatePasswordPattern("Your password must be at least 8 characters long, contain at least one number, one special character and have a mixture of uppercase and lowercase letters."),
+	ValidateEmail("Incorrect email address"),
+	validatePassword("Wrong Password");
 	
 	private final String label;
 
