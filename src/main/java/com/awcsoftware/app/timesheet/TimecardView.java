@@ -25,9 +25,18 @@ public class TimecardView  implements Serializable
 	private String statusGrid;
 	private String managerComment;
 	private String weekWorkingHours;
-	
+	private String workingdate;	
 	
 	private List<TimecardDayDetails> timecardDaySummary;
+
+	
+	public String getWorkingdate() {
+		return workingdate;
+	}
+
+	public void setWorkingdate(String workingdate) {
+		this.workingdate = workingdate;
+	}
 
 	public int getTcId() {
 		return tcId;

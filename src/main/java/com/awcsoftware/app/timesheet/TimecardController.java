@@ -23,6 +23,14 @@ public class TimecardController {
 
 	TimecardService service;
 
+	/*
+	 *  This function is called when employee will save his/her timecard information. 
+	 *  This function will store data in table as draft mode so employee can 
+	 *  change timecard as many time as s/he wants. This url/method will allow 
+	 *  user to add new record  or update the existing timecard details 
+	 * 
+	 */
+	
 	@RequestMapping(value = "/tc-add", method = RequestMethod.POST, headers = "Accept=application/json")	 
 	public ResponseEntity<String> saveTimecard(@RequestBody TimecardInfo timecardInfo) {
 		service = new TimecardService();
@@ -35,6 +43,15 @@ public class TimecardController {
 		}
 	}
 
+	/*
+	 *  This function is called when employee will submit his/her timecard information. 
+	 *  This function will store data in table as submit mode.
+	 *  Once the timecard data is submitted, employee can not resubmitted his/her timecard details again
+	 *  until manager reject the particular time card. This url/method will allow 
+	 *  user to add new record  or update the existing timecard details 
+	 * 
+	 */
+	
 	@RequestMapping(value = "/tc-submit", method = RequestMethod.POST, headers = "Accept=application/json")
 	public ResponseEntity<String> submitTimecard(@RequestBody TimecardInfo timecardInfo) {
 		service = new TimecardService();
@@ -47,6 +64,11 @@ public class TimecardController {
 		}
 	}
 
+	/*
+	 *  This function is called when employee wants to check his/her timecard.
+	 *  This function will show the detail view of entered 
+	 * 
+	 */
 	@RequestMapping(value = "/tc-search", method = RequestMethod.GET, headers = "Accept=application/json")
 	public ResponseEntity<List<TimecardInfo>> TimeCardView(@RequestBody TimecardInfo timecardInfoParam) {
 		service = new TimecardService();
