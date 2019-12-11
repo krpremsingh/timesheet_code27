@@ -22,7 +22,12 @@ public class TimecardDayDetails implements Serializable {
 	private LocalDateTime addedOn;
 	private LocalDateTime lastModifiedOn;
 	private String recordType;
+	private String rowIndex;	
 	
+	private String projectName;
+	private String projectWorkHour;
+	
+	private String timecardRowDetails;	
 	public int getTcddId() {
 		return tcddId;
 	}
@@ -109,14 +114,40 @@ public class TimecardDayDetails implements Serializable {
 	public void setWorkingDate(LocalDate workingDate) {
 		this.workingDate = workingDate;
 	}
-
-	
 	
 	public String getRecordType() {
 		return recordType;
 	}
 	public void setRecordType(String recordType) {
 		this.recordType = recordType;
+	}
+
+		
+	public String getRowIndex() {
+		return rowIndex;
+	}
+	public void setRowIndex(String rowIndex) {
+		this.rowIndex = rowIndex;
+	}
+	public String getProjectName() {
+		return projectName;
+	}
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
+	}
+	public String getProjectWorkHour() {
+		return projectWorkHour;
+	}
+	public void setProjectWorkHour(String projectWorkHour) {
+		this.projectWorkHour = projectWorkHour;
+	}
+
+	
+	public String getTimecardRowDetails() {
+		return timecardRowDetails;
+	}
+	public void setTimecardRowDetails(String timecardRowDetails) {
+		this.timecardRowDetails = timecardRowDetails;
 	}
 	@Override
 	public String toString() {

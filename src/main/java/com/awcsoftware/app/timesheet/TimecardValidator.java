@@ -1,8 +1,10 @@
 package com.awcsoftware.app.timesheet;
 
+import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -12,6 +14,7 @@ import com.awcsoftware.app.AppConstant;
 import com.awcsoftware.app.AppValidator;
 import com.awcsoftware.app.Util;
 import com.awcsoftware.spring.security.auth.UserAuthenticationDetail;
+import com.awcsoftware.spring.security.auth.user.Role;
 
 public class TimecardValidator extends AppValidator {
 	static Logger logger = Logger.getLogger(TimecardValidator.class);
@@ -23,11 +26,11 @@ public class TimecardValidator extends AppValidator {
 		errorMsg = new LinkedHashSet<String>();
 	}
 
-	public Set<String> validateTimeCard(TimecardInfo timecardInfo) {
+	public Set<String> validateTimeCard(TimecardInfo timecardInfo) throws ParseException {
 
 		errorMsg.clear();
 
-		if (timecardInfo.getEmpId() == 0) {
+		if (timecardInfo.getEmpId() == AppConstant.WORKING_HOURS.Zero.getValue()) {
 			errorMsg.add(TimecardMessageConstant.Blank_Emp_Id.getLabel());
 		}
 
@@ -36,11 +39,11 @@ public class TimecardValidator extends AppValidator {
 			errorMsg.add(TimecardMessageConstant.DifferentEmployeeIdAndLoggedInUser.getLabel());
 		}
 
-		if (timecardInfo.getWeekStart() == null || timecardInfo.getWeekStart().toString().length() < 10) {
+		if (timecardInfo.getWeekStart() == null || timecardInfo.getWeekStart().toString().length() < AppConstant.WORKING_HOURS.Ten.getValue()) {
 			errorMsg.add(TimecardMessageConstant.Blank_Start_Date.getLabel());
 		}
 
-		if (timecardInfo.getWeekEnd() == null || timecardInfo.getWeekEnd().toString().length() < 10) {
+		if (timecardInfo.getWeekEnd() == null || timecardInfo.getWeekEnd().toString().length() < AppConstant.WORKING_HOURS.Ten.getValue()) {
 			errorMsg.add(TimecardMessageConstant.Blank_End_Date.getLabel());
 		}
 
@@ -48,7 +51,7 @@ public class TimecardValidator extends AppValidator {
 			errorMsg.add(TimecardMessageConstant.BlankTimecardDetails.getLabel());
 		}
 
-		if (timecardInfo.getTimecardDayInfo().size() == 0) {
+		if (timecardInfo.getTimecardDayInfo().size() == AppConstant.WORKING_HOURS.Zero.getValue()) {
 			errorMsg.add(TimecardMessageConstant.BlankTimecardDetails.getLabel());
 		}
 
@@ -58,12 +61,12 @@ public class TimecardValidator extends AppValidator {
 		return errorMsg;
 	}
 
-	public Set<String> validateSubmitTimeCard(TimecardInfo timecardInfo) {
+	public Set<String> validateSubmitTimeCard(TimecardInfo timecardInfo) throws ParseException {
 		errorMsg.clear();
 
 		draftFlag = AppConstant.TIME_CARD_STATUS.Pending.toString();
 		validateTimeCard(timecardInfo);
-		if (timecardInfo.getTimecardDayInfo().size() < 5) {
+		if (timecardInfo.getTimecardDayInfo().size() < AppConstant.WORKING_HOURS.Five.getValue()) {
 			errorMsg.add(TimecardMessageConstant.MimimunTimecards.getLabel());
 		}
 
@@ -87,8 +90,9 @@ public class TimecardValidator extends AppValidator {
 	}
 
 	public Set<String> validateTimecardDayInfo(List<TimecardDayInfo> timecardDayInfoParam, String weekStartDate,
-			String weekEndDate) {
+			String weekEndDate) throws ParseException{
 		int timecardDayCtr = 0;
+		Set dateSet=new HashSet();
 		for (timecardDayCtr = 0; timecardDayCtr < timecardDayInfoParam.size(); timecardDayCtr++) {
 			TimecardDayInfo timecardDayInfo = (TimecardDayInfo) timecardDayInfoParam.get(timecardDayCtr);
 
@@ -96,17 +100,30 @@ public class TimecardValidator extends AppValidator {
 				errorMsg.add(TimecardMessageConstant.WorkDateCantBeNull.getLabel());
 				return errorMsg;
 			}
+			
+			if (dateSet.contains(timecardDayInfo.getWorkingDate().toString())) {
+				errorMsg.add(TimecardMessageConstant.Timecard_Date_Data_Exist.getLabel());
+				return errorMsg;
+			}
+
+			if (!Util.getDateDay(timecardDayInfo.getWorkingDate().toString()).trim()
+					.equalsIgnoreCase(timecardDayInfo.getWorkingDay().trim()))
+			{
+				errorMsg.add(TimecardMessageConstant.Timecard_Date_Day_is_Not_Equal.getLabel());
+				return errorMsg;				
+			}
 
 			if (Util.validateDateRange(timecardDayInfo.getWorkingDate().toString(), weekStartDate,
 					weekEndDate) == false)
 				errorMsg.add(TimecardMessageConstant.WorkDateNotInWeekRange.getLabel());
 
-			if (timecardDayInfo.getTimecardDayDetails().size() == 0) {
+			if (timecardDayInfo.getTimecardDayDetails().size() == AppConstant.WORKING_HOURS.Zero.getValue()) {
 				errorMsg.add(TimecardMessageConstant.BlankDayTimecardDetails.getLabel());
 				return errorMsg;
 			}
 
 			validateTimecardDayDetailsData(timecardDayInfo.getTimecardDayDetails());
+			dateSet.add(timecardDayInfo.getWorkingDate().toString());
 		}
 		return errorMsg;
 	}
@@ -192,11 +209,11 @@ public class TimecardValidator extends AppValidator {
 		if (Integer.parseInt(dailyTimeHour.substring(0, 2)) > 24) {
 			errorMsg.add(TimecardMessageConstant.Daily_Working_Limit.getLabel());
 		}
-
+/*
 		if (draftFlag.equals(AppConstant.TIME_CARD_STATUS.Pending.toString())
-				&& Integer.parseInt(dailyTimeHour.substring(0, 2)) < 8)
+				&& Integer.parseInt(dailyTimeHour.substring(0, 2)) < AppConstant.WORKING_HOURS.Eight.getValue())
 			errorMsg.add(TimecardMessageConstant.SingleDayWorkingHourValidationDuringSubmit.getLabel());
-
+*/
 		return errorMsg;
 
 	}
@@ -205,18 +222,40 @@ public class TimecardValidator extends AppValidator {
 
 		errorMsg.clear();
 
-		if (timecardApproverDetails.getTcId() == 0) {
+		if (timecardApproverDetails.getTcId() == AppConstant.WORKING_HOURS.Zero.getValue()) {
 			errorMsg.add(TimecardMessageConstant.TimecardNotExistDuringApproval.getLabel());
 		}
 
-		if (timecardApproverDetails.getProjectId() == 0) {
+		if (timecardApproverDetails.getProjectId() == AppConstant.WORKING_HOURS.Zero.getValue()) {
 			errorMsg.add(TimecardMessageConstant.ProjectIdBlankDuringApproval.getLabel());
 		}
 
-		if (timecardApproverDetails.getStatus() == "Reject" && timecardApproverDetails.getComments().equals("")) {
+		if (timecardApproverDetails.getStatus().equalsIgnoreCase(AppConstant.TIME_CARD_STATUS.Reject.toString())
+				&& timecardApproverDetails.getComments().equals("")) {
 			errorMsg.add(TimecardMessageConstant.RejectCommentIsEmpty.getLabel());
 		}
 
+		return errorMsg;
+	}
+
+
+	public Set<String> validateTimeCardEmployeeView(TimecardInfo timecardInfo) {
+
+		errorMsg.clear();
+
+		UserAuthenticationDetail auth = Util.getLoggedinUser();
+
+		logger.info(auth.getEmpId());
+		logger.info(auth.getRole());
+		logger.info(auth.getAuthorities());
+		logger.info(auth.getEmpCode());
+		logger.info(auth.getDesignationId());
+		
+		List<Role> employeeRole=auth.getRole();
+		
+		if (auth.getEmpId() != timecardInfo.getEmpId()) {
+			errorMsg.add(TimecardMessageConstant.Logged_IN_USER_CANNOT_CHECK_OTHER_USER_DETAIL.getLabel());
+		}
 		return errorMsg;
 	}
 

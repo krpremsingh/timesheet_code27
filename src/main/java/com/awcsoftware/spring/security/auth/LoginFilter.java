@@ -75,6 +75,7 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
 				List<GrantedAuthority> authorityList = roles.stream()
 						.map(role -> new SimpleGrantedAuthority("ROLE_" + role.getRole())).collect(Collectors.toList());
 
+				logger.debug(authorityList);
 				UserAuthenticationDetail authDetail = new UserAuthenticationDetail(username, password, authorityList); 
 				authDetail.setRole(roles);
 				authDetail.setEmpId(user.getEmpId());

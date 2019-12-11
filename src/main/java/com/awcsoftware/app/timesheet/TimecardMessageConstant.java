@@ -36,16 +36,18 @@ public enum TimecardMessageConstant {
 	ProjectIdBlankDuringApproval("Project id is blank"),
 	RejectCommentIsEmpty("Add comment for rejection"),
 
-	
-	TimecardDateTimeExist("Data already exist for the selected Time"),		
-	TimecardDataExist("Data already exist for the selected week"),		
+	Logged_IN_USER_CANNOT_CHECK_OTHER_USER_DETAIL("Logged in user can not check other user timecard"),
+	Timecard_Date_Time_Exist("Data already exist for the selected Time"),		
+	Timecard_Data_Exist("Date already exist for the selected week"),		
 	TimecardTimeDataExist("Data already exist for the selected date and time"),		
-	TimecardDateDataExist("Data already exist for the selected date"),		
+	Timecard_Date_Data_Exist("Date already exist"),
+	Timecard_Date_Day_is_Not_Equal("Date and day should be same "),
 	TimecardSuccessMessage("Timecard saved successfully"),		
 			
 	TimecardUpdateMessage("Timecard updated successfully"),			
 	TimecardSubmitMessage("Timecard submitted successfully"),			
-	TimecardAlreadySubmitMessage("Timecard is already submitted");	
+	TimecardAlreadySubmitMessage("Timecard is already submitted");
+	
 
 	
 	private final String label;

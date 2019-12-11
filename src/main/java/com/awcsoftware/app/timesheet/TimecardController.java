@@ -69,8 +69,9 @@ public class TimecardController {
 	 *  This function will show the detail view of entered 
 	 * 
 	 */
-	@RequestMapping(value = "/tc-search", method = RequestMethod.GET, headers = "Accept=application/json")
-	public ResponseEntity<List<TimecardInfo>> TimeCardView(@RequestBody TimecardInfo timecardInfoParam) {
+	
+	@RequestMapping(value = "/tc-search", method = RequestMethod.POST, headers = "Accept=application/json")
+	public ResponseEntity<List<TimecardInfo>> getEmployeeTimeCard(@RequestBody TimecardInfo timecardInfoParam) {
 		service = new TimecardService();
 		List<TimecardInfo> timecardInfo = null;
 		try {
@@ -81,30 +82,73 @@ public class TimecardController {
 		}
 	}
 
-	@RequestMapping(value = "/tc-detail-search", method = RequestMethod.GET, headers = "Accept=application/json")
-	public ResponseEntity<List<TimecardView>> TimecardDetailsView(@RequestBody TimecardView timecardDetailsViewParam) {
+	/*
+	 *  when user will click on result of method EmployeeTimecardView, 
+	 *  This method will show detail view of selected TimecardInfo.tcId 
+	 * 
+	 */
+
+	@RequestMapping(value = "/tc-detail-search", method = RequestMethod.POST, headers = "Accept=application/json")
+	public ResponseEntity<List<TimecardView>> getTimecardEmployeeDetailView(@RequestBody TimecardView timecardDetailsViewParam) {
 		service = new TimecardService();
 		List<TimecardView> timecardDetailsView = null;
 		try {
-			timecardDetailsView = (List<TimecardView>) service.getTimecardDetailsView(timecardDetailsViewParam.getTcId());
+			timecardDetailsView = (List<TimecardView>) service.getTimecardEmployeeDetailView(timecardDetailsViewParam.getTcId());
 			return new ResponseEntity<List<TimecardView>>(timecardDetailsView, HttpStatus.OK);
 		} catch (DbException | AppException e) {
 			return new ResponseEntity<List<TimecardView>>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
-	@RequestMapping(value = "/tc-savedData", method = RequestMethod.GET, headers = "Accept=application/json")
-	public ResponseEntity<TimecardInfo> getTimecardRecord(@RequestBody TimecardInfo timecardInfoParam) {
+	/*
+	 *  when user either save his/her timecard or submit his/her timecard, 
+	 *  system will show entered details using this method.
+	 * 
+	 */
+
+	@RequestMapping(value = "/tc-savedData", method = RequestMethod.POST, headers = "Accept=application/json")
+	public ResponseEntity<TimecardInfo> getTimecardSavedRecord(@RequestBody TimecardInfo timecardInfoParam) {
 		service = new TimecardService();
 		TimecardInfo timecardInfo = null;
 		try {
-			timecardInfo = (TimecardInfo) service.getTimecardRecord(timecardInfoParam);
+			timecardInfo = (TimecardInfo) service.getTimecardSavedRecord(timecardInfoParam);
 			return new ResponseEntity<TimecardInfo>(timecardInfo, HttpStatus.OK);
 		} catch (DbException | AppException e) {
 			return new ResponseEntity<TimecardInfo>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
+	@RequestMapping(value = "/tc-savedView", method = RequestMethod.POST, headers = "Accept=application/json")
+	public ResponseEntity<List<TimecardDayDetails>> getTimecardSavedRecordData(@RequestBody TimecardInfo timecardInfoParam) {
+		service = new TimecardService();
+		List<TimecardDayDetails> timecardDayDetails = null;
+		try {
+			timecardDayDetails = (List<TimecardDayDetails>) service.getTimecardSavedRecordData(timecardInfoParam);
+			return new ResponseEntity<List<TimecardDayDetails>>(timecardDayDetails, HttpStatus.OK);
+		} catch (DbException | AppException e) {
+			return new ResponseEntity<List<TimecardDayDetails>>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	/*
+	 *  This method is created for manager view details.
+	 * 
+	 */
+
+	@RequestMapping(value = "/tc-submitView", method = RequestMethod.POST, headers = "Accept=application/json")
+	public ResponseEntity<List<TimecardInfo>> getTimecardViewForManager(@RequestBody TimecardInfo timecardInfoParam) {
+		service = new TimecardService();
+		List<TimecardInfo> timecardManagerView= null;
+		try {
+			timecardManagerView = (List<TimecardInfo>) service.getTimecardViewForManager(timecardInfoParam);
+			return new ResponseEntity<List<TimecardInfo>>(timecardManagerView, HttpStatus.OK);
+		} catch (DbException | AppException e) {
+			return new ResponseEntity<List<TimecardInfo>>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	
+	
 	/*
 	 * 
 	 * Method created for Manager View, Approval and Rejection

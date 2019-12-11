@@ -12,8 +12,10 @@ public class TimecardManagerView implements Serializable {
 	private String workingDate;
 	private int projectId;
 	private String totalWeekHours;
-	private String weekEnd;
 	private String weekStart;
+	private String weekEnd;
+	
+	
 	public int getEmpId() {
 		return empId;
 	}

@@ -2,6 +2,7 @@ package com.awcsoftware.app;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 import java.util.function.Predicate;
@@ -46,8 +47,8 @@ public class Util {
 
 	public static boolean validateDateRange(String dateToCheck, String startDate, String endDate) {
 		boolean res = false;
-		SimpleDateFormat fmt1 = new SimpleDateFormat("yyyy-MM-dd");
-		SimpleDateFormat fmt2 = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat fmt1 = new SimpleDateFormat(AppConstant.TIME_FORMAT_CONST.DATE_FORMAT.getValue());
+		SimpleDateFormat fmt2 = new SimpleDateFormat(AppConstant.TIME_FORMAT_CONST.DATE_FORMAT.getValue());
 		try {
 			Date requestDate = fmt2.parse(dateToCheck);
 			Date fromDate = fmt1.parse(startDate);
@@ -63,52 +64,52 @@ public class Util {
 		return ((target.compareTo(start) >= 0) && (target.compareTo(end) <= 0));
 	}
 
-	public static String TimeAdd(String strStartTime, String strEndTime)  {
-		String date3 = "";
+	public static String TimeAdd(String startTimeParam, String endTimeParam)  {
+		String returnTime = "";
 		try
 		{
-			String time1 = strStartTime;
-			String time2 = strEndTime;
+			String startTime = startTimeParam;
+			String endTime = endTimeParam;
 	
-			SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
-			timeFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+			SimpleDateFormat timeFormat = new SimpleDateFormat(AppConstant.TIME_FORMAT_CONST.TIME_24_HOUR_FORMAT.getValue());
+			timeFormat.setTimeZone(TimeZone.getTimeZone(AppConstant.TIME_FORMAT_CONST.TIME_ZONE.getValue()));
 	
-			Date date1 = timeFormat.parse(time1);
-			Date date2 = timeFormat.parse(time2);
+			Date startFormatDate = timeFormat.parse(startTime);
+			Date endFormatDate = timeFormat.parse(endTime);
 	
-			long sum = date1.getTime() + date2.getTime();
+			long sum = startFormatDate.getTime() + endFormatDate.getTime();
 	
-			date3 = timeFormat.format(new Date(sum)).toString();
+			returnTime = timeFormat.format(new Date(sum)).toString();
 		}
 		catch(ParseException ex)
 		{
 			return new AppException(ex).toString();
 		}
-		return date3;
+		return returnTime;
 	}
 
-	public static String TimeDiff(String strStartTime, String strEndTime) {
-		String date4 ="";
+	public static String TimeDiff(String startTimeParam, String endTimeParam) {
+		String returnTime ="";
 		try
 		{
-			String time1 = strStartTime;
-			String time2 = strEndTime;
+			String startTime = startTimeParam;
+			String endTime = endTimeParam;
 	
 			SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
 			timeFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 	
-			Date date1 = timeFormat.parse(time1);
-			Date date2 = timeFormat.parse(time2);
+			Date startFormatDate = timeFormat.parse(startTime);
+			Date endFormatDate = timeFormat.parse(endTime);
 	
-			long diff = date2.getTime() - date1.getTime();
+			long diff = endFormatDate.getTime() - startFormatDate.getTime();
 	
-			date4 = timeFormat.format(new Date(diff));
+			returnTime = timeFormat.format(new Date(diff));
 		}
 		catch(ParseException ex)
 		{
 			return new AppException(ex).toString();
 		}
-		return date4;
+		return returnTime;
 	}
 
 	public static UserAuthenticationDetail getLoggedinUser() {
@@ -144,6 +145,18 @@ public class Util {
 			      + "|^(((19|2[0-9])[0-9]{2})-(0[469]|11)-(0[1-9]|[12][0-9]|30))$");
 		
 		return DATE_PATTERN.matcher(inputDate).matches();
+		
+	}
+
+	public static String getDateDay(String inputDate) throws ParseException
+	{
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		Date parsedDate = dateFormat.parse(inputDate);
+		Calendar calcInstance = Calendar.getInstance();
+		calcInstance.setTime(parsedDate);		
+        int dayNumber = calcInstance.get(Calendar.DAY_OF_WEEK);
+        String[] strDayArray= {"Sunday","Monday","Tuesday","Wednesday","ThursDay","Friday","Staurday"};
+        return strDayArray[dayNumber-1];
 		
 	}
 }

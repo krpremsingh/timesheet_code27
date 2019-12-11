@@ -18,6 +18,10 @@ public class TimecardInfo implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	// Field mapped for table TimeCardSummaryInfo
+/*
+ * Field used for inserting/Editing data
+ * 
+ */
 	private int tcId;
 	private int empId;
 	private LocalDate weekStart;
@@ -26,12 +30,42 @@ public class TimecardInfo implements Serializable {
 	private String status;
 	private LocalDateTime addedOn;
 	private List<TimecardDayInfo> timecardDayInfo;
+	
 	private String WeekPeriod;
 	private String statusGrid;
 	private String managerName;
+
+	/*
+	 * Field used for showing error when logged-in user 
+	 * and data insert user are different
+	 * 
+	 */
+
+	private String searchStatus;
+
+	/*
+	 * Data show per tcId
+	 * 
+	 */
 	
-	private List<TimecardDetailSearch> timecardDetailSearch;
+	private String empName;
+	private String projectId;
+	private String projectName;
+	private String projectGroup;
+	private String approverId;
 	
+
+	private List<TimecardDetailSearch> employeeTimecard;
+	
+	
+	public String getSearchStatus() {
+		return searchStatus;
+	}
+
+	public void setSearchStatus(String searchStatus) {
+		this.searchStatus = searchStatus;
+	}
+
 	public int getTcId() {
 		return tcId;
 	}
@@ -120,6 +154,55 @@ public class TimecardInfo implements Serializable {
 
 	public void setManagerName(String managerName) {
 		this.managerName = managerName;
+	}
+
+	
+	public String getEmpName() {
+		return empName;
+	}
+
+	public void setEmpName(String empName) {
+		this.empName = empName;
+	}
+
+	public String getProjectId() {
+		return projectId;
+	}
+
+	public void setProjectId(String projectId) {
+		this.projectId = projectId;
+	}
+
+	public String getProjectName() {
+		return projectName;
+	}
+
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
+	}
+
+	public String getProjectGroup() {
+		return projectGroup;
+	}
+
+	public void setProjectGroup(String projectGroup) {
+		this.projectGroup = projectGroup;
+	}
+
+	public String getApproverId() {
+		return approverId;
+	}
+
+	public void setApproverId(String approverId) {
+		this.approverId = approverId;
+	}
+
+	public List<TimecardDetailSearch> getEmployeeTimecard() {
+		return employeeTimecard;
+	}
+
+	public void setEmployeeTimecard(List<TimecardDetailSearch> employeeTimecard) {
+		this.employeeTimecard = employeeTimecard;
 	}
 
 	@Override
