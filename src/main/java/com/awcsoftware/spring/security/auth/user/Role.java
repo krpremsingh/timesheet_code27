@@ -1,6 +1,13 @@
 package com.awcsoftware.spring.security.auth.user;
 
-public class Role {
+import org.springframework.security.core.GrantedAuthority;
+
+public class Role implements GrantedAuthority {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int roleId;
 	private String role;
 
@@ -18,6 +25,12 @@ public class Role {
 
 	public void setRole(String role) {
 		this.role = role;
+	}
+
+	@Override
+	public String getAuthority() {
+		// TODO Auto-generated method stub
+		return this.role;
 	}
 
 }

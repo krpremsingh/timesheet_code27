@@ -2,15 +2,17 @@ package com.awcsoftware.spring.security.auth;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import com.awcsoftware.spring.security.auth.user.Role;
 
-public class UserAuthenticationDetail extends UsernamePasswordAuthenticationToken {
+public class UserAuthenticationDetail extends UsernamePasswordAuthenticationToken implements UserDetails {
 	static Logger log = Logger.getLogger(UserAuthenticationDetail.class.getName());
 	
 	private List<Role> role;
@@ -19,6 +21,7 @@ public class UserAuthenticationDetail extends UsernamePasswordAuthenticationToke
 	private int empId;
 	private String empCode;
 	private int designationId;
+	private String firstName;
 
 	private static final long serialVersionUID = 1L;
 
@@ -80,6 +83,51 @@ public class UserAuthenticationDetail extends UsernamePasswordAuthenticationToke
 	public void setFirstLoginStatus(int firstLoginStatus) {
 		this.firstLoginStatus = firstLoginStatus;
 	}
+
+	public String getName() {
+		return firstName;
+	}
+
+	public void setName(String firstName) {
+		this.firstName = firstName;
+	}
+	@Override
+	public String getUsername() {
+		return (String) super.getPrincipal();
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		return true;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return true;
+	}
+	
+	@Override
+	public String getPassword() {
+		return null;
+	}
+	
+	@Override
+	public Collection<GrantedAuthority> getAuthorities() {
+		return getRole().stream().map(role -> new SimpleGrantedAuthority("ROLE_" + role.getRole()))
+				.collect(Collectors.toList());
+	}
+
+
 	
 
 }

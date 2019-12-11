@@ -15,7 +15,7 @@ import com.awcsoftware.spring.security.auth.user.User;
 import com.awcsoftware.spring.security.auth.user.UserDao;
 
 /* 
- * validate the password ttern
+ * validate the password pattern
  * check current password in database
  * validate current password with new password
  * validate new password and confirm password
@@ -30,7 +30,7 @@ public class EmployeeValidator {
 	}
 	User result = null;
 
-	private static final String PASSWORD_PATTERN = "((?=.*[a-z])(?=.*\\d)(?=.*[A-Z])(?=.*[@#$%!]).{8,40})";
+	private static final String PASSWORD_PATTERN = "((?=.*[a-z])(?=.*\\d)(?=.*[A-Z])(?=.*[@#$%!&*]).{8,20})";
 
 	private Pattern pattern;
 
@@ -39,7 +39,9 @@ public class EmployeeValidator {
 	public EmployeeValidator() {
 		pattern = Pattern.compile(PASSWORD_PATTERN);
 	}
-
+    /*
+     * 
+     */
 	public boolean validatePattern(final String password) {
 
 		matcher = pattern.matcher(password);
@@ -83,7 +85,11 @@ public class EmployeeValidator {
 		if (!user.getConfirmPassword().equalsIgnoreCase(user.getNewPassword())) {
 			errorMsg.add(EmployeeMessageConstants.InvalidPassword.getLabel());
 		}
+		if(user.getNewPassword()==null||user.getNewPassword()=="") {
+			errorMsg.add(EmployeeMessageConstants.PasswordNotNull.getLabel().toString());
+		}
 		if(validatePattern(user.getNewPassword())==false) {
+
 			errorMsg.add(EmployeeMessageConstants.ValidatePasswordPattern.getLabel().toString());
 		}
 		return errorMsg;
@@ -92,8 +98,12 @@ public class EmployeeValidator {
 	public Set<String> verifyEmail(String email) {
 		errorMsg.clear();
 		EmployeeDao dao = new EmployeeDao();
-		String emailId = dao.verifyEmailId(email);
-		if (emailId == null) {
+		String emailId = dao.verifyEmailId(email);		
+		if (Util.isEmptyOrNull(emailId) || !Util.validateEmail.test(email)) {
+			logger.debug("email id not found");
+			return null;
+		}
+		if (Util.isEmptyOrNull(emailId) || !Util.validateEmail.test(email)) {
 			errorMsg.add(EmployeeMessageConstants.WrongEmailId.getLabel());
 		}
 		return errorMsg;
@@ -126,15 +136,5 @@ public class EmployeeValidator {
 		}
 		return errorMsg;
 	}
-
-	/*
-	 * public Set<String> verifyCurrentPassword(User user){ UserDao dao= new
-	 * UserDao(); String password = dao.getCurrentPassword(user.getEmail());
-	 * if(password.equals(user.getNewPassword())) {
-	 * errorMsg.add(EmployeeErrorConstants.SameAsCurrentPassword.getLabel().toString
-	 * ()); } return errorMsg;
-	 * 
-	 * }
-	 */
 
 }

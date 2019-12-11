@@ -2,14 +2,15 @@ package com.awcsoftware.app.employee;
 
 import org.apache.ibatis.session.SqlSession;
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.Component;
 
 import com.awcsoftware.app.AppException;
-import com.awcsoftware.app.Util;
 import com.awcsoftware.mybatis.DbException;
 import com.awcsoftware.mybatis.MyBatisManager;
 import com.awcsoftware.spring.security.auth.user.User;
 import com.awcsoftware.spring.security.auth.user.UserDao;
 
+@Component("empDao")
 public class EmployeeDao {
 	static Logger logger = Logger.getLogger(EmployeeDao.class.getName());
 
@@ -35,7 +36,7 @@ public class EmployeeDao {
 			if (result != 0) {
 				session.commit();
 				deleteToken(user);
-				logger.debug(user.getEmail()+" " +result+" ");
+				logger.debug(user.getEmail() + " " + result + " ");
 				return true;
 			}
 			return false;
@@ -66,10 +67,6 @@ public class EmployeeDao {
 		User user = null;
 		UserDao userdao = new UserDao();
 		user = userdao.getUser(email);
-		if (Util.isEmptyOrNull(user) || !Util.validateEmail.test(email)) {
-			logger.debug("email id not found");
-			return null;
-		}
 		return user.getEmail();
 
 	}
@@ -121,24 +118,19 @@ public class EmployeeDao {
 
 	}
 
-/*	public String getCurrentPassword(String email) {
-		SqlSession session = MyBatisManager.openSession();
-		try {
-			String result = session.selectOne("User.getCurrentPassword");
-			if (result != null) {
-				session.commit();
-				return result;
-			}
-			return null;
-		} finally {
-			session.close();
-		}
-
-	}*/
+	/*
+	 * public String getCurrentPassword(String email) { SqlSession session =
+	 * MyBatisManager.openSession(); try { String result =
+	 * session.selectOne("User.getCurrentPassword"); if (result != null) {
+	 * session.commit(); return result; } return null; } finally { session.close();
+	 * }
+	 * 
+	 * }
+	 */
 	public int deleteToken(User user) {
 		SqlSession session = MyBatisManager.openSession();
 		try {
-			int result = session.delete("User.deleteToken",user);
+			int result = session.delete("User.deleteToken", user);
 			if (result != 0) {
 				session.commit();
 				return result;
@@ -147,6 +139,6 @@ public class EmployeeDao {
 		} finally {
 			session.close();
 		}
-		
+
 	}
 }

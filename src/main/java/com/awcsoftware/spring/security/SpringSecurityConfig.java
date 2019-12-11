@@ -13,6 +13,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import com.awcsoftware.spring.security.auth.LoginFilter;
 import com.awcsoftware.spring.security.auth.LogoutFilter;
 import com.awcsoftware.spring.security.auth.TokenFilter;
+import com.awcsoftware.spring.security.auth.user.AccessDeniedHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -46,6 +47,11 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 		filter.setAuthenticationManager(authenticationManagerBean());
 		return filter;
 	}
+		
+	@Bean
+	AccessDeniedHandler accessDeniedHandler() {
+		return new AccessDeniedHandler();
+	}
 	
 	@Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -66,7 +72,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers(CREDENTIAL_BASED_LOGIN_ENTRY_POINT).permitAll()
 				.antMatchers(LOGOUT_ENTRY_POINT).authenticated()
 			    .anyRequest().authenticated()
-				
-	        ;
+			    .and()
+			    .exceptionHandling().accessDeniedHandler(accessDeniedHandler());
 	    }
 }

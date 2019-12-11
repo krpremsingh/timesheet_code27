@@ -13,8 +13,7 @@ public class AppException extends Exception {
 	public AppException(String message) {
 		super(message);
 		this.message = message;
-	}
-	
+	}	
 	public AppException(Throwable cause) {
         super(cause);
     }

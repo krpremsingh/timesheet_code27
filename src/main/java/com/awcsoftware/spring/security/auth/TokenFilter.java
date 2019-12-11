@@ -1,8 +1,6 @@
 package com.awcsoftware.spring.security.auth;
 
 import java.io.IOException;
-
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -21,6 +19,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 
+import com.awcsoftware.app.employee.EmployeeMessageConstants;
 import com.awcsoftware.session.store.TokenSession;
 import com.awcsoftware.spring.security.auth.token.TokenManager;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -93,7 +92,7 @@ public class TokenFilter extends AbstractAuthenticationProcessingFilter{
 			}
 		} else {
 			throw new
-            BadCredentialsException("904 - Authentication Token not valid");
+            BadCredentialsException(EmployeeMessageConstants.TokenExpired.getLabel().toString());
 		}
 		List<GrantedAuthority> authorityList = Collections.<GrantedAuthority>emptyList();
 		UserAuthenticationDetail authDetail = new UserAuthenticationDetail
