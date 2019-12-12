@@ -505,7 +505,9 @@
 		parameterType="TimecardInfo" resultType="TimecardDayDetails">
 			select tcdd.tcId tcId, tcdd.tcdId tcdId,tcdd.tcddId tcddId, projectId, activityId, location,  tcdd.status status, taskDetails,
 			group_Concat('$ ',concat(workingDate,'*',startTime,'*',endTime,'*',tcdd.workingHours)) timecardRowDetails,
-			ifnull((select projectName from ProjectsInfo PI where PI.projectId= tcdd.projectId),' ') projectName
+			ifnull((select projectName from ProjectsInfo PI where PI.projectId= tcdd.projectId),' ') projectName,
+			ifnull((select activity from ActivitiesInfo PI where PI.activityId= tcdd.activityId),' ') activityName,
+			ifnull((select location from WorkLocationsInfo PI where PI.workLocationId = tcdd.location),' ') locationName
 			 from TimecardDayDetails tcdd, 
 			TimecardDayInfo tcdi, TimecardInfo tci
 			where empId=#{empId}  	
@@ -521,7 +523,7 @@
 				and weekEnd &lt;=#{weekEnd,jdbcType=VARCHAR}
 			</if>	
 	
-			and tci.tcId=tcdd.tcId and tcdd.tcId=tcdi.tcId and tcdd.tcdId=tcdi.tcdId group by rowIndex order by rowIndex ;
+			and tci.tcId=tcdd.tcId and tcdd.tcId=tcdi.tcId and tcdd.tcdId=tcdi.tcdId and tcdd.recordType='Active' group by rowIndex order by rowIndex ;
 
 	</select>
 

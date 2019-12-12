@@ -26,6 +26,9 @@ public class TimecardDayDetails implements Serializable {
 	
 	private String projectName;
 	private String projectWorkHour;
+
+	private String activityName;
+	private String locationName;
 	
 	private String timecardRowDetails;	
 	public int getTcddId() {
@@ -148,6 +151,19 @@ public class TimecardDayDetails implements Serializable {
 	}
 	public void setTimecardRowDetails(String timecardRowDetails) {
 		this.timecardRowDetails = timecardRowDetails;
+	}
+	
+	public String getActivityName() {
+		return activityName;
+	}
+	public void setActivityName(String activityName) {
+		this.activityName = activityName;
+	}
+	public String getLocationName() {
+		return locationName;
+	}
+	public void setLocationName(String locationName) {
+		this.locationName = locationName;
 	}
 	@Override
 	public String toString() {

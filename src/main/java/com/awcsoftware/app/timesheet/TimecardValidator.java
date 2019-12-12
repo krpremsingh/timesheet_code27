@@ -100,7 +100,12 @@ public class TimecardValidator extends AppValidator {
 				errorMsg.add(TimecardMessageConstant.WorkDateCantBeNull.getLabel());
 				return errorMsg;
 			}
-			
+
+			if(Util.isValidDate(timecardDayInfo.getWorkingDate().toString()) == false )
+			{
+				errorMsg.add(TimecardMessageConstant.Invalid_Date.getLabel());
+				return errorMsg;				
+			}
 			if (dateSet.contains(timecardDayInfo.getWorkingDate().toString())) {
 				errorMsg.add(TimecardMessageConstant.Timecard_Date_Data_Exist.getLabel());
 				return errorMsg;

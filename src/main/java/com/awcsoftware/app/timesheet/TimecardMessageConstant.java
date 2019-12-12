@@ -7,6 +7,7 @@ public enum TimecardMessageConstant {
 	Blank_Emp_Id("Invalid employee"),
 	Blank_Start_Date("Week start date is not valid "),
 	Blank_End_Date("Week end date is not valid "),
+	Invalid_Date("Invalid Date, Date must be in YYYY-MM-DD Format"),
 	Blank_Approval_Details("approval details is empty, kindly contact adminstrator and try again"),
 	Daily_Working_Limit("Working hours cannot exceed by 24 hours for a day"),	
 	Blank_Working_Date("Invalid working date"),

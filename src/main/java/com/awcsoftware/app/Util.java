@@ -155,7 +155,7 @@ public class Util {
 		Calendar calcInstance = Calendar.getInstance();
 		calcInstance.setTime(parsedDate);		
         int dayNumber = calcInstance.get(Calendar.DAY_OF_WEEK);
-        String[] strDayArray= {"Sunday","Monday","Tuesday","Wednesday","ThursDay","Friday","Staurday"};
+        String[] strDayArray= {"Sunday","Monday","Tuesday","Wednesday","ThursDay","Friday","Saturday"};
         return strDayArray[dayNumber-1];
 		
 	}
