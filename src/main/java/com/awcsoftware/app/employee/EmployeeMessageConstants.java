@@ -15,7 +15,7 @@ public enum EmployeeMessageConstants {
 	PasswordNotNull("Password can't be blank"),
 	AccessDenied("Access Denied"),
 	ValidatePasswordPattern("Your password must be at least 8 characters long, contain at least one number, one special character and have a mixture of uppercase and lowercase letters."),
-	ValidateEmail("Incorrect email address"),
+	ValidateEmail("Wrong email address"),
 	validatePassword("Wrong Password");
 	
 	private final String label;

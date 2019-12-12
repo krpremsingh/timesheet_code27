@@ -5,8 +5,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 public class TimecardDayInfo implements Serializable {
 	private int tcdId;
 	private int tcId;

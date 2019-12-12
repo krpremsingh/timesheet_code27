@@ -73,6 +73,11 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers(LOGOUT_ENTRY_POINT).authenticated()
 			    .anyRequest().authenticated()
 			    .and()
-			    .exceptionHandling().accessDeniedHandler(accessDeniedHandler());
+			    .exceptionHandling().accessDeniedHandler(accessDeniedHandler())
+			    .and()
+			    .logout().clearAuthentication(true)
+			    .logoutSuccessUrl(LOGOUT_ENTRY_POINT)
+			    .invalidateHttpSession(true);
+	             
 	    }
 }
