@@ -1,7 +1,7 @@
 package com.awcsoftware.app.employee;
 
 public enum EmployeeMessageConstants {
-    InvalidPassword("Confirm & new password should be same"),
+    InvalidPassword("New & confirm password must be same"),
 	InvalidCurrentPassword("Current password is wrong"),
 	WrongEmailId("Email id does not exist"),
 	SendEmail("Email send successfully"),
@@ -14,7 +14,7 @@ public enum EmployeeMessageConstants {
 	ValidEmail("Email id is correct"),
 	PasswordNotNull("Password can't be blank"),
 	AccessDenied("Access Denied"),
-	ValidatePasswordPattern("Your password must be at least 8 characters long, contain at least one number, one special character and have a mixture of uppercase and lowercase letters."),
+	ValidatePasswordPattern("Password Must contain at least one uppercase and one lowercase letter and one number digit (ex: 0, 1, 2, 3, etc.) and one following special character (@#$%!&*) and length must be equal to or greater than 8 characters and less than or equal to 20 characters"),
 	ValidateEmail("Wrong email address"),
 	validatePassword("Wrong Password");
 	

@@ -2,6 +2,9 @@ package com.awcsoftware.app.common;
 
 import java.util.List;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class ParentBasePojo {
 
 	private int id;

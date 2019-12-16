@@ -39,9 +39,10 @@ public class EmployeeValidator {
 	public EmployeeValidator() {
 		pattern = Pattern.compile(PASSWORD_PATTERN);
 	}
-    /*
-     * 
-     */
+
+	/*
+	 * 
+	 */
 	public boolean validatePattern(final String password) {
 
 		matcher = pattern.matcher(password);
@@ -85,20 +86,20 @@ public class EmployeeValidator {
 		if (!user.getConfirmPassword().equalsIgnoreCase(user.getNewPassword())) {
 			errorMsg.add(EmployeeMessageConstants.InvalidPassword.getLabel());
 		}
-		if(user.getNewPassword()==null||user.getNewPassword()=="") {
+		if (user.getNewPassword() == null || user.getNewPassword() == "") {
 			errorMsg.add(EmployeeMessageConstants.PasswordNotNull.getLabel().toString());
 		}
-		if(validatePattern(user.getNewPassword())==false) {
+		if (validatePattern(user.getNewPassword()) == false) {
 
 			errorMsg.add(EmployeeMessageConstants.ValidatePasswordPattern.getLabel().toString());
 		}
 		return errorMsg;
 	}
-
+/*
 	public Set<String> verifyEmail(String email) {
 		errorMsg.clear();
 		EmployeeDao dao = new EmployeeDao();
-		String emailId = dao.verifyEmailId(email);		
+		String emailId = dao.verifyEmailId(email);
 		if (Util.isEmptyOrNull(emailId) || !Util.validateEmail.test(email)) {
 			logger.debug("email id not found");
 			return null;
@@ -108,6 +109,16 @@ public class EmployeeValidator {
 		}
 		return errorMsg;
 
+	}*/
+
+	public Set<String> verifyEmailId(String email) throws AppException, DbException {
+		errorMsg.clear();
+		UserDao dao = new UserDao();
+		logger.debug(dao.getUser(email));
+		if (Util.isEmptyOrNull(email) || !Util.validateEmail.test(email)||Util.isEmptyOrNull(dao.getUser(email))) {
+			errorMsg.add(EmployeeMessageConstants.WrongEmailId.getLabel());
+		}
+		return errorMsg;
 	}
 
 	public Set<String> checkToken(String email) {

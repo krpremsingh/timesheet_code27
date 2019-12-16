@@ -5,7 +5,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,11 +19,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.awcsoftware.app.AppException;
-import com.awcsoftware.app.Util;
-import com.awcsoftware.app.mail.Mail;
 import com.awcsoftware.mybatis.DbException;
 import com.awcsoftware.spring.security.auth.user.User;
-import com.awcsoftware.spring.security.auth.user.UserService;
+import com.awcsoftware.spring.security.auth.user.UserDao;
 
 @RestController
 public class EmployeeController {
@@ -34,14 +31,7 @@ public class EmployeeController {
 	EmployeeService employeeservice;
 
 	@Autowired
-	UserService userservice;
-
-	@Autowired
-	Mail mail;
-
-	@Autowired(required = true)
-	@Qualifier("confirmationtoken")
-	ConfirmationToken confirmationtoken;
+	UserDao userdao;
 
 	@Bean
 	PasswordEncoder passwordencoder() {
@@ -65,32 +55,14 @@ public class EmployeeController {
 	public ResponseEntity<String> forgotPassword(@RequestBody User user, HttpServletRequest request)
 			throws MessagingException {
 		try {
-			user = userservice.getUser(user.getEmail());
 			
-			if (user == null || !Util.validateEmail.test(user.getEmail())) {
-				return new ResponseEntity<String>(EmployeeMessageConstants.WrongEmailId.getLabel().toString(),
-						HttpStatus.INTERNAL_SERVER_ERROR);
-			}
-			
-			confirmationtoken = new ConfirmationToken(user);
-			employeeservice.saveUpdateToken(confirmationtoken);
-
-			/*
-			 * boolean checktoken =
-			 * employeeservice.checkToken(confirmationtoken.getUser().getEmail());
-			 * logger.debug("checktoken " + checktoken); if (checktoken == true) {
-			 * employeeservice.updateToken(confirmationtoken);
-			 * logger.debug("update token "); } else if (checktoken == false) {
-			 * employeeservice.saveToken(confirmationtoken);
-			 * 
-			 * }
-			 */
+			return new ResponseEntity<String>(employeeservice.sendEmail(user.getEmail(), request), HttpStatus.OK);
 		} catch (DbException e) {
 			return new ResponseEntity<String>("Database Error", HttpStatus.INTERNAL_SERVER_ERROR);
 		} catch (AppException e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		return new ResponseEntity<String>(mail.sendEmail(confirmationtoken, request), HttpStatus.OK);
+		
 	}
 
 	@RequestMapping(value = "/auth/confirm-reset", method = RequestMethod.GET, headers = "Accept=application/json")
