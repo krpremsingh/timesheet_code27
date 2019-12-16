@@ -2,6 +2,9 @@ package com.awcsoftware.app.employee;
 
 import java.util.Set;
 
+import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -10,8 +13,7 @@ import org.springframework.web.util.UriComponents;
 
 import com.awcsoftware.app.AppException;
 import com.awcsoftware.app.Util;
-import com.awcsoftware.app.mail.MailConfig;
-import com.awcsoftware.app.mail.MailContent;
+import com.awcsoftware.app.mail.Mail;
 import com.awcsoftware.mybatis.DbException;
 import com.awcsoftware.spring.security.auth.user.User;
 import com.awcsoftware.spring.security.auth.user.UserDao;
@@ -24,10 +26,6 @@ public class EmployeeService {
 	UriComponents uriComponents = null;
 
 	@Autowired(required = true)
-	@Qualifier("mailconfig")
-	MailConfig mailconfig;
-
-	@Autowired(required = true)
 	@Qualifier("empDao")
 	EmployeeDao empDao;
 
@@ -36,12 +34,16 @@ public class EmployeeService {
 	UserDao userDao;
 
 	@Autowired
-	MailContent mailcontent;
+	ConfirmationToken ctoken;
+
+	@Autowired
+	Mail mail;
 
 	public String resetPassword(User user) throws AppException, DbException {
 		User result = null;
 		EmployeeValidator validator = new EmployeeValidator();
 		result = userDao.getUser(user.getEmail());
+		log.debug("user "+ user);
 		Set<String> validateCurrentPassword = validator.validateCurrentPassword(user);
 		if (validateCurrentPassword.size() != 0) {
 			return validateCurrentPassword.toString();
@@ -65,7 +67,7 @@ public class EmployeeService {
 		EmployeeValidator validator = new EmployeeValidator();
 
 		Set<String> validateNewConfirmPassword = validator.validateNewConfirmPassword(user);
-
+        log.debug("validateNewConfirmPassword  "  +validateNewConfirmPassword);
 		if (validateNewConfirmPassword.size() != 0) {
 			return validateNewConfirmPassword.toString();
 		}
@@ -73,14 +75,18 @@ public class EmployeeService {
 		return EmployeeMessageConstants.PasswordChanged.getLabel();
 	}
 
-	public String verifyEmailId(String email) throws AppException, DbException {
-
+	public String sendEmail(String email, HttpServletRequest request)
+			throws AppException, DbException, MessagingException {
 		EmployeeValidator validator = new EmployeeValidator();
-		Set<String> verifyEmail = validator.verifyEmail(email);
-		if (verifyEmail.size() == 0) {
-			return verifyEmail.toString();
+		Set<String> verifyemail = validator.verifyEmailId(email);
+		if (verifyemail.size() != 0) {
+			return verifyemail.toString();
 		}
-		return EmployeeMessageConstants.ValidEmail.getLabel().toString();
+		User user = userDao.getUser(email);
+		ctoken = new ConfirmationToken(user);
+		log.debug(user +" "+ ctoken);
+		saveUpdateToken(ctoken);
+		return mail.changePasswordEmail(ctoken, request);
 	}
 
 	public boolean saveToken(ConfirmationToken token) throws AppException, DbException {

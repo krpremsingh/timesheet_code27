@@ -1,7 +1,8 @@
 package com.awcsoftware.app.common;
 
-import javax.validation.constraints.Min;
+import org.springframework.stereotype.Component;
 
+@Component
 public class BasePojo {
 
 	private int id;
