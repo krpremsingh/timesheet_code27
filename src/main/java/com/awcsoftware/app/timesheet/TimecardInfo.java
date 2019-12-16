@@ -3,16 +3,21 @@ package com.awcsoftware.app.timesheet;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.apache.log4j.Logger;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 public class TimecardInfo implements Serializable {
+	static Logger logger = Logger.getLogger(TimecardInfo.class);
+
 	/**
 	 * 
 	 */
@@ -52,10 +57,11 @@ public class TimecardInfo implements Serializable {
 	private String projectId;
 	private String projectName;
 	private String projectGroup;
+	private List<Integer> projectValue;
 	private String approverId;
 	
 
-	private List<TimecardDetailSearch> employeeTimecard;
+	private List<TimecardProjectWorkDetails> employeeProjectTimecard;
 	
 	
 	public String getSearchStatus() {
@@ -182,6 +188,7 @@ public class TimecardInfo implements Serializable {
 	}
 
 	public String getProjectGroup() {
+		
 		return projectGroup;
 	}
 
@@ -197,12 +204,22 @@ public class TimecardInfo implements Serializable {
 		this.approverId = approverId;
 	}
 
-	public List<TimecardDetailSearch> getEmployeeTimecard() {
-		return employeeTimecard;
+	
+	
+	public List<TimecardProjectWorkDetails> getEmployeeProjectTimecard() {
+		return employeeProjectTimecard;
 	}
 
-	public void setEmployeeTimecard(List<TimecardDetailSearch> employeeTimecard) {
-		this.employeeTimecard = employeeTimecard;
+	public void setEmployeeProjectTimecard(List<TimecardProjectWorkDetails> employeeProjectTimecard) {
+		this.employeeProjectTimecard = employeeProjectTimecard;
+	}
+
+	public List<Integer> getProjectValue() {
+		return projectValue;
+	}
+
+	public void setProjectValue(List<Integer> projectValue) {
+		this.projectValue = projectValue;
 	}
 
 	@Override

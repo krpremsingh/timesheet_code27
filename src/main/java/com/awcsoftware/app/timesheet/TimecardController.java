@@ -118,6 +118,11 @@ public class TimecardController {
 		}
 	}
 
+	/*
+	 *  This method will show data as per entered sequence.
+	 * 
+	 */
+
 	@RequestMapping(value = "/tc-savedView", method = RequestMethod.POST, headers = "Accept=application/json")
 	public ResponseEntity<List<TimecardDayDetails>> getTimecardSavedRecordData(@RequestBody TimecardInfo timecardInfoParam) {
 		service = new TimecardService();
@@ -135,7 +140,7 @@ public class TimecardController {
 	 * 
 	 */
 
-	@RequestMapping(value = "/tc-submitView", method = RequestMethod.POST, headers = "Accept=application/json")
+	@RequestMapping(value = "/tc-ManagerView", method = RequestMethod.POST, headers = "Accept=application/json")
 	public ResponseEntity<List<TimecardInfo>> getTimecardViewForManager(@RequestBody TimecardInfo timecardInfoParam) {
 		service = new TimecardService();
 		List<TimecardInfo> timecardManagerView= null;
@@ -146,81 +151,30 @@ public class TimecardController {
 			return new ResponseEntity<List<TimecardInfo>>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
-	
-	
-	/*
-	 * 
-	 * Method created for Manager View, Approval and Rejection
-	 * 
-	 * 
-	 * 
-	 */
 
-	/*
-	 * @RequestMapping(value = "/getTimecardsByManager", method =
-	 * RequestMethod.POST, headers = "Accept=application/json") public
-	 * ResponseEntity<List<TimecardInfo>> TimecardViewByManager(
-	 * 
-	 * @RequestBody TimecardApproverDetails timecardapproval) { TimecardService
-	 * service = new TimecardService(); try { List<TimecardInfo> result =
-	 * service.getTimecardViewByManager(timecardapproval.getApproverId());
-	 * logger.debug("result   " + result); return new
-	 * ResponseEntity<List<TimecardInfo>>(result, HttpStatus.OK); } catch
-	 * (DbException | AppException e) { return new
-	 * ResponseEntity<List<TimecardInfo>>(HttpStatus.INTERNAL_SERVER_ERROR); }
-	 * 
-	 * }
-	 */
-
-	@RequestMapping(value = "/tc-approve", method = RequestMethod.GET, headers = "Accept=application/json")
-	public ResponseEntity<String> approveTimecard(@RequestBody TimecardApproverDetails timecardApproverDetails) {
+/*	@RequestMapping(value = "/tc-Approve", method = RequestMethod.POST, headers = "Accept=application/json")
+	public ResponseEntity<String> approveTimecardByManager(@RequestBody TimecardProjectWorkDetails timecardProjectWorkDetailsParam) {
 		service = new TimecardService();
-		String TimecardApproverResult = "";
+		String timecardSaveResult = "";
 		try {
-			TimecardApproverResult = service.approveRejectTimecard(timecardApproverDetails);
-			return new ResponseEntity<String>(TimecardApproverResult, HttpStatus.OK);
-		} catch (ParseException e) {
-			return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
-		} catch (AppException e) {
-			return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
-		} catch (DbException e) {
-			return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
+			timecardSaveResult = service.approveTimecardByManager(timecardProjectWorkDetailsParam);
+			return new ResponseEntity<String>(timecardSaveResult, HttpStatus.OK);
+		} catch (DbException | AppException | ParseException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
-	@RequestMapping(value = "/getEmployees", method = RequestMethod.POST, headers = "Accept=application/json")
-	public ResponseEntity<List<User>> getEmployeesUnderLoggedInManager(@RequestBody User user) {
+	@RequestMapping(value = "/tc-Reject", method = RequestMethod.POST, headers = "Accept=application/json")
+	public ResponseEntity<String> rejectTimecardByManager(@RequestBody TimecardProjectWorkDetails timecardProjectWorkDetailsParam) {
 		service = new TimecardService();
+		String timecardSaveResult = "";
 		try {
-			List<User> result = service.getEmployeesUnderLoggedInManager(user.getEmpId());
-			logger.debug("result   " + result);
-			return new ResponseEntity<List<User>>(result, HttpStatus.OK);
-		} catch (DbException | AppException e) {
-			return new ResponseEntity<List<User>>(HttpStatus.INTERNAL_SERVER_ERROR);
+			timecardSaveResult = service.rejectTimecardByManager(timecardProjectWorkDetailsParam);
+			return new ResponseEntity<String>(timecardSaveResult, HttpStatus.OK);
+		} catch (DbException | AppException | ParseException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-
 	}
-
-	@RequestMapping(value = "/getTimecardsByManager", method = RequestMethod.POST, headers = "Accept=application/json")
-	public ResponseEntity<List<TimecardManagerView>> getEmployeeTimecardforManager(
-			@RequestBody TimecardManagerView view) {
-		service = new TimecardService();
-		try {
-			List<TimecardManagerView> result = service.getTimecardViewByManager(view);
-			logger.debug("result   " + result);
-			return new ResponseEntity<List<TimecardManagerView>>(result, HttpStatus.OK);
-		} catch (DbException | AppException e) {
-			return new ResponseEntity<List<TimecardManagerView>>(HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-
-	}
-	/*
-	 * @GetMapping("/sample")
-	 * 
-	 * @PreAuthorize("hasRole('ROLE_EMPLOYEE')") public String sample() { return
-	 * "hello world";
-	 * 
-	 * }
-	 */
+*/
+	
 }

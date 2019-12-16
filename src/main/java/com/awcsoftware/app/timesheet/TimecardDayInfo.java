@@ -15,6 +15,8 @@ public class TimecardDayInfo implements Serializable {
 	private String status;
 	private LocalDateTime addedOn;
 	private LocalDateTime lastModifiedOn;
+	
+	private String projectGroup;
 
 	private List<TimecardDayDetails> timecardDayDetails;
 
@@ -90,6 +92,15 @@ public class TimecardDayInfo implements Serializable {
 
 	public void setTimecardDayDetails(List<TimecardDayDetails> timecardDayDetails) {
 		this.timecardDayDetails = timecardDayDetails;
+	}
+	
+	
+	public String getProjectGroup() {
+		return projectGroup;
+	}
+
+	public void setProjectGroup(String projectGroup) {
+		this.projectGroup = projectGroup;
 	}
 
 	@Override

@@ -9,7 +9,7 @@ public class AppConstant {
 	public enum RECORD_TYPE {
 		Discard, Active,
 	}
-	
+
 	public enum TIME_FORMAT_CONST {
 		TIME_24_HOUR_FORMAT("HH:mm:ss"),
 		DATE_FORMAT("yyyy-MM-dd"),
@@ -28,7 +28,8 @@ public class AppConstant {
 	}
 
 	public enum WORKING_HOURS {
-		Zero(0), One(1), Two(2), Three(3), four(4), Five(5), Six(6), Seven(7), Eight(8), Nine(9), Ten(10);
+		Zero(0), One(1), Two(2), Three(3), four(4), Five(5), Six(6), Seven(7), Eight(8), Nine(9), Ten(10),
+		Number_of_future_Days_allowed(14),Leave_Activity(18);
 
 		private final int workingHour;
 

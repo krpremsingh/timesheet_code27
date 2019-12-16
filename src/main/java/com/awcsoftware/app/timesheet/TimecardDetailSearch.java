@@ -1,17 +1,20 @@
 package com.awcsoftware.app.timesheet;
 
-public class TimecardDetailSearch {
+import java.io.Serializable;
+import java.util.List;
+
+public class TimecardDetailSearch implements Serializable{
 
 	private String tcId;
 	private String tcdId;
 	private String projectId;
 	private String activityId;
 	private String location;
-	private String weekWorkingHours;
+	private String totalWeekWorkHours;
 	private String managerName;
 	private String status;
-	
-
+	private String workingDate;
+	private String workingDay;
 	
 	public String getTcId() {
 		return tcId;
@@ -44,10 +47,10 @@ public class TimecardDetailSearch {
 		this.location = location;
 	}
 	public String getWeekWorkingHours() {
-		return weekWorkingHours;
+		return totalWeekWorkHours;
 	}
 	public void setWeekWorkingHours(String weekWorkingHours) {
-		this.weekWorkingHours = weekWorkingHours;
+		this.totalWeekWorkHours = weekWorkingHours;
 	}
 	public String getManagerName() {
 		return managerName;
@@ -61,7 +64,23 @@ public class TimecardDetailSearch {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	
-	
+	public String getTotalWeekWorkHours() {
+		return totalWeekWorkHours;
+	}
+	public void setTotalWeekWorkHours(String totalWeekWorkHours) {
+		this.totalWeekWorkHours = totalWeekWorkHours;
+	}
+	public String getWorkingDate() {
+		return workingDate;
+	}
+	public void setWorkingDate(String workingDate) {
+		this.workingDate = workingDate;
+	}
+	public String getWorkingDay() {
+		return workingDay;
+	}
+	public void setWorkingDay(String workingDay) {
+		this.workingDay = workingDay;
+	}
 	
 }

@@ -95,8 +95,8 @@ public class Util {
 			String startTime = startTimeParam;
 			String endTime = endTimeParam;
 	
-			SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
-			timeFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+			SimpleDateFormat timeFormat = new SimpleDateFormat(AppConstant.TIME_FORMAT_CONST.TIME_24_HOUR_FORMAT.getValue());
+			timeFormat.setTimeZone(TimeZone.getTimeZone(AppConstant.TIME_FORMAT_CONST.TIME_ZONE.getValue()));
 	
 			Date startFormatDate = timeFormat.parse(startTime);
 			Date endFormatDate = timeFormat.parse(endTime);
@@ -150,13 +150,43 @@ public class Util {
 
 	public static String getDateDay(String inputDate) throws ParseException
 	{
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat dateFormat = new SimpleDateFormat(AppConstant.TIME_FORMAT_CONST.DATE_FORMAT.getValue());
 		Date parsedDate = dateFormat.parse(inputDate);
 		Calendar calcInstance = Calendar.getInstance();
 		calcInstance.setTime(parsedDate);		
         int dayNumber = calcInstance.get(Calendar.DAY_OF_WEEK);
-        String[] strDayArray= {"Sunday","Monday","Tuesday","Wednesday","ThursDay","Friday","Saturday"};
+        String[] strDayArray= {"Sunday","Monday","Tuesday","Wednesday","ThursDay","Friday","Saturday"};       
         return strDayArray[dayNumber-1];
 		
 	}
+
+
+ 	public static Date getWeekStartDate() {
+	    Calendar calendar = Calendar.getInstance();
+	    while (calendar.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY) {
+	        calendar.add(Calendar.DATE, -1);
+	    }
+	    return calendar.getTime();
+	}
+
+ 	public static String addNumberOfdays(Date inputDate)
+ 	{
+ 		SimpleDateFormat dateFormat = new SimpleDateFormat(AppConstant.TIME_FORMAT_CONST.DATE_FORMAT.getValue());
+ 		Calendar calendar = Calendar.getInstance();
+	    calendar.setTime(inputDate);
+	    calendar.add(Calendar.DATE, AppConstant.WORKING_HOURS.Number_of_future_Days_allowed.getValue());	    
+	    String futureDate = dateFormat.format(calendar.getTime());		    
+	    return futureDate;
+ 		
+ 	}
+ 	
+	public static Date getWeekEndDate() {
+	    Calendar calendar = Calendar.getInstance();
+	    while (calendar.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY) {
+	        calendar.add(Calendar.DATE, 1);
+	    }
+	    calendar.add(Calendar.DATE, -1);
+	    return calendar.getTime(); 
+	}
+
 }

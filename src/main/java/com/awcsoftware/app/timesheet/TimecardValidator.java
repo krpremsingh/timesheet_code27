@@ -65,7 +65,9 @@ public class TimecardValidator extends AppValidator {
 		errorMsg.clear();
 
 		draftFlag = AppConstant.TIME_CARD_STATUS.Pending.toString();
+		
 		validateTimeCard(timecardInfo);
+
 		if (timecardInfo.getTimecardDayInfo().size() < AppConstant.WORKING_HOURS.Five.getValue()) {
 			errorMsg.add(TimecardMessageConstant.MimimunTimecards.getLabel());
 		}
@@ -98,24 +100,20 @@ public class TimecardValidator extends AppValidator {
 
 			if (timecardDayInfo.getWorkingDate() == null) {
 				errorMsg.add(TimecardMessageConstant.WorkDateCantBeNull.getLabel());
-				return errorMsg;
 			}
 
 			if(Util.isValidDate(timecardDayInfo.getWorkingDate().toString()) == false )
 			{
 				errorMsg.add(TimecardMessageConstant.Invalid_Date.getLabel());
-				return errorMsg;				
 			}
 			if (dateSet.contains(timecardDayInfo.getWorkingDate().toString())) {
-				errorMsg.add(TimecardMessageConstant.Timecard_Date_Data_Exist.getLabel());
-				return errorMsg;
+				errorMsg.add(timecardDayInfo.getWorkingDate().toString()+" "+TimecardMessageConstant.Timecard_Date_Data_Exist.getLabel());
 			}
 
 			if (!Util.getDateDay(timecardDayInfo.getWorkingDate().toString()).trim()
 					.equalsIgnoreCase(timecardDayInfo.getWorkingDay().trim()))
 			{
-				errorMsg.add(TimecardMessageConstant.Timecard_Date_Day_is_Not_Equal.getLabel());
-				return errorMsg;				
+				errorMsg.add(TimecardMessageConstant.Timecard_Date_Day_is_Not_Equal.getLabel()+" ["+timecardDayInfo.getWorkingDate().toString()+"]");
 			}
 
 			if (Util.validateDateRange(timecardDayInfo.getWorkingDate().toString(), weekStartDate,
@@ -124,7 +122,6 @@ public class TimecardValidator extends AppValidator {
 
 			if (timecardDayInfo.getTimecardDayDetails().size() == AppConstant.WORKING_HOURS.Zero.getValue()) {
 				errorMsg.add(TimecardMessageConstant.BlankDayTimecardDetails.getLabel());
-				return errorMsg;
 			}
 
 			validateTimecardDayDetailsData(timecardDayInfo.getTimecardDayDetails());
@@ -151,24 +148,24 @@ public class TimecardValidator extends AppValidator {
 
 			if (timecardDayDetails.getStartTime() == null || timecardDayDetails.getStartTime().trim().equals("")) {
 				errorMsg.add(TimecardMessageConstant.StartEndTimeCantBeNull.getLabel());
-				return errorMsg;
+				break;
 			}
 
 			if (timecardDayDetails.getEndTime() == null || timecardDayDetails.getEndTime().trim().equals("")) {
 				errorMsg.add(TimecardMessageConstant.StartEndTimeCantBeNull.getLabel());
-				return errorMsg;
+				break;
 			}
 
 			if(Util.isValidTime(timecardDayDetails.getStartTime().toString())==false)
 			{
 				errorMsg.add(TimecardMessageConstant.Enter_Time_is_not_wrong.getLabel());
-				return errorMsg;
+				break;
 			}
 			
 			if(Util.isValidTime(timecardDayDetails.getEndTime().toString())==false)
 			{
 				errorMsg.add(TimecardMessageConstant.Enter_Time_is_not_wrong.getLabel());
-				return errorMsg;
+				break;
 			}			
 				
 			if ((dayDetCtr + 1) < (timecardDayDetailsParam.size()) && (timecardDayDetailsParam.size() > 1)) {
@@ -185,13 +182,11 @@ public class TimecardValidator extends AppValidator {
 
 			if (currentRowStartTime.compareTo(currentRowEndTime) == 0) {
 				errorMsg.add(TimecardMessageConstant.StartEndTimeCantBeSame.getLabel());
-				loopBrkCtr = 1;
 				break;
 			}
 
 			if (currentRowStartTime.isAfter(currentRowEndTime)) {
 				errorMsg.add(TimecardMessageConstant.StartTimeBiggerThanEndTime.getLabel());
-				loopBrkCtr = 1;
 				break;
 			}
 
@@ -200,7 +195,6 @@ public class TimecardValidator extends AppValidator {
 
 			if (nextRowStartTime.isBefore(currentRowEndTime)) {
 				errorMsg.add(TimecardMessageConstant.TimeOverlapping.getLabel());
-				loopBrkCtr = 1;
 				break;
 			}
 
@@ -223,20 +217,20 @@ public class TimecardValidator extends AppValidator {
 
 	}
 
-	public Set<String> validateTimecardApprovalData(TimecardApproverDetails timecardApproverDetails) {
+	public Set<String> validateTimecardApprovalData(TimecardProjectWorkDetails timecardProjectWorkDetails) {
 
 		errorMsg.clear();
 
-		if (timecardApproverDetails.getTcId() == AppConstant.WORKING_HOURS.Zero.getValue()) {
+		if (timecardProjectWorkDetails.getTcId() == AppConstant.WORKING_HOURS.Zero.getValue()) {
 			errorMsg.add(TimecardMessageConstant.TimecardNotExistDuringApproval.getLabel());
 		}
 
-		if (timecardApproverDetails.getProjectId() == AppConstant.WORKING_HOURS.Zero.getValue()) {
+		if (Integer.parseInt(timecardProjectWorkDetails.getProjectId()) == AppConstant.WORKING_HOURS.Zero.getValue()) {
 			errorMsg.add(TimecardMessageConstant.ProjectIdBlankDuringApproval.getLabel());
 		}
 
-		if (timecardApproverDetails.getStatus().equalsIgnoreCase(AppConstant.TIME_CARD_STATUS.Reject.toString())
-				&& timecardApproverDetails.getComments().equals("")) {
+		if (timecardProjectWorkDetails.getStatus().equalsIgnoreCase(AppConstant.TIME_CARD_STATUS.Reject.toString())
+				&& timecardProjectWorkDetails.getApproverComment().equals("")) {
 			errorMsg.add(TimecardMessageConstant.RejectCommentIsEmpty.getLabel());
 		}
 

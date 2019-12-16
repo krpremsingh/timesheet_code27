@@ -1,5 +1,6 @@
 package com.awcsoftware.app.timesheet;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
@@ -14,15 +15,16 @@ import com.awcsoftware.spring.security.auth.user.User;
 public class TimecardDao {
 	static Logger logger = Logger.getLogger(TimecardDao.class);
 
-/*		************************************************************************
- * 			Method Starts for Filling and view Timecard by an Employee 
- *		************************************************************************ 
- */
+	/*
+	 * ************************************************************
+	 * Method Starts for Filling and view Timecard by an Employee
+	 * ************************************************************
+	 */
 	
-/*
- *  Parent method for saving/editing of timecard detail by an employee
- * 
- */
+	/*
+	 * Parent method for saving/editing of timecard detail by an employee
+	 * 
+	 */
 	
 	public String saveTimecard(TimecardInfo timecardInfo) throws DbException, AppException {
 		SqlSession session = MyBatisManager.openSession();
@@ -67,12 +69,10 @@ public class TimecardDao {
 							.equals(TimecardMessageConstant.TimecardUpdateMessage.getLabel())) {					
 						submitTimecardReturn=TimecardMessageConstant.TimecardSubmitMessage.getLabel();
 					}
-
 				}
 			}
 			session.commit();
 			return submitTimecardReturn;
-
 		} finally {
 			session.close();
 		}
@@ -82,15 +82,11 @@ public class TimecardDao {
 		if (isTimecardExistsForCurrentWeek(timecardInfo, session) == false) {
 			addTimecardInfo(timecardInfo, session);
 			addTimecardDayInfo(timecardInfo, session);
-			session.update("TimecardMapper.updateTimecardInfoHour", timecardInfo);
+			updateTimecardInfoHour(timecardInfo,session);
 			return true;
 		} else {
 			return false;
 		}
-	}
-
-	private void addTimecardInfo(TimecardInfo timecardInfo, SqlSession session) throws DbException, AppException {
-		session.insert("TimecardMapper.addTimecardInfo", timecardInfo);
 	}
 
 	private void addTimecardDayInfo(TimecardInfo timecardInfo, SqlSession session) throws DbException, AppException {
@@ -100,7 +96,7 @@ public class TimecardDao {
 			timecardDayInfo.setStatus(timecardInfo.getStatus());
 			timecardDayInfoCtr = isTimecardExistsForCurrentDate(timecardDayInfo, session);
 			if (timecardDayInfoCtr == -1) {
-				session.insert("TimecardMapper.addIndividualTimecardDayInfo", timecardDayInfo);
+				addTimecardDayInfoQuery(timecardDayInfo,session);				
 				addTimecardDayDetails(timecardDayInfo, session);
 			} else {
 				timecardDayInfo.setTcdId(timecardDayInfoCtr);
@@ -113,12 +109,10 @@ public class TimecardDao {
 			throws DbException, AppException {
 		int projectId = 0;
 		for (TimecardDayDetails timecardDayDetails : timecardDayInfoParam.getTimecardDayDetails()) {
-
 			timecardDayDetails.setTcId(timecardDayInfoParam.getTcId());
 			timecardDayDetails.setTcdId(timecardDayInfoParam.getTcdId());
 			timecardDayDetails.setStatus(timecardDayInfoParam.getStatus());
 			timecardDayDetails.setRecordType(AppConstant.RECORD_TYPE.Active.toString());
-
 			if (timecardDayInfoParam.getStatus().equals(AppConstant.TIME_CARD_STATUS.Pending.toString())) {
 				if (projectId != timecardDayDetails.getProjectId()) {
 					submitTimecardDetails(timecardDayDetails, session);
@@ -127,14 +121,14 @@ public class TimecardDao {
 			}
 		}
 		session.insert("TimecardMapper.addBatchTimecardDayDetails", timecardDayInfoParam.getTimecardDayDetails());
-		session.update("TimecardMapper.updateTimecardDayHourInfo", timecardDayInfoParam);
+		updateTimecardDayInfoHourQuery(timecardDayInfoParam,session);
 	}
 
 	private String updateTimecardByView(TimecardInfo timecardInfo, SqlSession session)
 			throws DbException, AppException {
 		session.update("TimecardMapper.DeactivateTimecardDayDetails", timecardInfo.getTcId());
 		addTimecardDayInfo(timecardInfo, session);
-		session.update("TimecardMapper.updateTimecardInfoHour", timecardInfo);
+		updateTimecardInfoHour(timecardInfo,session);
 		return TimecardMessageConstant.TimecardUpdateMessage.getLabel();
 	}
 
@@ -146,7 +140,7 @@ public class TimecardDao {
 			TimecardApproverDetails timecardApproverDetails = timecardAppDetails.get(approverCtr);
 			timecardApproverDetails.setTcId(timecardDayDetails.getTcId());
 			if (isApproverExistforCurrentTimecardProject(timecardApproverDetails, session) == false)
-				session.insert("TimecardMapper.addTimecardApproverDetails", timecardApproverDetails);
+				addTimecardApproverDetails(timecardApproverDetails,session);	
 		}
 	}
 
@@ -193,6 +187,28 @@ public class TimecardDao {
 		}
 	}
 
+	private void addTimecardInfo(TimecardInfo timecardInfo, SqlSession session) throws DbException, AppException {
+		session.insert("TimecardMapper.addTimecardInfo", timecardInfo);
+	}
+
+	private void updateTimecardInfoHour(TimecardInfo timecardInfo, SqlSession session) throws DbException, AppException {
+		session.insert("TimecardMapper.updateTimecardInfoHour", timecardInfo);
+	}
+
+	private void addTimecardDayInfoQuery(TimecardDayInfo timecardDayInfo, SqlSession session) throws DbException, AppException {
+		session.insert("TimecardMapper.addIndividualTimecardDayInfo", timecardDayInfo);
+	}
+
+	private void updateTimecardDayInfoHourQuery(TimecardDayInfo timecardDayInfoParam, SqlSession session) throws DbException, AppException {
+		session.update("TimecardMapper.updateTimecardDayHourInfo", timecardDayInfoParam);
+	}
+
+	private void addTimecardApproverDetails(TimecardApproverDetails timecardApproverDetails, SqlSession session) throws DbException, AppException {
+		session.insert("TimecardMapper.addTimecardApproverDetails", timecardApproverDetails);
+	}
+
+	
+	
 	public boolean isTimecardExistsForCurrentWeek(TimecardInfo timecardInfo, SqlSession session) {
 		int tcId = 0;
 		tcId = session.selectOne("TimecardMapper.isDataForCurrentWeekExists", timecardInfo);
@@ -238,86 +254,80 @@ public class TimecardDao {
 	}
 
 /*		************************************************************************
-* 			Method Ended for Filling and view Timecard by an Employee 
+* 				Method Ended for Filling and view Timecard by an Employee 
 *		************************************************************************ 
 */
 	
 /*		************************************************************************
-* 			Method Starts for Manager's Action 
+* 						Method Starts for Manager's Action 
 *		************************************************************************ 
 */	
 
-	public List<TimecardInfo> getTimecardViewForManager(TimecardInfo timecardInfoManager) {
+	public List<TimecardInfo> getTimecardViewForManager(TimecardInfo timecardInfoManager) throws DbException {
 		SqlSession session = MyBatisManager.openSession();
 		try {
 
-			List<TimecardInfo> result = session.selectList("TimecardMapper.getTimecardApproverSummary", timecardInfoManager);
-			logger.debug(result);			
-			if (result != null)
-				return result;
-			else
-				return null;
+			List<TimecardInfo> managerTimecardView = session.selectList("TimecardMapper.getTimecardApproverSummary",
+					timecardInfoManager);
+			managerTimecardView=getTimecardViewPerProjectForManager(managerTimecardView, session);			
+			return managerTimecardView;
 		} finally {
 			session.close();
 		}
 	}
 
-	public List<TimecardInfo> getTimecardByManager(int approverId) {
-		SqlSession session = MyBatisManager.openSession();
-		try {
-			List<TimecardInfo> result = session.selectList("TimecardMapper.getTimecardByManager", approverId);
-			if (result != null)
-				return result;
-			else
-				return null;
-		} finally {
-			session.close();
+	public List<TimecardInfo> getTimecardViewPerProjectForManager(List<TimecardInfo> timecardInfoManager,
+			SqlSession session) throws DbException {
+		List<Integer> projectValue=null;
+		
+		for (int paramCtr = 0; paramCtr < timecardInfoManager.size(); paramCtr++) {
+			TimecardInfo timecardInfo = (TimecardInfo) timecardInfoManager.get(paramCtr);
+			projectValue=new ArrayList<Integer>();
+			for (String projectId : timecardInfo.getProjectGroup().split(","))
+			{
+logger.debug("projectID>>>>>>>>>>>>"+projectId);				
+				projectValue.add(Integer.parseInt(projectId));
+			}
+			timecardInfo.setProjectValue(projectValue);
+			List<TimecardProjectWorkDetails> timecardProjectWorkDetails = (List<TimecardProjectWorkDetails>)getTimecardProjectViewForManager(timecardInfo, session);
+			timecardProjectWorkDetails=getTimecardViewPerProjectPerDayForManager(timecardProjectWorkDetails,session);
+			timecardInfo.setEmployeeProjectTimecard(timecardProjectWorkDetails);
+			timecardInfoManager.set(paramCtr,timecardInfo);
 		}
-
+		return timecardInfoManager;
 	}
 
-	public List<User> getEmployeesUnderLoggedInManager(int approverId) {
-		SqlSession session = MyBatisManager.openSession();
+	
+	public List<TimecardProjectWorkDetails> getTimecardViewPerProjectPerDayForManager(List<TimecardProjectWorkDetails> timecardProjectWorkDetailsParam,
+			SqlSession session) throws DbException {
+		List<Integer> projectValue=new ArrayList<Integer>();
 
-		try {
-			List<User> result = session.selectList("TimecardMapper.getEmployeesUnderLoggedInManager", approverId);
-			if (result != null)
-				return result;
-			else
-				return null;
-		} finally {
-			session.close();
+		for(int projectCtr=0;projectCtr<timecardProjectWorkDetailsParam.size();projectCtr++)
+		{
+			TimecardProjectWorkDetails timecardProjectWorkDetailsObj=(TimecardProjectWorkDetails)timecardProjectWorkDetailsParam.get(projectCtr);
+			
+			List<TimecardDetailSearch> timecardDetailSearch=(List<TimecardDetailSearch>)getTimecardViewQueryManagerDayInfo(timecardProjectWorkDetailsObj,session);
+			timecardProjectWorkDetailsObj.setProjectTimecard(timecardDetailSearch);
+			timecardProjectWorkDetailsParam.set(projectCtr, timecardProjectWorkDetailsObj);
 		}
-
+		return timecardProjectWorkDetailsParam;
 	}
 
-	public List<User> getEmployeeNames(int approverId) {
-		SqlSession session = MyBatisManager.openSession();
+	public List<TimecardDetailSearch> getTimecardViewQueryManagerDayInfo(
+			TimecardProjectWorkDetails timecardProjectWorkDetails, SqlSession session) throws DbException {
 
-		try {
-			List<User> result = session.selectList("TimecardMapper.getEmployeeNames", approverId);
-			if (result != null)
-				return result;
-			else
-				return null;
-		} finally {
-			session.close();
-		}
+		List<TimecardDetailSearch> timecardDetailSearchData = session
+				.selectList("TimecardMapper.getEmployeeTimecardPerProjectPerDay", timecardProjectWorkDetails);
 
+		return timecardDetailSearchData;
 	}
+	
+	public List<TimecardProjectWorkDetails> getTimecardProjectViewForManager(
+			TimecardInfo timecardInfoParam, SqlSession session) throws DbException {
+		
+		List<TimecardProjectWorkDetails> timecardProjectWorkDetails = session
+				.selectList("TimecardMapper.getEmployeeTimecardPerProject", timecardInfoParam);
 
-	public List<TimecardManagerView> getTimecardByManager(TimecardManagerView view) {
-		SqlSession session = MyBatisManager.openSession();
-
-		try {
-			List<TimecardManagerView> result = session.selectList("TimecardMapper.getTimecardByManager", view);
-			if (result != null)
-				return result;
-			else
-				return null;
-		} finally {
-			session.close();
-		}
-
+		return timecardProjectWorkDetails;
 	}
 }

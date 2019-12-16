@@ -139,34 +139,23 @@ public class TimecardService {
 		 */			
 	}
 
-	public List<TimecardInfo> getTimecardViewByManager(int approverId) throws DbException, AppException {
-		TimecardDao dao = new TimecardDao();
-		List<TimecardInfo> result = dao.getTimecardByManager(approverId);
-		return result;
-	}
-
-	public String approveRejectTimecard(TimecardApproverDetails timecardApproverDetails)
-			throws DbException, AppException, ParseException {
+	/*
+	 *  This function is called when employee will save his/her timecard information. 
+	 *  This function will store data in table as draft mode so employee can 
+	 *  change timecard as many time as s/he wants. This url/method will allow 
+	 *  user to add new record  or update the existing timecard details 
+	 * 
+	 */
+/*
+	public String approveTimecardByManager(TimecardProjectWorkDetails timecardProjectWorkDetailsParam) throws DbException, AppException, ParseException {
 		TimecardValidator validator = new TimecardValidator();
-		Set<String> validatorResult = validator.validateTimecardApprovalData(timecardApproverDetails);
-		if (validatorResult.size() == 0) {
+		Set<String> validatorResult = validator.validateTimecardApprovalData(timecardProjectWorkDetailsParam);
+		if (validatorResult.size() == AppConstant.WORKING_HOURS.Zero.getValue()) {
 			TimecardDao dao = new TimecardDao();
-			/* dao.approveRejectTimecard(timecardApproverDetails); */
-			return "S";
+			timecardProjectWorkDetailsParam.setStatus(AppConstant.TIME_CARD_STATUS.Draft.toString());
+			return dao.saveTimecard(timecardProjectWorkDetailsParam);
 		} else
 			return validatorResult.toString();
 	}
-
-	public List<User> getEmployeesUnderLoggedInManager(int approverId) throws DbException, AppException {
-		TimecardDao dao = new TimecardDao();
-		return (List<User>) dao.getEmployeesUnderLoggedInManager(approverId);
-
-	}
-
-	public List<TimecardManagerView> getTimecardViewByManager(TimecardManagerView view)
-			throws DbException, AppException {
-		TimecardDao dao = new TimecardDao();
-		List<TimecardManagerView> result = dao.getTimecardByManager(view);
-		return result;
-	}
+*/
 }
