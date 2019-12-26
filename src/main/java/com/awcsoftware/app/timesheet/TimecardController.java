@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.awcsoftware.app.AppException;
 import com.awcsoftware.mybatis.DbException;
-import com.awcsoftware.spring.security.auth.user.User;
 
 @RestController
 public class TimecardController {
@@ -175,5 +174,15 @@ public class TimecardController {
 		}
 	}
 */
+/*	@RequestMapping(value="/getWeekTimecard" ,method=RequestMethod.POST)
+	public ResponseEntity<List<TimecardDayDetails>> getWeekTimecard(@RequestBody TimecardInfo timecardInfo){
+		service=new TimecardService();
+		try {
+			return new ResponseEntity<List<TimecardDayDetails>>(service.getWeekTimecard(timecardInfo), HttpStatus.OK);
+		} catch (DbException | AppException e) {
+			return new ResponseEntity<List<TimecardDayDetails>>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+	}*/
 	
 }

@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -17,7 +18,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 
+import com.awcsoftware.app.employee.EmployeeDao;
+import com.awcsoftware.app.employee.EmployeeLoginTransaction;
 import com.awcsoftware.app.employee.EmployeeMessageConstants;
+import com.awcsoftware.app.employee.EmployeeService;
 import com.awcsoftware.session.store.TokenSession;
 import com.awcsoftware.spring.security.auth.token.TokenManager;
 import com.awcsoftware.spring.security.auth.user.Role;
@@ -26,6 +30,15 @@ import com.awcsoftware.spring.security.auth.user.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class LoginFilter extends AbstractAuthenticationProcessingFilter {
+	@Autowired
+	EmployeeDao employeedao;
+	
+	@Autowired
+	EmployeeService employeeservice;
+	
+	@Autowired
+	EmployeeLoginTransaction logintransaction;
+	
 	static Logger log = Logger.getLogger(LoginFilter.class.getName());
 
 	public LoginFilter(String defaultProcessUrl) {
@@ -69,6 +82,15 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
 			if (user.getEmail().equals(username) && user.getPassword().equals(password)) {
 				 
 				UserAuthenticationDetail authDetail = new UserAuthenticationDetail(username, password);
+				logintransaction= new EmployeeLoginTransaction(user);
+				log.debug("auutthhddeetails  "+authDetail+" "+logintransaction);
+				
+				 if(authDetail.isCredentialsNonExpired()==false) { 
+					 employeeservice.setLoginTransactionIfFailed(logintransaction);
+					 
+					  throw new BadCredentialsException(EmployeeMessageConstants.PasswordExpired.getLabel().toString());
+				}
+				employeeservice.setLoginTransactionIfSuccess(logintransaction);   
 				authDetail.setRole(roles);
 				authDetail.setName(user.getFirstName());
 				authDetail.setEmpId(user.getEmpId());
@@ -76,7 +98,9 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
 				authDetail.setFirstLoginStatus(user.getFirstLoginStatus());
 				authDetail.setDesignationId(user.getDesignationId());
 				return authDetail;
-			} else {
+			} 
+		
+			else {
 				throw new BadCredentialsException(EmployeeMessageConstants.validatePassword.getLabel().toString());
 			}
 		} else {

@@ -1,14 +1,15 @@
 package com.awcsoftware.spring.security.auth.user;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import org.apache.log4j.Logger;
 
-public class User   {
+public class User implements Serializable   {
 
 	/**
-	 * Author by Arun
+	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	static Logger log = Logger.getLogger(User.class.getName());
@@ -46,7 +47,7 @@ public class User   {
 
 	private int designationId;
 
-
+    private String mailFlag;
 
 	public int getEmpId() {
 		return empId;
@@ -182,4 +183,13 @@ public class User   {
 	public void setNewPassword(String newPassword) {
 		this.newPassword = newPassword;
 	}
+
+	public String getMailFlag() {
+		return mailFlag;
+	}
+
+	public void setMailFlag(String mailFlag) {
+		this.mailFlag = mailFlag;
+	}
+	
 }

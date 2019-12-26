@@ -26,7 +26,7 @@ import com.awcsoftware.spring.security.auth.user.UserDao;
 @RestController
 public class EmployeeController {
 	final static Logger logger = Logger.getLogger(EmployeeController.class);
-
+	
 	@Autowired
 	EmployeeService employeeservice;
 
@@ -37,7 +37,8 @@ public class EmployeeController {
 	PasswordEncoder passwordencoder() {
 		return new BCryptPasswordEncoder();
 	}
-
+     
+	
 	
 	@RequestMapping(value = "/resetPassword", method = RequestMethod.PUT, headers = "Accept=application/json")
 	public ResponseEntity<String> resetPassword(@RequestBody User user, HttpServletRequest request) {
@@ -84,6 +85,8 @@ public class EmployeeController {
 		} catch (AppException e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		} catch (DbException e) {
+			return new ResponseEntity<String>("Db error", HttpStatus.INTERNAL_SERVER_ERROR);
+		} catch (MessagingException e) {
 			return new ResponseEntity<String>("Db error", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 

@@ -1,9 +1,11 @@
 package com.awcsoftware.app.employee;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import org.springframework.stereotype.Component;
 
+import com.awcsoftware.app.AppConstant;
 import com.awcsoftware.spring.security.auth.token.TokenManager;
 import com.awcsoftware.spring.security.auth.user.User;
 /*
@@ -12,7 +14,11 @@ import com.awcsoftware.spring.security.auth.user.User;
  * take instance of principal in constructor 
  */
 @Component("confirmationtoken")
-public class ConfirmationToken {
+public class ConfirmationToken implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private User user;
 	private int tokenId;
 	private String token;
@@ -23,7 +29,7 @@ public class ConfirmationToken {
 		this.user = user;
 		this.token = TokenManager.generateToken(user.getEmail(), user.getPassword());
 		this.tokenCreationDate = LocalDateTime.now();
-		this.tokenExpiryDate = tokenCreationDate.plusHours(24);
+		this.tokenExpiryDate = tokenCreationDate.plusHours(AppConstant.WORKING_HOURS.TwentyFour.getValue());
 	}
 
 	public ConfirmationToken() {

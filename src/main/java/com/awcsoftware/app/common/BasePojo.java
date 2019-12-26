@@ -8,10 +8,23 @@ public class BasePojo {
 	private int id;
 	
 	private String name;
+	
+	private String errorMsg;
 
 	public BasePojo() {
 
 	}
+	
+
+	public String getErrorMsg() {
+		return errorMsg;
+	}
+
+
+	public void setErrorMsg(String errorMsg) {
+		this.errorMsg = errorMsg;
+	}
+
 
 	public int getId() {
 		return id;

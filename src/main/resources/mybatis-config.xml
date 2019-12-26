@@ -15,6 +15,10 @@
 
 		<typeAlias type="com.awcsoftware.app.common.ParentBasePojo"
 			alias="ParentBasePojo" />
+			
+			<typeAlias type="com.awcsoftware.app.mail.MailPojo" alias="MailPojo"/>
+			
+		<typeAlias  type="com.awcsoftware.app.employee.EmployeeLoginTransaction" alias="EmployeeLoginTransaction"/>
 
 		<!-- Start of Mapping classes with Timesheet package -->
 
@@ -32,7 +36,7 @@
 
 		<typeAlias alias="TimecardApproverDetails"
 			type="com.awcsoftware.app.timesheet.TimecardApproverDetails" />
-			
+
 		<typeAlias alias="TimecardManagerView"
 			type="com.awcsoftware.app.timesheet.TimecardManagerView" />
 
@@ -41,6 +45,8 @@
 
 		<typeAlias alias="TimecardProjectWorkDetails"
 			type="com.awcsoftware.app.timesheet.TimecardProjectWorkDetails" />
+			
+	
 
 		<!-- End of Mapping classes with Timesheet package -->
 
@@ -56,16 +62,16 @@
 				<property name="password" value="My@SQL" />
 			</dataSource>
 		</environment>
-</environments>
+	</environments>
 
 	<mappers>
-<!-- Mapper Definition for Timecard functionality -->
+		<!-- Mapper Definition for Timecard functionality -->
 		<mapper
 			resource="com/awcsoftware/app/timesheet/TimecardMapper.xml" />
 		<mapper
 			resource="com/awcsoftware/app/common/BaseRepositoryMapper.xml" />
-			
-<!-- Mapper Definition for employee password functionality -->			
+
+		<!-- Mapper Definition for employee password functionality -->
 		<mapper
 			resource="com/awcsoftware/app/employee/EmployeeMapper.xml" />
 	</mappers>
