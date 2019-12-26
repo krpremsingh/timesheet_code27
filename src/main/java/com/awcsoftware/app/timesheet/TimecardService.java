@@ -2,8 +2,6 @@ package com.awcsoftware.app.timesheet;
 
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -12,7 +10,6 @@ import org.apache.log4j.Logger;
 import com.awcsoftware.app.AppConstant;
 import com.awcsoftware.app.AppException;
 import com.awcsoftware.mybatis.DbException;
-import com.awcsoftware.spring.security.auth.user.User;
 
 public class TimecardService {
 	static Logger logger = Logger.getLogger(TimecardService.class);
@@ -158,4 +155,13 @@ public class TimecardService {
 			return validatorResult.toString();
 	}
 */
+/*	public List<TimecardDayDetails> getWeekTimecard(TimecardInfo timecardInfo) throws AppException, DbException {
+		TimecardDao dao = new TimecardDao();
+		List<TimecardDayDetails> weekTimecard = dao.getWeekTimecard(timecardInfo);
+		if(weekTimecard!=null) {
+			return weekTimecard;
+		}
+		return null;
+		
+	}*/
 }

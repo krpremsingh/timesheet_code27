@@ -39,7 +39,7 @@ public class TimecardInfo implements Serializable {
 	private String WeekPeriod;
 	private String statusGrid;
 	private String managerName;
-
+    private String email;
 	/*
 	 * Field used for showing error when logged-in user 
 	 * and data insert user are different
@@ -221,11 +221,26 @@ public class TimecardInfo implements Serializable {
 	public void setProjectValue(List<Integer> projectValue) {
 		this.projectValue = projectValue;
 	}
+	
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
 	@Override
 	public String toString() {
 		return "TimecardInfo [tcId=" + tcId + ", empId=" + empId + ", weekStart=" + weekStart + ", weekEnd=" + weekEnd
 				+ ", totalHours=" + totalHours + ", status=" + status + ", addedOn=" + addedOn + ", timecardDayInfo="
-				+ timecardDayInfo + "]";
+				+ timecardDayInfo + ", WeekPeriod=" + WeekPeriod + ", statusGrid=" + statusGrid + ", managerName="
+				+ managerName + ", email=" + email + ", searchStatus=" + searchStatus + ", empName=" + empName
+				+ ", projectId=" + projectId + ", projectName=" + projectName + ", projectGroup=" + projectGroup
+				+ ", projectValue=" + projectValue + ", approverId=" + approverId + ", employeeProjectTimecard="
+				+ employeeProjectTimecard + "]";
 	}
+
+
 }

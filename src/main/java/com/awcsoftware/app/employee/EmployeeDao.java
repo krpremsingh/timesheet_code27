@@ -2,6 +2,7 @@ package com.awcsoftware.app.employee;
 
 import org.apache.ibatis.session.SqlSession;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.awcsoftware.app.AppException;
@@ -10,14 +11,45 @@ import com.awcsoftware.mybatis.MyBatisManager;
 import com.awcsoftware.spring.security.auth.user.User;
 import com.awcsoftware.spring.security.auth.user.UserDao;
 
+/**
+ * 
+ * @author Arun 
+ * methods to generate and verify confirmation token
+ * 1.saveToken(assigned a token to user with expiry date)
+ * 2.updateToken(update token if user generate a link more than one time without changing the password)  
+ * 3.checkToken(to check token in the database)
+ * 4.findByToken(to verify the user entered token with database token)
+ * 5.deleteToken(delete the token from database after the password changed by user)
+ * 6.verifyEmailId(verify the email id entered by user for link generation to change password)
+ * methods to reset and change password 
+ * 1.resetPassword
+ * 2.updatePassword 
+ * methods to maintain the state of user 
+ * 1.getLoginTransaction
+ * 2.saveLastLogin
+ * 3.saveLoginTransaction
+ */
 @Component("empDao")
 public class EmployeeDao {
+
+	@Autowired
+	UserDao userdao;
+
+	@Autowired
+	EmployeeLoginTransaction logintransaction;
+
 	static Logger logger = Logger.getLogger(EmployeeDao.class.getName());
 
-	public boolean resetPassword(User user) {
+	/*
+	 * reset old password or force user to change password and update the login
+	 * transaction table
+	 * 
+	 */
+	
+	public boolean saveToken(ConfirmationToken token) {
 		SqlSession session = MyBatisManager.openSession();
 		try {
-			int result = session.update("User.resetPassword", user);
+			int result = session.insert("User.saveToken", token);
 			if (result != 0) {
 				session.commit();
 				return true;
@@ -26,23 +58,20 @@ public class EmployeeDao {
 		} finally {
 			session.close();
 		}
-
 	}
-
-	public boolean updatePassword(User user) {
+	public boolean updateToken(ConfirmationToken token) {
 		SqlSession session = MyBatisManager.openSession();
 		try {
-			int result = session.update("User.updatePassword", user);
+			int result = session.update("User.updateToken", token);
 			if (result != 0) {
 				session.commit();
-				deleteToken(user);
-				logger.debug(user.getEmail() + " " + result + " ");
 				return true;
 			}
 			return false;
 		} finally {
 			session.close();
 		}
+
 	}
 
 	public ConfirmationToken findByToken(String token) throws AppException, DbException {
@@ -60,14 +89,6 @@ public class EmployeeDao {
 			session.close();
 		}
 		return null;
-
-	}
-
-	public String verifyEmailId(String email) {
-		User user = null;
-		UserDao userdao = new UserDao();
-		user = userdao.getUser(email);
-		return user.getEmail();
 
 	}
 
@@ -89,34 +110,9 @@ public class EmployeeDao {
 
 	}
 
-	public boolean saveToken(ConfirmationToken token) {
-		SqlSession session = MyBatisManager.openSession();
-		try {
-			int result = session.insert("User.saveToken", token);
-			if (result != 0) {
-				session.commit();
-				return true;
-			}
-			return false;
-		} finally {
-			session.close();
-		}
-	}
 
-	public boolean updateToken(ConfirmationToken token) {
-		SqlSession session = MyBatisManager.openSession();
-		try {
-			int result = session.update("User.updateToken", token);
-			if (result != 0) {
-				session.commit();
-				return true;
-			}
-			return false;
-		} finally {
-			session.close();
-		}
 
-	}
+	
 
 	/*
 	 * public String getCurrentPassword(String email) { SqlSession session =
@@ -141,4 +137,100 @@ public class EmployeeDao {
 		}
 
 	}
+	
+
+	public String verifyEmailId(String email) {
+		User user = null;
+		user = userdao.getUser(email);
+		return user.getEmail();
+
+	}
+
+	public boolean resetPassword(User user) {
+		SqlSession session = MyBatisManager.openSession();
+		try {
+			int result = session.update("User.resetPassword", user);
+			if (result != 0) {
+				session.commit();
+				logintransaction = new EmployeeLoginTransaction(user);
+				logintransaction.setActivityStatus(EmployeeMessageConstants.PasswordChanged.getLabel().toString());
+				logintransaction.setStatusReason(" ");
+				saveLoginTransaction(logintransaction);
+				return true;
+			}
+			return false;
+		} finally {
+			session.close();
+		}
+
+	}
+
+	// generate new password for user if forgot and update the login transaction
+	// table
+
+	public boolean updatePassword(User user) {
+		SqlSession session = MyBatisManager.openSession();
+		try {
+			int result = session.update("User.updatePassword", user);
+			if (result != 0) {
+				session.commit();
+				deleteToken(user);
+				logger.debug(user.getEmail() + " " + result + " ");
+				logintransaction = new EmployeeLoginTransaction(user);
+				logintransaction.setActivityStatus(EmployeeMessageConstants.PasswordChanged.getLabel().toString());
+				logintransaction.setStatusReason(" ");
+				saveLoginTransaction(logintransaction);
+				return true;
+			}
+			return false;
+		} finally {
+			session.close();
+		}
+	}
+
+	public EmployeeLoginTransaction getLoginTransaction(EmployeeLoginTransaction logintransaction) {
+		SqlSession session = MyBatisManager.openSession();
+		try {
+			EmployeeLoginTransaction result = session.selectOne("User.checkLoginTransaction", logintransaction);
+			session.commit();
+			return result;
+
+		} finally {
+			session.close();
+		}
+
+	}
+
+	public boolean saveLoginTransaction(EmployeeLoginTransaction logintransaction) {
+		logger.debug(logintransaction);
+		SqlSession session = MyBatisManager.openSession();
+		try {
+			int result = session.insert("User.saveLoginTransaction", logintransaction);
+			if (result != 0) {
+				session.commit();
+				return true;
+			}
+			return false;
+		} finally {
+			session.close();
+		}
+
+	}
+
+//update loginTimestamp in login transaction
+	public boolean saveLastLogin(EmployeeLoginTransaction logintransaction) {
+		SqlSession session = MyBatisManager.openSession();
+		try {
+			int result = session.insert("User.saveLastLogin", logintransaction);
+			if (result != 0) {
+				session.commit();
+				return true;
+			}
+			return false;
+		} finally {
+			session.close();
+		}
+
+	}
+
 }

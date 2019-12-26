@@ -558,6 +558,21 @@
 			and tci.tcId=tcdd.tcId and tcdd.tcId=tcdi.tcId and tcdd.tcdId=tcdi.tcdId and 
 			tcdd.recordType='Active' group by rowIndex order by rowIndex ;
 	</select>
+	
+<!-- 	<select id="getWeekTimecard" parameterType="TimecardInfo" resultType="TimecardDayDetails">
+	Select tdi.tcId,tdd.projectId,tdd.activityId,tdd.location,tdi.workingDay,tdi.totalWeekWorkHours,tdi.workingDate,tdd.tcddId,tdd.tcdId,tdd.taskDetails,tdd.status,tdd.startTime,tdd.endTime,tdd.workingHours,
+	ifnull((select projectName from ProjectsInfo PI where PI.projectId= tdd.projectId),' ') projectName,
+	ifnull((select location from WorkLocationsInfo PI where PI.workLocationId = tdd.location),' ') locationName,
+	ifnull((select activity from ActivitiesInfo PI where PI.activityId= tdd.activityId),' ') activityName 
+	FROM TimecardDayInfo tdi inner join TimecardInfo ti on tdi.tcId=ti.tcId inner join TimecardDayDetails tdd on tdd.tcdId=tdi.tcdId 
+	WHERE ti.weekStart=#{weekStart} and weekEnd=#{weekEnd}  and ti.empId=#{empId};
+	</select> -->
+	
+	<select id="getPreviousWeekStatus"  resultType="TimecardInfo">
+	select distinct ti.empId,(select e.email from EmployeeInfo e where ti.empId=e.empId) email,ti.status,now() FROM TimecardInfo ti WHERE ti.weekStart BETWEEN (NOW() - INTERVAL
+ 10 DAY) AND NOW() and UPPER(ti.status)=upper('draft');
+	</select>
+	
 </mapper> 
  
  

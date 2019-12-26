@@ -16,7 +16,7 @@ public class UserDao {
 		SqlSession session = MyBatisManager.openSession();
 		try {
 			User user = session.selectOne("User.getUser", username);
-
+			
 			return user;
 		} finally {
 			session.close();

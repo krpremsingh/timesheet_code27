@@ -3,6 +3,11 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="User">
+	<cache />
+<!-- 	********************************************** 
+			Start Of Defining Result Map 
+		********************************************** 
+-->
 	<resultMap
 		type="User" id="User">
      </resultMap>
@@ -23,11 +28,12 @@
 		select r.roleId ,r.role from EmployeeRole er inner join RolesInfo r on
 		er.roleId=r.roleId where er.empId=#{empId};
 	</select>
-			
-<select id="checkToken" resultType="ConfirmationToken">
- select t.empId ,t.token,e.email,t.tokenExpiryDate from ConfirmationToken t inner join EmployeeInfo e on e.empId=t.empId where e.email=#{user.email} 
-</select>
-
+	
+<!-- *********************************************************************** 
+		Operation to reset or change password of a user
+		1.resetPassword(if user login first time or user wants to change password)
+		2.updatePassword(if user forgot the password) 
+    *********************************************************************** -->
 <update id="resetPassword" parameterType="User">
  update EmployeeInfo set password=#{newPassword}, firstLoginStatus=1 where email=#{email};
 </update>
@@ -35,7 +41,11 @@
 <update id="updatePassword" parameterType="User">
  update EmployeeInfo set password=#{newPassword} where email=#{email};
 </update>
-	
+
+<!--********************************************************************************************
+     Operations for confirmation token(to confirm that the token used by user to create
+     new password if he/she forgot is valid or not)
+**********************************************************************************  -->	
 <insert id="saveToken" parameterType="ConfirmationToken" keyProperty="tokenId" useGeneratedKeys="true"> 
 insert into ConfirmationToken(token,tokenCreationDate,tokenExpiryDate,empId) values(#{token},#{tokenCreationDate},#{tokenExpiryDate},(select empId from EmployeeInfo where email=#{user.email}))
  </insert>
@@ -44,6 +54,10 @@ insert into ConfirmationToken(token,tokenCreationDate,tokenExpiryDate,empId) val
   update ConfirmationToken t inner join EmployeeInfo e on t.empId=e.empId set t.token=#{token},t.tokenCreationDate=#{tokenCreationDate},t.tokenExpiryDate=#{tokenExpiryDate} where e.email=#{user.email} 
  </update>
  
+<select id="checkToken" resultType="ConfirmationToken">
+ select t.empId ,t.token,e.email,t.tokenExpiryDate from ConfirmationToken t inner join EmployeeInfo e on e.empId=t.empId where e.email=#{user.email} 
+</select>
+ 
  <select id="findByToken" resultType="ConfirmationToken"> 
  select t.tokenExpiryDate,t.token,t.empId from ConfirmationToken t inner join EmployeeInfo e on e.empId=t.empId where t.token=#{token} 
  </select>
@@ -51,5 +65,37 @@ insert into ConfirmationToken(token,tokenCreationDate,tokenExpiryDate,empId) val
 <delete id="deleteToken" parameterType="ConfirmationToken">
 delete t from ConfirmationToken t inner join EmployeeInfo e on e.empId=t.empId where e.email=#{email}
 </delete>
+<!-- queries for logintransaction  -->
+<select id="checkLoginTransaction" resultType="EmployeeLoginTransaction" parameterType="EmployeeLoginTransaction">
+select * from LoginTransaction lt inner join EmployeeInfo e on e.empId=lt.empId where lt.passwordExpiryDate &lt;&gt; '' and e.email=#{user.email} and lt.loginTimestamp=(select MAX(loginTimestamp) from LoginTransaction) LIMIT 1;
+</select>
+
+<insert id="saveLoginTransaction" parameterType="EmployeeLoginTransaction" keyProperty="empId" useGeneratedKeys="true">
+  insert into LoginTransaction(empId,loginTimestamp,lastPasswordChange,passwordExpiryDate,activityStatus,statusReason) values((select empId from EmployeeInfo where email=#{user.email}),#{loginTimestamp},#{lastPasswordChange},#{passwordExpiryDate},#{activityStatus},#{statusReason})
+</insert>
+
+<insert id="saveLastLogin" parameterType="EmployeeLoginTransaction" keyProperty="empId" useGeneratedKeys="true">
+insert into LoginTransaction values(#{empId},#{loginTimestamp},#{lastPasswordChange},#{passwordExpiryDate},#{activityStatus},#{statusReason});
+</insert>
+
+<select id="getemaillist" resultType="User">
+select e.email,e.mailFlag,e.empId,e.password from EmployeeInfo e where e.mailFlag='NO';
+</select>
+
+<update id="updateMailFlag" parameterType="MailPojo">
+update EmployeeInfo set mailFlag='YES' where mailFlag='NO' and
+	email in( 	
+     <foreach item="item" index="index" collection="userList" separator=",">
+		#{item.email}
+		</foreach>
+		)
+</update>
+
+<!--
+<update id="updateFirstLogin" parameterType="EmployeeLoginTransaction">
+update EmployeeInfo e inner join LoginTransaction lt on e.empId=lt.empId set firstLoginStatus=0 where e.empId=#{empId}
+</update> -->
+
+
 
 </mapper>

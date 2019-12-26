@@ -1,36 +1,95 @@
 package com.awcsoftware.app.mail;
 
+import java.io.IOException;
+
+import javax.mail.BodyPart;
 import javax.mail.MessagingException;
+import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import com.awcsoftware.app.AppException;
 import com.awcsoftware.app.employee.ConfirmationToken;
-import com.awcsoftware.app.employee.EmployeeMessageConstants;
+import com.awcsoftware.app.employee.EmployeeService;
 import com.awcsoftware.mybatis.DbException;
+import com.awcsoftware.spring.security.auth.user.User;
+
 @Component
 public class Mail {
+	static Logger logger = Logger.getLogger(Mail.class.getName());
 	
 	@Autowired(required = true)
 	@Qualifier("mailconfig")
 	MailConfig mailconfig;
 	
 	@Autowired
-	MailContent mailcontent;
-	
-	public String changePasswordEmail(ConfirmationToken confirmationToken, HttpServletRequest request) throws MessagingException,AppException,DbException {
+	EmployeeService employeeservice;
+  
+	UriComponents uriComponents =null;
+
+	public String changePasswordRequestEmail(ConfirmationToken confirmationToken, HttpServletRequest request)
+			throws MessagingException, AppException, DbException {
+         uriComponents = UriComponentsBuilder.newInstance().scheme(request.getScheme()).host(request.getServerName())
+				.port(request.getServerPort()).path(MailMessageConstants.ForgotPasswordUriPath.getLabel().toString())
+				.queryParam("token", confirmationToken.getToken()).build();
+		String forgotPasswordMailContent = MailMessageConstants.ForgotPasswordEmailContent.getLabel().toString();
+		logger.debug("forgotPasswordMailContent "+forgotPasswordMailContent);
+		if(forgotPasswordMailContent.contains("user_link")) {
+			forgotPasswordMailContent=forgotPasswordMailContent.replace("user_link", uriComponents.toUriString());
+		}
 		MimeMessage message = mailconfig.javaMailSender().createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(message, true);
 		helper.setTo(confirmationToken.getUser().getEmail());
-		helper.setSubject(MailMessageConstants.ChangePasswordRequest.getLabel().toString());
-		helper.setText(mailcontent.emailContent(confirmationToken, request), true);
+		helper.setSubject(MailMessageConstants.ChangePasswordSubject.getLabel().toString());
+		helper.setText(forgotPasswordMailContent, true);
 		mailconfig.javaMailSender().send(message);
-		return EmployeeMessageConstants.SendEmail.getLabel().toString();
+		return MailMessageConstants.SendEmail.getLabel().toString();
+	}
 
+	public String changePasswordSuccessEmail(User user) throws MessagingException {
+		MimeMessage message = mailconfig.javaMailSender().createMimeMessage();
+		MimeMessageHelper helper = new MimeMessageHelper(message, true);
+		helper.setTo(user.getEmail());
+		helper.setSubject(MailMessageConstants.PasswordChanged.getLabel().toString());
+		helper.setText(MailMessageConstants.PasswordChangedEmailContent.getLabel().toString(), true);
+		mailconfig.javaMailSender().send(message);
+		return null;
+		
+	}
+	public String welcomeEmail(MailPojo mailpojo) throws MessagingException, IOException {
+		MimeMessage message = mailconfig.javaMailSender().createMimeMessage();
+		MimeMessageHelper helper = new MimeMessageHelper(message, true);
+		 MimeMultipart multipart = new MimeMultipart();
+         BodyPart messageBodyPart = new MimeBodyPart();
+        // String content = mailtemplatecontent.welcomeEmail;
+         String content = MailMessageConstants.WelcomeEmailContent.getLabel().toString();
+         logger.debug(content);
+		for( User sendTo:mailpojo.getUserList()) {
+			String contentupdate=null;
+			if(content.contains("user_email")) {
+				contentupdate=content.replaceAll("user_email", sendTo.getEmail());
+			}
+			 if(contentupdate.contains("user_password")) {
+				 contentupdate=contentupdate.replaceAll("user_password", sendTo.getPassword());
+			}
+	        messageBodyPart.setContent(contentupdate, "text/html");
+	        multipart.addBodyPart(messageBodyPart); 
+	        message.setContent(multipart);
+			helper.setTo(sendTo.getEmail());
+			helper.setSubject(MailMessageConstants.WelcomeEmailSubject.getLabel().toString());
+			helper.setText(messageBodyPart.getContent().toString());
+			mailconfig.javaMailSender().send(message);
+		}
+		return  MailMessageConstants.SendEmail.getLabel().toString();
+		
 	}
 }

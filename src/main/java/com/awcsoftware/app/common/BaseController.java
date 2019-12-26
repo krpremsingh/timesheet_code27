@@ -27,14 +27,14 @@ public class BaseController {
 
 	@PostMapping("/getProjects")
 	public ResponseEntity<List<BasePojo>> getProjectsList(@RequestBody BasePojo basepojo) {
-		List<BasePojo> setOfProjects = baseservice.getProjects(basepojo.getId());
+		List<BasePojo> setOfProjects = baseservice.getProjects(basepojo);
 			return new ResponseEntity<List<BasePojo>>(setOfProjects,HttpStatus.OK);	
 		}
 
 
 	@PostMapping("/getProjectLocations")
 	public ResponseEntity<List<BasePojo>> getprojectLocations(@RequestBody BasePojo basepojo) {
-		List<BasePojo> setOfProjectLocations = baseservice.getProjectLocations(basepojo.getId());
+		List<BasePojo> setOfProjectLocations = baseservice.getProjectLocations(basepojo);
 		return new ResponseEntity<List<BasePojo>>(setOfProjectLocations,HttpStatus.OK);
 
 	}
