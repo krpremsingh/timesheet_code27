@@ -201,10 +201,7 @@ public class TimecardValidator extends AppValidator {
 			if (nextRowStartTime == null)
 				nextRowStartTime = currentRowEndTime;
 
-			if (nextRowStartTime.isBefore(currentRowEndTime)) {
-				errorMsg.add(TimecardMessageConstant.TimeOverlapping.getLabel());
-
-				
+			if (nextRowStartTime.isBefore(currentRowEndTime)) {				
 				errorMsg.add(TimecardMessageConstant.TimeOverlapping.getLabel() + " Date ["
 						+ timecardDayDetails.getWorkingDate() + "] Start Time[" + currentRowStartTime + "] End Time["
 						+ currentRowEndTime + "] ");

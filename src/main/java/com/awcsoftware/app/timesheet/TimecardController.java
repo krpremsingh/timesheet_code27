@@ -35,6 +35,8 @@ public class TimecardController {
 		String timecardSaveResult = "";
 		try {
 			timecardSaveResult = service.saveTimecard(timecardInfo);
+			timecardSaveResult=timecardSaveResult+"Timecard Id ["+timecardInfo.getTcId()+"]";
+			
 			return new ResponseEntity<String>(timecardSaveResult, HttpStatus.OK);
 		} catch (DbException | AppException | ParseException e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);

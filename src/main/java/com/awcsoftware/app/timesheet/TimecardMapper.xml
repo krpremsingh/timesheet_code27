@@ -486,6 +486,20 @@
 	</select>
 
 
+	<select id="getTimecardEmployeeView"
+		parameterType="TimecardInfo" resultType="TimecardInfo">
+
+		select tcId, weekStart, weekEnd, status, totalHours, approverId, projectGroup,empId from (  
+			select tci.tcId tcId, tci.weekStart weekStart ,tci.weekEnd weekEnd, tci.status status , tci.totalHours totalHours, 
+			tcad.approverId approverId, tcad.projectID projectId, 
+			ifnull((select group_concat(tcadsub.projectId) from TimecardApproverDetails tcadsub where 
+			tcadsub.approverId=tcad.approverId and tcadsub.tcID=tcad.tcId),' ') projectGroup,tci.empId empId
+			from TimecardApproverDetails tcad, TimecardInfo tci 
+			where approverId=#{approverId} and tci.tcId=tcad.tcId and tci.status='Pending'
+		) as Main group by 1;
+		
+	</select>
+
 	<select id="getTimecardApproverSummary"
 		parameterType="TimecardInfo" resultType="TimecardInfo">
 
