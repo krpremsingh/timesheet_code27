@@ -59,7 +59,7 @@ public class TimecardInfo implements Serializable {
 	private String projectGroup;
 	private List<Integer> projectValue;
 	private String approverId;
-	
+	private String searchType;	
 
 	private List<TimecardProjectWorkDetails> employeeProjectTimecard;
 	
@@ -229,6 +229,14 @@ public class TimecardInfo implements Serializable {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public String getSearchType() {
+		return searchType;
+	}
+
+	public void setSearchType(String searchType) {
+		this.searchType = searchType;
 	}
 
 	@Override

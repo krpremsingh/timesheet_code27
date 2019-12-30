@@ -28,7 +28,10 @@ public enum TimecardMessageConstant {
 	WorkDateCantBeNull("Work date can't be blank"),
 	StartEndTimeCantBeSame("Start time and end time can't be same"),
 	StartEndTimeCantBeNull("Start time and end time can't be blank"),
-	TimeOverlapping("Working hours for same day is overlapping"),
+	TimeOverlapping("Working hours cannot be same for DATE"),
+	HALF_DAY_TIME_ERROR("Half day cann't be more than 4 hours"),
+	Leave_cant_be_Less_Parameterized_Hour("Leave can not be less than "),
+	Multi_Leave_Same_Day_Msg("Multiple leave on same date now allowed"),
 	
 	StartTimeBiggerThanEndTime("Start Time can not be greater than End Time"),
 	Enter_Time_is_wrong("Enter time is wrong"),

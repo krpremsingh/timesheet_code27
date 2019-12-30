@@ -111,6 +111,11 @@ public class TimecardService {
 		return (List<TimecardDayDetails>) dao.getTimecardSavedRecordData(TimecardInfoParam);
 	}
 
+	public List<TimecardInfo> getTimecardViewForEmployee(TimecardInfo timecardInfoParam) throws DbException, AppException {
+		TimecardDao dao = new TimecardDao();
+		return (List<TimecardInfo>) dao.getTimecardViewForEmployee(timecardInfoParam);
+	}
+
 	/*		************************************************************************
 	 * 			Method Ends for Filling and view Timecard by an Employee 
 	 *		************************************************************************ 
@@ -124,16 +129,6 @@ public class TimecardService {
 	public List<TimecardInfo> getTimecardViewForManager(TimecardInfo timecardInfoParam) throws DbException, AppException {
 		TimecardDao dao = new TimecardDao();
 		return (List<TimecardInfo>) dao.getTimecardViewForManager(timecardInfoParam);
-
-		/*
-		 * TimecardValidator validator = new TimecardValidator(); Set<String>
-		 * validatorResult = validator.validateTimeCardEmployeeView(timecardInfoParam);
-		 * if (validatorResult.size() == 0) { TimecardDao dao = new TimecardDao();
-		 * return (List<TimecardInfo>) dao.getTimecardViewForManager(timecardInfoParam);
-		 * } else { List<TimecardInfo> timecardReturn = new ArrayList<TimecardInfo>();
-		 * timecardInfoParam.setSearchStatus(validatorResult.toString());
-		 * timecardReturn.add(timecardInfoParam); return timecardReturn; }
-		 */			
 	}
 
 	/*

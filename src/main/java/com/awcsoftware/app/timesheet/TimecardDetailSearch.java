@@ -15,6 +15,7 @@ public class TimecardDetailSearch implements Serializable{
 	private String status;
 	private String workingDate;
 	private String workingDay;
+	private String managerComment;
 	
 	public String getTcId() {
 		return tcId;
@@ -82,5 +83,10 @@ public class TimecardDetailSearch implements Serializable{
 	public void setWorkingDay(String workingDay) {
 		this.workingDay = workingDay;
 	}
-	
+	public String getManagerComment() {
+		return managerComment;
+	}
+	public void setManagerComment(String managerComment) {
+		this.managerComment = managerComment;
+	}	
 }

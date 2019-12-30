@@ -35,7 +35,7 @@ public class TimecardController {
 		String timecardSaveResult = "";
 		try {
 			timecardSaveResult = service.saveTimecard(timecardInfo);
-			timecardSaveResult=timecardSaveResult+"Timecard Id ["+timecardInfo.getTcId()+"]";
+			timecardSaveResult=timecardSaveResult+" ["+timecardInfo.getTcId()+"]";
 			
 			return new ResponseEntity<String>(timecardSaveResult, HttpStatus.OK);
 		} catch (DbException | AppException | ParseException e) {
@@ -132,6 +132,23 @@ public class TimecardController {
 			return new ResponseEntity<List<TimecardDayDetails>>(timecardDayDetails, HttpStatus.OK);
 		} catch (DbException | AppException e) {
 			return new ResponseEntity<List<TimecardDayDetails>>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	/*
+	 *  This method is created for manager view details.
+	 * 
+	 */
+
+	@RequestMapping(value = "/tc-EmployeeView", method = RequestMethod.POST, headers = "Accept=application/json")
+	public ResponseEntity<List<TimecardInfo>> getTimecardViewForEmployee(@RequestBody TimecardInfo timecardInfoParam) {
+		service = new TimecardService();
+		List<TimecardInfo> timecardManagerView= null;
+		try {
+			timecardManagerView = (List<TimecardInfo>) service.getTimecardViewForEmployee(timecardInfoParam);
+			return new ResponseEntity<List<TimecardInfo>>(timecardManagerView, HttpStatus.OK);
+		} catch (DbException | AppException e) {
+			return new ResponseEntity<List<TimecardInfo>>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 

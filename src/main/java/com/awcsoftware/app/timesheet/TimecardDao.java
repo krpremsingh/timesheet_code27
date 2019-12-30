@@ -255,6 +255,19 @@ public class TimecardDao {
 			return true;
 	}
 
+	public List<TimecardInfo> getTimecardViewForEmployee(TimecardInfo timecardInfoManager) throws DbException {
+		SqlSession session = MyBatisManager.openSession();
+		try {
+
+			List<TimecardInfo> managerTimecardView = session.selectList("TimecardMapper.getTimecardEmployeeView",
+					timecardInfoManager);
+			managerTimecardView = getTimecardViewPerProjectForManager(managerTimecardView, session);
+			return managerTimecardView;
+		} finally {
+			session.close();
+		}
+	}
+
 	/*
 	 * ************************************************************************
 	 * Method Ended for Filling and view Timecard by an Employee

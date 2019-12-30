@@ -138,6 +138,7 @@ public class TimecardValidator extends AppValidator {
 		String timeDiff = "00:00:00";
 		String dailyTimeHour = "00:00:00";
 		LocalTime currentRowStartTime = null, currentRowEndTime = null, nextRowStartTime = null, nextRowEndTime = null;
+		int leaveCountInSameDay=0;
 		TimecardDayDetails timecardDayDetailsNextRow = null;
 
 		for (dayDetCtr = 0; dayDetCtr < (timecardDayDetailsParam.size()); dayDetCtr++) {
@@ -149,6 +150,10 @@ public class TimecardValidator extends AppValidator {
 			TimecardDayDetails timecardDayDetails = (TimecardDayDetails) timecardDayDetailsParam.get(dayDetCtr);
 			validateTimeCardDetails(timecardDayDetails);
 
+			if(timecardDayDetails.getActivityId()==18)
+			{
+				leaveCountInSameDay++;
+			}
 			if (timecardDayDetails.getStartTime() == null || timecardDayDetails.getStartTime().trim().equals("")) {
 				errorMsg.add(TimecardMessageConstant.StartEndTimeCantBeNull.getLabel()+" ["+timecardDayDetails.getWorkingDate()+"] ");
 				break;
@@ -204,19 +209,38 @@ public class TimecardValidator extends AppValidator {
 			if (nextRowStartTime.isBefore(currentRowEndTime)) {				
 				errorMsg.add(TimecardMessageConstant.TimeOverlapping.getLabel() + " Date ["
 						+ timecardDayDetails.getWorkingDate() + "] Start Time[" + currentRowStartTime + "] End Time["
-						+ currentRowEndTime + "] ");
-
-				
+						+ currentRowEndTime + "] ");				
 				break;
 			}
 
 			timeDiff = Util.TimeDiff(timecardDayDetails.getStartTime() + ":00",
 					timecardDayDetails.getEndTime() + ":00");
+			
+			if(timecardDayDetails.getActivityId()==20
+					&& Integer.parseInt(timeDiff.substring(0,2))>4)
+			{
+				errorMsg.add(TimecardMessageConstant.HALF_DAY_TIME_ERROR.getLabel());
+			}
+				
+			if(timecardDayDetails.getActivityId()==18
+					&& Integer.parseInt(timeDiff.substring(0,2))>9)
+			{
+				errorMsg.add(TimecardMessageConstant.Leave_cant_be_Less_Parameterized_Hour.getLabel()+ 
+						AppConstant.WORKING_HOURS.Nine.getValue()+" hours Working Date ["+
+						timecardDayDetails.getWorkingDate()+"] Start Time ["+
+						timecardDayDetails.getStartTime()+"] End Time["+timecardDayDetails.getEndTime()+"]");
+			}
+				
 			timecardDayDetails.setWorkingHours(timeDiff);
 
 			dailyTimeHour = Util.TimeAdd(dailyTimeHour, timeDiff);
 		}
-
+		
+		if(leaveCountInSameDay>1)
+		{
+			errorMsg.add(TimecardMessageConstant.Multi_Leave_Same_Day_Msg.getLabel());
+		}
+		
 		if (Integer.parseInt(dailyTimeHour.substring(0, 2)) > 24) {
 			errorMsg.add(TimecardMessageConstant.Daily_Working_Limit.getLabel());
 		}

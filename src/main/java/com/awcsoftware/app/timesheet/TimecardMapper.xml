@@ -489,14 +489,14 @@
 	<select id="getTimecardEmployeeView"
 		parameterType="TimecardInfo" resultType="TimecardInfo">
 
-		select tcId, weekStart, weekEnd, status, totalHours, approverId, projectGroup,empId from (  
+			select tcId, weekStart, weekEnd, status, totalHours, approverId, projectGroup,empId from (  
 			select tci.tcId tcId, tci.weekStart weekStart ,tci.weekEnd weekEnd, tci.status status , tci.totalHours totalHours, 
 			tcad.approverId approverId, tcad.projectID projectId, 
 			ifnull((select group_concat(tcadsub.projectId) from TimecardApproverDetails tcadsub where 
-			tcadsub.approverId=tcad.approverId and tcadsub.tcID=tcad.tcId),' ') projectGroup,tci.empId empId
+			tcadsub.tcID=tcad.tcId),' ') projectGroup,tci.empId empId
 			from TimecardApproverDetails tcad, TimecardInfo tci 
-			where approverId=#{approverId} and tci.tcId=tcad.tcId and tci.status='Pending'
-		) as Main group by 1;
+			where empId=#{empId} and weekStart=#{weekStart} and weekEnd=#{weekEnd} and tci.tcId=tcad.tcId and tci.status='Pending'
+			) as Main group by 1;
 		
 	</select>
 
@@ -521,7 +521,9 @@
 			convert(sec_to_time(sum(Time_to_sec(workingHours))),char) totalWeekWorkHours, 
 			tcdi.workingDate workingDate, tcdi.workingDay workingDay, tcdd.status status,tcdd.activityId,tcdd.location,
 			ifnull((select concat(firstName,' ', middleName,' ', lastName) from TimecardApproverDetails tcad, EmployeeInfo ei where tcad.projectId=tcdd.projectId and
-			tcad.tcId=tcdi.tcId and tcad.approverId=ei.empId),' ') as managerName
+			tcad.tcId=tcdi.tcId and tcad.approverId=ei.empId),' ') as managerName,
+			ifnull((select comments from TimecardApproverDetails tcad, EmployeeInfo ei where tcad.projectId=tcdd.projectId and
+			tcad.tcId=tcdi.tcId and tcad.approverId=ei.empId),' ') as managerComment			
 			  from 
 			TimecardDayDetails tcdd,TimecardDayInfo tcdi 
 			where tcdd.tcId=#{tcId}  and tcdd.tcId=tcdi.tcId and tcdd.tcdId=tcdi.tcdId 
