@@ -46,6 +46,37 @@ public class EmployeeDao {
 	 * 
 	 */
 	
+	public boolean insertEmployee(User user)throws AppException, DbException {
+		SqlSession session = MyBatisManager.openSession();
+		try {
+			int result = session.insert("User.insertEmployee", user);
+			if (result != 0) {
+				session.commit();
+				return true;
+			}
+			return false;
+		} finally {
+			session.close();
+		}
+		
+	}
+	
+	public boolean checkEmployee(User user) {
+		SqlSession session = MyBatisManager.openSession();
+		try {
+			  int result = session.selectOne("User.checkEmployee", user);
+			 logger.debug("result "+result);
+			if (result == 0) {
+				session.commit();
+				return true;
+			}
+			return false;
+		} finally {
+			session.close();
+		}
+		
+	}
+	
 	public boolean saveToken(ConfirmationToken token) {
 		SqlSession session = MyBatisManager.openSession();
 		try {

@@ -16,11 +16,11 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
-import com.awcsoftware.spring.security.SpringSecurityConfig;
+import com.awcsoftware.app.scheduler.EmailNotificationScheduler;
 
 @Configuration
 @EnableScheduling
-@ComponentScan(basePackages = "com.awcsoftware",excludeFilters= {@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE,classes= {SpringConfig.class,SpringSecurityConfig.class})})
+@ComponentScan(basePackages = "com.awcsoftware",excludeFilters= {@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE,classes= {EmailNotificationScheduler.class})})
 public class SpringConfig extends WebMvcConfigurationSupport {
 	
 	protected void configureMessageConverters(List<HttpMessageConverter<?>> converters) {

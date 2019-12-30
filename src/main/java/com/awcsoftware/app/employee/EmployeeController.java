@@ -91,10 +91,16 @@ public class EmployeeController {
 		}
 
 	}
-	@PreAuthorize("hasRole('EMPLOYEE')")
-	@GetMapping("/sample")
-	public String helloWorld() {
-		return "hi";
+	
+	@RequestMapping(value="/auth/insertEmployee",method=RequestMethod.POST)
+	public ResponseEntity<String> insertEmployee(@RequestBody User user){
+		try {
+			return new ResponseEntity<String>(employeeservice.insertEmployee(user).toString(), HttpStatus.OK);
+		} catch (AppException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		} catch (DbException e) {
+			return new ResponseEntity<String>("Db error", HttpStatus.INTERNAL_SERVER_ERROR);	
+	}
 		
 	}
 

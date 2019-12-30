@@ -28,6 +28,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 	public static final String LOGOUT_ENTRY_POINT = "/auth/logout";
 	public static final String FORGOT_PASSWORD = "/auth/forgotPassword";
 	public static final String CONFIRM_RESET = "/auth/confirm-reset";
+	public static final String INSERT_EMPLOYEE="/auth/insertEmployee";
 	public static final String CHANGE_PASSWORD = "/auth/changePassword";
 		
 	@Bean
@@ -94,6 +95,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers(FORGOT_PASSWORD).permitAll()
 				.antMatchers(CONFIRM_RESET).permitAll()
 				.antMatchers(CHANGE_PASSWORD).permitAll()
+				.antMatchers(INSERT_EMPLOYEE).permitAll()
 				.and().authorizeRequests()
 				.antMatchers(CREDENTIAL_BASED_LOGIN_ENTRY_POINT).permitAll()
 				.antMatchers(LOGOUT_ENTRY_POINT)

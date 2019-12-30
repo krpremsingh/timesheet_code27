@@ -2,7 +2,9 @@ package com.awcsoftware.app.common;
 
 public enum BaseMessageConstants {
 
-	validateProjects("project not found"), validateProjectLocations("location not found");
+	ValidateProjects("Project not found"), 
+	ProjectNotAssigned("Project not assigned"),
+	ValidateProjectLocations("Location not found");
 
 	private final String label;
 

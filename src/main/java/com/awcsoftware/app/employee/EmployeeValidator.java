@@ -7,6 +7,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.Component;
 
 import com.awcsoftware.app.AppException;
 import com.awcsoftware.app.Util;
@@ -22,6 +23,7 @@ import com.awcsoftware.spring.security.auth.user.UserDao;
  * check confirmation token validity
  * check confirmation token null or not
  */
+@Component
 public class EmployeeValidator {
 	static Logger logger = Logger.getLogger(EmployeeValidator.class);
 	static Set<String> errorMsg;
@@ -87,7 +89,7 @@ public class EmployeeValidator {
 			errorMsg.add(EmployeeMessageConstants.InvalidPassword.getLabel());
 		}
 		if (user.getNewPassword() == null || user.getNewPassword() == "") {
-			errorMsg.add(EmployeeMessageConstants.PasswordNotNull.getLabel().toString());
+			errorMsg.add(EmployeeMessageConstants.BlankPassword.getLabel().toString());
 		}
 		if (validatePattern(user.getNewPassword()) == false) {
 
@@ -146,6 +148,65 @@ public class EmployeeValidator {
 			errorMsg.add(EmployeeMessageConstants.LinkValid.getLabel().toString());
 		}
 		return errorMsg;
+	}
+	
+	public Set<String> validateEmployee(User user) throws AppException, DbException{
+		errorMsg.clear();
+		EmployeeDao dao = new EmployeeDao();
+		boolean checkEmployee = dao.checkEmployee(user);
+		if(Util.isEmptyOrNull(user.getEmpCode())) {
+			errorMsg.add(EmployeeMessageConstants.BlankEmpCode.getLabel().toString());	
+			return errorMsg;
+		}
+		if(Util.isEmptyOrNull(user.getDob())) {
+			errorMsg.add(EmployeeMessageConstants.BlankDob.getLabel().toString());
+			return errorMsg;
+		}
+		if(Util.isEmptyOrNull(user.getDoj())) {
+			errorMsg.add(EmployeeMessageConstants.BlankDoj.getLabel().toString());
+			return errorMsg;
+		}
+		if(Util.isEmptyOrNull(user.getPassword())) {
+			errorMsg.add(EmployeeMessageConstants.BlankPassword.getLabel().toString());
+			return errorMsg;
+		}
+		if (validatePattern(user.getPassword()) == false) {
+			
+			errorMsg.add(EmployeeMessageConstants.ValidatePasswordPattern.getLabel().toString());
+			return errorMsg;
+		}
+		
+		if(!Util.validateEmail.test(user.getEmail())) {
+			errorMsg.add(EmployeeMessageConstants.ValidateEmail.getLabel().toString());	
+			return errorMsg;
+		}
+		
+		if(Util.isEmptyOrNull(user.getEmail())) {
+			errorMsg.add(EmployeeMessageConstants.BlankEmail.getLabel().toString());
+			return errorMsg;
+		}
+		if(!Util.isValidDate(user.getDob().toString())) {
+			errorMsg.add(EmployeeMessageConstants.InvalidDateFormat.getLabel().toString());
+			return errorMsg;
+		}
+		if(!Util.isValidDate(user.getDoj().toString())) {
+			errorMsg.add(EmployeeMessageConstants.InvalidDateFormat.getLabel().toString());
+			return errorMsg;
+		}
+		
+		else {
+		
+			if(checkEmployee==false) {
+				errorMsg.add(EmployeeMessageConstants.EmployeeAlreadyExist.getLabel().toString());
+				return errorMsg;
+			}
+			if(checkEmployee==true) {
+				dao.insertEmployee(user);
+				  }
+			errorMsg.add(EmployeeMessageConstants.EmployeeAdded.getLabel().toString());
+		}	
+		return errorMsg;
+		
 	}
 
 }

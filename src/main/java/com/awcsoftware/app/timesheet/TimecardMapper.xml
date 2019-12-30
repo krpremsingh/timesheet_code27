@@ -569,7 +569,7 @@
 	
 	<select id="getPreviousWeekStatus"  resultType="TimecardInfo">
 	select distinct ti.empId,(select e.email from EmployeeInfo e where ti.empId=e.empId) email,ti.status,now() FROM TimecardInfo ti WHERE ti.weekStart BETWEEN (NOW() - INTERVAL
- 10 DAY) AND NOW() and UPPER(ti.status)=upper('draft');
+ 11 DAY) AND NOW() and UPPER(ti.status)=upper('draft');
 	</select>
 	
 </mapper> 
