@@ -486,6 +486,20 @@
 	</select>
 
 
+	<select id="getTimecardEmployeeView"
+		parameterType="TimecardInfo" resultType="TimecardInfo">
+
+		select tcId, weekStart, weekEnd, status, totalHours, approverId, projectGroup,empId from (  
+			select tci.tcId tcId, tci.weekStart weekStart ,tci.weekEnd weekEnd, tci.status status , tci.totalHours totalHours, 
+			tcad.approverId approverId, tcad.projectID projectId, 
+			ifnull((select group_concat(tcadsub.projectId) from TimecardApproverDetails tcadsub where 
+			tcadsub.approverId=tcad.approverId and tcadsub.tcID=tcad.tcId),' ') projectGroup,tci.empId empId
+			from TimecardApproverDetails tcad, TimecardInfo tci 
+			where approverId=#{approverId} and tci.tcId=tcad.tcId and tci.status='Pending'
+		) as Main group by 1;
+		
+	</select>
+
 	<select id="getTimecardApproverSummary"
 		parameterType="TimecardInfo" resultType="TimecardInfo">
 
@@ -539,7 +553,8 @@
 			group_Concat('$ ',concat(workingDate,'*',startTime,'*',endTime,'*',tcdd.workingHours)) timecardRowDetails,
 			ifnull((select projectName from ProjectsInfo PI where PI.projectId= tcdd.projectId),' ') projectName,
 			ifnull((select activity from ActivitiesInfo PI where PI.activityId= tcdd.activityId),' ') activityName,
-			ifnull((select location from WorkLocationsInfo PI where PI.workLocationId = tcdd.location),' ') locationName
+			ifnull((select location from WorkLocationsInfo PI where PI.workLocationId = tcdd.location),' ') locationName,
+			convert(sec_to_time(sum(Time_to_sec(workingHours))),char) projectWorkHour 
 			 from TimecardDayDetails tcdd, 
 			TimecardDayInfo tcdi, TimecardInfo tci
 			where empId=#{empId}  	
@@ -555,7 +570,7 @@
 				and tci.weekEnd &lt;=#{weekEnd,jdbcType=VARCHAR}
 			</if>		
 			and tci.tcId=tcdd.tcId and tcdd.tcId=tcdi.tcId and tcdd.tcdId=tcdi.tcdId and 
-			tcdd.recordType='Active' and tci.status='draft' group by rowIndex order by rowIndex ;
+			tcdd.recordType='Active' group by rowIndex order by rowIndex ;
 	</select>
 	
 <!-- 	<select id="getWeekTimecard" parameterType="TimecardInfo" resultType="TimecardDayDetails">

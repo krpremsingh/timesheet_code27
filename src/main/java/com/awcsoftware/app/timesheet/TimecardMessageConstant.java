@@ -31,7 +31,7 @@ public enum TimecardMessageConstant {
 	TimeOverlapping("Working hours for same day is overlapping"),
 	
 	StartTimeBiggerThanEndTime("Start Time can not be greater than End Time"),
-	Enter_Time_is_not_wrong("Enter time is wrong"),
+	Enter_Time_is_wrong("Enter time is wrong"),
 	
 	TimecardNotExistDuringApproval("Invalid timecard"),
 	ProjectIdBlankDuringApproval("Project id is blank"),
