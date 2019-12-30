@@ -38,14 +38,21 @@ public class Mail {
 
 	public String changePasswordRequestEmail(ConfirmationToken confirmationToken, HttpServletRequest request)
 			throws MessagingException, AppException, DbException {
-         uriComponents = UriComponentsBuilder.newInstance().scheme(request.getScheme()).host(request.getServerName())
+   /*      uriComponents = UriComponentsBuilder.newInstance().scheme(request.getScheme()).host(request.getServerName())
 				.port(request.getServerPort()).path(MailMessageConstants.ForgotPasswordUriPath.getLabel().toString())
-				.queryParam("token", confirmationToken.getToken()).build();
-		String forgotPasswordMailContent = MailMessageConstants.ForgotPasswordEmailContent.getLabel().toString();
+				.queryParam("token", confirmationToken.getToken()).build();*/
+/*		String forgotPasswordMailContent = MailMessageConstants.ForgotPasswordEmailContent.getLabel().toString();
 		logger.debug("forgotPasswordMailContent "+forgotPasswordMailContent);
 		if(forgotPasswordMailContent.contains("user_link")) {
 			forgotPasswordMailContent=forgotPasswordMailContent.replace("user_link", uriComponents.toUriString());
-		}
+		}*/
+		 uriComponents = UriComponentsBuilder.newInstance().scheme(request.getScheme()).host(request.getServerName())
+					.port(request.getServerPort()).path(MailMessageConstants.ForgotPasswordUriPath.getLabel().toString()).queryParam("token", confirmationToken.getToken()).build();
+			String forgotPasswordMailContent = MailMessageConstants.ForgotPasswordEmailContent.getLabel().toString();
+			logger.debug("forgotPasswordMailContent "+forgotPasswordMailContent);
+			if(forgotPasswordMailContent.contains("user_link")) {
+				forgotPasswordMailContent=forgotPasswordMailContent.replace("user_link", uriComponents.toUriString());
+			}
 		MimeMessage message = mailconfig.javaMailSender().createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(message, true);
 		helper.setTo(confirmationToken.getUser().getEmail());

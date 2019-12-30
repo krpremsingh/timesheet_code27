@@ -91,6 +91,14 @@ update EmployeeInfo set mailFlag='YES' where mailFlag='NO' and
 		)
 </update>
 
+<insert id="insertEmployee" parameterType="User" keyProperty="empId" useGeneratedKeys="true">
+insert into EmployeeInfo(empCode,firstName,middleName,lastName,email,dob,doj,password,designationId,status,addedOn,lastModifiedOn,firstLoginStatus,mailFlag) values(#{empCode},#{firstName},#{middleName},#{lastName},#{email},#{dob},#{doj},#{password},#{designationId},#{status},now(),#{lastModifiedOn},0,'NO');
+</insert>
+
+<select id="checkEmployee" resultType="int" parameterType="User">
+ select count(*) from EmployeeInfo where empCode=#{empCode} or email=#{email};
+</select>
+
 <!--
 <update id="updateFirstLogin" parameterType="EmployeeLoginTransaction">
 update EmployeeInfo e inner join LoginTransaction lt on e.empId=lt.empId set firstLoginStatus=0 where e.empId=#{empId}

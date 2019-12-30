@@ -25,7 +25,8 @@ public class BaseService {
 		//Set<String> set = basevalidator.validateProjects(basepojo.getId());
 		if(setofprojects.size()==0) {	
 			List<BasePojo> listoferrormsg= new ArrayList<BasePojo>();
-			basepojo.setErrorMsg(BaseMessageConstants.validateProjects.getLabel().toString());
+			basepojo.setName(BaseMessageConstants.ProjectNotAssigned.getLabel().toString());
+			basepojo.setErrorMsg(BaseMessageConstants.ValidateProjects.getLabel().toString());
 			listoferrormsg.add(basepojo);
 			logger.debug(listoferrormsg);
 		  return listoferrormsg;	
@@ -38,7 +39,8 @@ public class BaseService {
 		//Set<String> set=basevalidator.validateProjectLocations(basepojo.getId());
 		if(setoflocations.size()==0) {
 			 List<BasePojo> listoferrormsg= new ArrayList<BasePojo>();
-			 basepojo.setErrorMsg(BaseMessageConstants.validateProjectLocations.getLabel().toString());
+			 basepojo.setName(BaseMessageConstants.ValidateProjectLocations.getLabel().toString());
+			 basepojo.setErrorMsg(BaseMessageConstants.ValidateProjectLocations.getLabel().toString());
 			 listoferrormsg.add(basepojo);
 			 return listoferrormsg;	
 			}

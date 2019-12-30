@@ -4,7 +4,7 @@ public enum MailMessageConstants {
 	ChangePasswordSubject("Change Password Request"), 
 	SendEmail("Email send successfully"),
 	PasswordChanged("Password changed"),
-	ForgotPasswordUriPath("/timesheet/auth/confirm-reset"),
+	ForgotPasswordUriPath("/timesheetfrontend/confirm-reset.html"),
 	InvalidEmail("Email id does not exist"),
 	WelcomeEmailSubject("Welcome to AWC Timesheet"),
 	WelcomeEmailContent("<html>\r\n" + 

@@ -17,6 +17,7 @@ import com.awcsoftware.app.mail.Mail;
 import com.awcsoftware.mybatis.DbException;
 import com.awcsoftware.spring.security.auth.user.User;
 import com.awcsoftware.spring.security.auth.user.UserDao;
+
 /*
  * methods to reset and change password
  * 1.resetPasssword
@@ -54,11 +55,14 @@ public class EmployeeService {
 	@Autowired
 	Mail mail;
 
+	@Autowired
+	EmployeeValidator employeevalidator;
+
 	public String resetPassword(User user) throws AppException, DbException {
 		User result = null;
 		EmployeeValidator validator = new EmployeeValidator();
 		result = userDao.getUser(user.getEmail());
-		log.debug("user "+ user);
+		log.debug("user " + user);
 		Set<String> validateCurrentPassword = validator.validateCurrentPassword(user);
 		if (validateCurrentPassword.size() != 0) {
 			return validateCurrentPassword.toString();
@@ -82,12 +86,12 @@ public class EmployeeService {
 		EmployeeValidator validator = new EmployeeValidator();
 
 		Set<String> validateNewConfirmPassword = validator.validateNewConfirmPassword(user);
-        log.debug("validateNewConfirmPassword  "  +validateNewConfirmPassword);
+		log.debug("validateNewConfirmPassword  " + validateNewConfirmPassword);
 		if (validateNewConfirmPassword.size() != 0) {
 			return validateNewConfirmPassword.toString();
 		}
 		boolean result = empDao.updatePassword(user);
-		if(result==true) {
+		if (result == true) {
 			mail.changePasswordSuccessEmail(user);
 		}
 		return EmployeeMessageConstants.PasswordChanged.getLabel();
@@ -102,7 +106,7 @@ public class EmployeeService {
 		}
 		User user = userDao.getUser(email);
 		ctoken = new ConfirmationToken(user);
-		log.debug(user +" "+ ctoken);
+		log.debug(user + " " + ctoken);
 		saveUpdateToken(ctoken);
 		return mail.changePasswordRequestEmail(ctoken, request);
 	}
@@ -152,24 +156,24 @@ public class EmployeeService {
 		}
 		return EmployeeMessageConstants.LinkValid.getLabel().toString();
 	}
-	
+
 	public EmployeeLoginTransaction setLoginTransactionIfFailed(EmployeeLoginTransaction transaction) {
 		EmployeeLoginTransaction result = empDao.getLoginTransaction(transaction);
 		transaction.setPasswordExpiryDate(result.getPasswordExpiryDate());
 		transaction.setLastPasswordChange(result.getLastPasswordChange());
-		//transaction.setLoginTimestamp(result.getLoginTimestamp());
+		// transaction.setLoginTimestamp(result.getLoginTimestamp());
 		transaction.setActivityStatus(EmployeeMessageConstants.LoginFailed.getLabel().toString());
 		transaction.setStatusReason(EmployeeMessageConstants.PasswordExpired.getLabel().toString());
 		empDao.saveLastLogin(transaction);
 		return transaction;
-		
+
 	}
-	
+
 	public EmployeeLoginTransaction setLoginTransactionIfSuccess(EmployeeLoginTransaction transaction) {
 		transaction.setActivityStatus(EmployeeMessageConstants.LoginSuccess.getLabel().toString());
 		EmployeeLoginTransaction result = empDao.getLoginTransaction(transaction);
 		log.debug(result);
-		if(Util.isEmptyOrNull(result)) {
+		if (Util.isEmptyOrNull(result)) {
 			transaction.setStatusReason(EmployeeMessageConstants.LoginSuccessReason.getLabel().toString());
 			empDao.saveLastLogin(transaction);
 			return transaction;
@@ -180,7 +184,14 @@ public class EmployeeService {
 		empDao.saveLastLogin(transaction);
 
 		return transaction;
-		
+
+	}
+
+	public String insertEmployee(User user) throws AppException, DbException {
+		Set<String> result = null;
+		result = employeevalidator.validateEmployee(user);
+		return result.toString();
+
 	}
 
 }

@@ -1,12 +1,11 @@
 package com.awcsoftware.spring.security.auth.user;
 
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import org.apache.log4j.Logger;
 
-public class User implements Serializable   {
+public class User implements Serializable {
 
 	/**
 	 * 
@@ -23,9 +22,9 @@ public class User implements Serializable   {
 
 	private String empCode;
 
-	private LocalDate dob;
+	private String dob;
 
-	private LocalDate doj;
+	private String doj;
 
 	private LocalDateTime addedOn;
 
@@ -47,7 +46,7 @@ public class User implements Serializable   {
 
 	private int designationId;
 
-    private String mailFlag;
+	private String mailFlag;
 
 	public int getEmpId() {
 		return empId;
@@ -89,19 +88,19 @@ public class User implements Serializable   {
 		this.empCode = empCode;
 	}
 
-	public LocalDate getDob() {
+	public String getDob() {
 		return dob;
 	}
 
-	public void setDob(LocalDate dob) {
+	public void setDob(String dob) {
 		this.dob = dob;
 	}
 
-	public LocalDate getDoj() {
+	public String getDoj() {
 		return doj;
 	}
 
-	public void setDoj(LocalDate doj) {
+	public void setDoj(String doj) {
 		this.doj = doj;
 	}
 
@@ -176,6 +175,7 @@ public class User implements Serializable   {
 	public void setConfirmPassword(String confirmPassword) {
 		this.confirmPassword = confirmPassword;
 	}
+
 	public String getNewPassword() {
 		return newPassword;
 	}
@@ -191,5 +191,5 @@ public class User implements Serializable   {
 	public void setMailFlag(String mailFlag) {
 		this.mailFlag = mailFlag;
 	}
-	
+
 }
