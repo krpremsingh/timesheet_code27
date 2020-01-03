@@ -66,7 +66,7 @@ public class EmployeeDao {
 	}
 	
 	public String validateEmployee(User user) throws AppException, DbException{
-		if(empValidator.validateEmployee(user).size()==0) {
+		if(empValidator.validateEmployeeBasicDetails(user).size()==0) {
 			if(checkEmployee(user)==true) {
 				insertEmployee(user);
 				return EmployeeMessageConstants.EmployeeAdded.getLabel().toString();
@@ -76,7 +76,7 @@ public class EmployeeDao {
 			}
 			
 		}
-			return empValidator.validateEmployee(user).toString(); 
+			return empValidator.validateEmployeeBasicDetails(user).toString(); 
 		
 		
 	}

@@ -155,7 +155,7 @@ public class EmployeeValidator {
 		
 	}
 
-	public Set<String> validateEmployee(User user) throws AppException, DbException {
+	public Set<String> validateEmployeeBasicDetails(User user) throws AppException, DbException {
 		errorMsg.clear();
 		if (Util.isEmptyOrNull(user.getEmpCode())) {
 			errorMsg.add(EmployeeMessageConstants.BlankEmpCode.getLabel().toString());
@@ -195,30 +195,51 @@ public class EmployeeValidator {
 		if (!Util.isValidDate(user.getDoj().toString())) {
 			errorMsg.add(EmployeeMessageConstants.InvalidDateFormat.getLabel().toString());
 			return errorMsg;
+		
 		}
-		for (EmployeeAddressInfo addressInfo : user.getAddressInfo()) {
 
-			if (Util.isEmptyOrNull(addressInfo.getAddressType())) {
-				errorMsg.add(EmployeeMessageConstants.BlankAddressType.getLabel().toString());
-				return errorMsg;
-			}
-			if (Util.isEmptyOrNull(addressInfo.getCity())) {
-				errorMsg.add(EmployeeMessageConstants.BlankCity.getLabel().toString());
-				return errorMsg;
-			}
-			if (Util.isEmptyOrNull(addressInfo.getCountry())) {
-				errorMsg.add(EmployeeMessageConstants.BlankCountry.getLabel().toString());
-				return errorMsg;
-			}
-			if (Util.isEmptyOrNull(addressInfo.getState())) {
-				errorMsg.add(EmployeeMessageConstants.BlankState.getLabel().toString());
-				return errorMsg;
-			}
-			if (Util.isEmptyOrNull(addressInfo.getStreet1()) || Util.isEmptyOrNull(addressInfo.getStreet2())) {
-				errorMsg.add(EmployeeMessageConstants.BlankStreet.getLabel().toString());
-				return errorMsg;
-			}
+
+		/*
+		 * else {
+		 * 
+		 * if(checkEmployee==false) {
+		 * errorMsg.add(EmployeeMessageConstants.EmployeeAlreadyExist.getLabel().
+		 * toString()); return errorMsg; } if(checkEmployee==true) {
+		 * dao.insertEmployee(user); }
+		 * errorMsg.add(EmployeeMessageConstants.EmployeeAdded.getLabel().toString()); }
+		 */
+		return errorMsg;
+
+	}
+	
+	public Set<String> validateEmployeeAddress(User user)throws AppException, DbException {	
+	for (EmployeeAddressInfo addressInfo : user.getAddressInfo()) {
+
+		if (Util.isEmptyOrNull(addressInfo.getAddressType())) {
+			errorMsg.add(EmployeeMessageConstants.BlankAddressType.getLabel().toString());
+			return errorMsg;
 		}
+		if (Util.isEmptyOrNull(addressInfo.getCity())) {
+			errorMsg.add(EmployeeMessageConstants.BlankCity.getLabel().toString());
+			return errorMsg;
+		}
+		if (Util.isEmptyOrNull(addressInfo.getCountry())) {
+			errorMsg.add(EmployeeMessageConstants.BlankCountry.getLabel().toString());
+			return errorMsg;
+		}
+		if (Util.isEmptyOrNull(addressInfo.getState())) {
+			errorMsg.add(EmployeeMessageConstants.BlankState.getLabel().toString());
+			return errorMsg;
+		}
+		if (Util.isEmptyOrNull(addressInfo.getStreet1()) || Util.isEmptyOrNull(addressInfo.getStreet2())) {
+			errorMsg.add(EmployeeMessageConstants.BlankStreet.getLabel().toString());
+			return errorMsg;
+		}
+	}
+	return errorMsg;
+
+}
+	public Set<String> validateEmployeePhone(User user){
 		for (EmployeePhoneInfo phoneInfo : user.getPhoneInfo()) {
 			if (Util.isEmptyOrNull(phoneInfo.getPhoneNumber())) {
 				errorMsg.add(EmployeeMessageConstants.BlankPhoneNumber.getLabel().toString());
@@ -229,6 +250,12 @@ public class EmployeeValidator {
 				return errorMsg;
 			}
 		}
+		return errorMsg;
+		
+	}
+	
+	public Set<String> validateEmployeeProjects(User user){
+
 		for (EmployeeProjectInfo projectInfo : user.getProjectInfo()) {
 			if (Util.isEmptyOrNull(projectInfo.getStartDate())) {
 				errorMsg.add(EmployeeMessageConstants.BlankStartDate.getLabel().toString());
@@ -252,18 +279,7 @@ public class EmployeeValidator {
 				return errorMsg;
 			}
 		}
-
-		/*
-		 * else {
-		 * 
-		 * if(checkEmployee==false) {
-		 * errorMsg.add(EmployeeMessageConstants.EmployeeAlreadyExist.getLabel().
-		 * toString()); return errorMsg; } if(checkEmployee==true) {
-		 * dao.insertEmployee(user); }
-		 * errorMsg.add(EmployeeMessageConstants.EmployeeAdded.getLabel().toString()); }
-		 */
 		return errorMsg;
-
+		
 	}
-
 }

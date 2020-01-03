@@ -104,7 +104,7 @@ public class EmployeeController {
 		
 	}
 	
-	   @PutMapping(path="/updateEmployee/{empId}")
+	@PutMapping(path="/updateEmployee/{empId}")
 	public ResponseEntity<String> updateEmployee(@RequestBody User user,@PathVariable("empId") int empId){
 		try {
 			return new ResponseEntity<String>(employeeservice.updateEmployee(user).toString(), HttpStatus.OK);
