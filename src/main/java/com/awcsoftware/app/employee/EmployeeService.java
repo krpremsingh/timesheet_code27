@@ -193,15 +193,11 @@ public class EmployeeService {
 		return result.toString();
 
 	}
-	
+
 	public String updateEmployee(User user) throws AppException, DbException {
-		if(employeevalidator.validateEmployee(user).size()==0) {
-			empDao.updateEmployee(user);
-			return EmployeeMessageConstants.EmployeeUpdated.getLabel().toString();
-		}
-		return employeevalidator.validateEmployee(user).toString();
-		
-		
+		empDao.updateEmployee(user);
+		return EmployeeMessageConstants.EmployeeUpdated.getLabel().toString();
+
 	}
 
 }
