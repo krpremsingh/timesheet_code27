@@ -8,9 +8,10 @@
 			Start Of Defining Result Map 
 		********************************************** 
 -->
-	<resultMap
-		type="User" id="User">
+	<resultMap type="User" id="User">
+	<id column="empId" property="empId" jdbcType="INTEGER" />
      </resultMap>
+     
     <select id="getUser" parameterType="string" resultType="User">
 		select
 		e.empId,e.firstName,e.email,e.password,e.designationId,e.empCode,e.firstLoginStatus
@@ -78,10 +79,6 @@ select * from LoginTransaction lt inner join EmployeeInfo e on e.empId=lt.empId 
 insert into LoginTransaction values(#{empId},#{loginTimestamp},#{lastPasswordChange},#{passwordExpiryDate},#{activityStatus},#{statusReason});
 </insert>
 
-<select id="getemaillist" resultType="User">
-select e.email,e.mailFlag,e.empId,e.password from EmployeeInfo e where e.mailFlag='NO';
-</select>
-
 <update id="updateMailFlag" parameterType="MailPojo">
 update EmployeeInfo set mailFlag='YES' where mailFlag='NO' and
 	email in( 	
@@ -92,12 +89,39 @@ update EmployeeInfo set mailFlag='YES' where mailFlag='NO' and
 </update>
 
 <insert id="insertEmployee" parameterType="User" keyProperty="empId" useGeneratedKeys="true">
-insert into EmployeeInfo(empCode,firstName,middleName,lastName,email,dob,doj,password,designationId,status,addedOn,lastModifiedOn,firstLoginStatus,mailFlag) values(#{empCode},#{firstName},#{middleName},#{lastName},#{email},#{dob},#{doj},#{password},#{designationId},#{status},now(),#{lastModifiedOn},0,'NO');
+insert into EmployeeInfo(empCode,firstName,middleName,lastName,email,dob,doj,
+password,designationId,status,addedOn,lastModifiedOn,firstLoginStatus,mailFlag) 
+values(#{empCode},#{firstName},#{middleName},#{lastName},#{email},
+#{dob},#{doj},#{password},#{designationId},#{status},now(),#{lastModifiedOn},0,'NO');
+</insert>
+
+<insert id="addEmployeeAddress" parameterType="EmployeeAddressInfo" keyProperty="addressId" useGeneratedKeys="true">
+insert into AddressInfo (empId,addressType,street1,street2,landmark,city,
+	state,country,zipcode,status,addedOn) 
+values (#{empId},#{addressType},#{street1},
+		#{street2},#{landmark},
+		#{city},#{state},#{country},
+		#{zipcode},#{status},now());
+</insert>
+
+<insert id="addEmployeePhone" parameterType="EmployeePhoneInfo" keyProperty="phoneNumberId" useGeneratedKeys="true">
+insert into PhoneNumberInfo(empId,phoneNumberType,phoneNumber,status,addedOn) 
+values(#{empId},#{phoneNumberType},#{phoneNumber},#{status},now()) ;
+</insert>
+
+<insert id="addEmployeeProjects" parameterType="EmployeeProjectInfo" keyProperty="pdId" useGeneratedKeys="true">
+insert into ProjectTeamDetails(pId,empId,role,workingLocation,startDate,endDate,status,addedOn) 
+values(#{pId},#{empId},#{role},#{workingLocation},#{startDate},#{endDate},#{status},now());
 </insert>
 
 <select id="checkEmployee" resultType="int" parameterType="User">
  select count(*) from EmployeeInfo where empCode=#{empCode} or email=#{email};
 </select>
+
+<update id="updateEmployee" parameterType="User">
+update EmployeeInfo set empCode=#{empCode},email=#{email},firstName=#{firstName},middleName=#{middleName},lastName=#{lastName},designationId=#{designationId},
+status=#{status} where empId=#{empId};
+</update>
 
 <!--
 <update id="updateFirstLogin" parameterType="EmployeeLoginTransaction">

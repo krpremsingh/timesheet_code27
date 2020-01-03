@@ -19,9 +19,7 @@ import com.awcsoftware.spring.security.auth.user.Role;
 import com.awcsoftware.spring.security.auth.user.UserDao;
 
 public class UserAuthenticationDetail extends UsernamePasswordAuthenticationToken implements UserDetails {
-	/*
-	 * @Autowired EmployeeDao employeedao;
-	 */
+
 
 	@Autowired
 	EmployeeLoginTransaction logintransaction;

@@ -1,6 +1,8 @@
 package com.awcsoftware.app.employee;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -97,27 +99,23 @@ public class EmployeeValidator {
 		}
 		return errorMsg;
 	}
-/*
-	public Set<String> verifyEmail(String email) {
-		errorMsg.clear();
-		EmployeeDao dao = new EmployeeDao();
-		String emailId = dao.verifyEmailId(email);
-		if (Util.isEmptyOrNull(emailId) || !Util.validateEmail.test(email)) {
-			logger.debug("email id not found");
-			return null;
-		}
-		if (Util.isEmptyOrNull(emailId) || !Util.validateEmail.test(email)) {
-			errorMsg.add(EmployeeMessageConstants.WrongEmailId.getLabel());
-		}
-		return errorMsg;
-
-	}*/
+	/*
+	 * public Set<String> verifyEmail(String email) { errorMsg.clear(); EmployeeDao
+	 * dao = new EmployeeDao(); String emailId = dao.verifyEmailId(email); if
+	 * (Util.isEmptyOrNull(emailId) || !Util.validateEmail.test(email)) {
+	 * logger.debug("email id not found"); return null; } if
+	 * (Util.isEmptyOrNull(emailId) || !Util.validateEmail.test(email)) {
+	 * errorMsg.add(EmployeeMessageConstants.WrongEmailId.getLabel()); } return
+	 * errorMsg;
+	 * 
+	 * }
+	 */
 
 	public Set<String> verifyEmailId(String email) throws AppException, DbException {
 		errorMsg.clear();
 		UserDao dao = new UserDao();
 		logger.debug(dao.getUser(email));
-		if (Util.isEmptyOrNull(email) || !Util.validateEmail.test(email)||Util.isEmptyOrNull(dao.getUser(email))) {
+		if (Util.isEmptyOrNull(email) || !Util.validateEmail.test(email) || Util.isEmptyOrNull(dao.getUser(email))) {
 			errorMsg.add(EmployeeMessageConstants.WrongEmailId.getLabel());
 		}
 		return errorMsg;
@@ -150,63 +148,122 @@ public class EmployeeValidator {
 		return errorMsg;
 	}
 	
-	public Set<String> validateEmployee(User user) throws AppException, DbException{
+	public LocalDate dateFormatter(String date) {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		LocalDate localDate = LocalDate.parse(date, formatter);
+		return localDate;
+		
+	}
+
+	public Set<String> validateEmployee(User user) throws AppException, DbException {
 		errorMsg.clear();
-		EmployeeDao dao = new EmployeeDao();
-		boolean checkEmployee = dao.checkEmployee(user);
-		if(Util.isEmptyOrNull(user.getEmpCode())) {
-			errorMsg.add(EmployeeMessageConstants.BlankEmpCode.getLabel().toString());	
+		if (Util.isEmptyOrNull(user.getEmpCode())) {
+			errorMsg.add(EmployeeMessageConstants.BlankEmpCode.getLabel().toString());
 			return errorMsg;
 		}
-		if(Util.isEmptyOrNull(user.getDob())) {
+		if (Util.isEmptyOrNull(user.getDob())) {
 			errorMsg.add(EmployeeMessageConstants.BlankDob.getLabel().toString());
 			return errorMsg;
 		}
-		if(Util.isEmptyOrNull(user.getDoj())) {
+		if (Util.isEmptyOrNull(user.getDoj())) {
 			errorMsg.add(EmployeeMessageConstants.BlankDoj.getLabel().toString());
 			return errorMsg;
 		}
-		if(Util.isEmptyOrNull(user.getPassword())) {
+		if (Util.isEmptyOrNull(user.getPassword())) {
 			errorMsg.add(EmployeeMessageConstants.BlankPassword.getLabel().toString());
 			return errorMsg;
 		}
 		if (validatePattern(user.getPassword()) == false) {
-			
+
 			errorMsg.add(EmployeeMessageConstants.ValidatePasswordPattern.getLabel().toString());
 			return errorMsg;
 		}
-		
-		if(!Util.validateEmail.test(user.getEmail())) {
-			errorMsg.add(EmployeeMessageConstants.ValidateEmail.getLabel().toString());	
+
+		if (!Util.validateEmail.test(user.getEmail())) {
+			errorMsg.add(EmployeeMessageConstants.ValidateEmail.getLabel().toString());
 			return errorMsg;
 		}
-		
-		if(Util.isEmptyOrNull(user.getEmail())) {
+
+		if (Util.isEmptyOrNull(user.getEmail())) {
 			errorMsg.add(EmployeeMessageConstants.BlankEmail.getLabel().toString());
 			return errorMsg;
 		}
-		if(!Util.isValidDate(user.getDob().toString())) {
+		if (!Util.isValidDate(user.getDob().toString())) {
 			errorMsg.add(EmployeeMessageConstants.InvalidDateFormat.getLabel().toString());
 			return errorMsg;
 		}
-		if(!Util.isValidDate(user.getDoj().toString())) {
+		if (!Util.isValidDate(user.getDoj().toString())) {
 			errorMsg.add(EmployeeMessageConstants.InvalidDateFormat.getLabel().toString());
 			return errorMsg;
 		}
-		
-		else {
-		
-			if(checkEmployee==false) {
-				errorMsg.add(EmployeeMessageConstants.EmployeeAlreadyExist.getLabel().toString());
+		for (EmployeeAddressInfo addressInfo : user.getAddressInfo()) {
+
+			if (Util.isEmptyOrNull(addressInfo.getAddressType())) {
+				errorMsg.add(EmployeeMessageConstants.BlankAddressType.getLabel().toString());
 				return errorMsg;
 			}
-			if(checkEmployee==true) {
-				dao.insertEmployee(user);
-				  }
-			errorMsg.add(EmployeeMessageConstants.EmployeeAdded.getLabel().toString());
-		}	
+			if (Util.isEmptyOrNull(addressInfo.getCity())) {
+				errorMsg.add(EmployeeMessageConstants.BlankCity.getLabel().toString());
+				return errorMsg;
+			}
+			if (Util.isEmptyOrNull(addressInfo.getCountry())) {
+				errorMsg.add(EmployeeMessageConstants.BlankCountry.getLabel().toString());
+				return errorMsg;
+			}
+			if (Util.isEmptyOrNull(addressInfo.getState())) {
+				errorMsg.add(EmployeeMessageConstants.BlankState.getLabel().toString());
+				return errorMsg;
+			}
+			if (Util.isEmptyOrNull(addressInfo.getStreet1()) || Util.isEmptyOrNull(addressInfo.getStreet2())) {
+				errorMsg.add(EmployeeMessageConstants.BlankStreet.getLabel().toString());
+				return errorMsg;
+			}
+		}
+		for (EmployeePhoneInfo phoneInfo : user.getPhoneInfo()) {
+			if (Util.isEmptyOrNull(phoneInfo.getPhoneNumber())) {
+				errorMsg.add(EmployeeMessageConstants.BlankPhoneNumber.getLabel().toString());
+				return errorMsg;
+			}
+			if (Util.isEmptyOrNull(phoneInfo.getPhoneNumberType())) {
+				errorMsg.add(EmployeeMessageConstants.BlankPhoneType.getLabel().toString());
+				return errorMsg;
+			}
+		}
+		for (EmployeeProjectInfo projectInfo : user.getProjectInfo()) {
+			if (Util.isEmptyOrNull(projectInfo.getStartDate())) {
+				errorMsg.add(EmployeeMessageConstants.BlankStartDate.getLabel().toString());
+				return errorMsg;
+			}
+			if (Util.isEmptyOrNull(projectInfo.getEndDate())) {
+				errorMsg.add(EmployeeMessageConstants.BlankEndDate.getLabel().toString());
+				return errorMsg;
+			}
+			if(dateFormatter(projectInfo.getEndDate()).isBefore(dateFormatter(projectInfo.getStartDate()))) {
+				errorMsg.add(EmployeeMessageConstants.StartDateEndDateRange.getLabel().toString());
+				return errorMsg;
+			}
+			
+			if (Util.isEmptyOrNull(projectInfo.getWorkingLocation())) {
+				errorMsg.add(EmployeeMessageConstants.BlankWorkLocation.getLabel().toString());
+				return errorMsg;
+			}
+			if (Util.isEmptyOrNull(projectInfo.getStatus())) {
+				errorMsg.add(EmployeeMessageConstants.BlankProjectStatus.getLabel().toString());
+				return errorMsg;
+			}
+		}
+
+		/*
+		 * else {
+		 * 
+		 * if(checkEmployee==false) {
+		 * errorMsg.add(EmployeeMessageConstants.EmployeeAlreadyExist.getLabel().
+		 * toString()); return errorMsg; } if(checkEmployee==true) {
+		 * dao.insertEmployee(user); }
+		 * errorMsg.add(EmployeeMessageConstants.EmployeeAdded.getLabel().toString()); }
+		 */
 		return errorMsg;
-		
+
 	}
 
 }

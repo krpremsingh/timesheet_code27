@@ -8,10 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -96,6 +96,18 @@ public class EmployeeController {
 	public ResponseEntity<String> insertEmployee(@RequestBody User user){
 		try {
 			return new ResponseEntity<String>(employeeservice.insertEmployee(user).toString(), HttpStatus.OK);
+		} catch (AppException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		} catch (DbException e) {
+			return new ResponseEntity<String>("Db error", HttpStatus.INTERNAL_SERVER_ERROR);	
+	}
+		
+	}
+	
+	   @PutMapping(path="/updateEmployee/{empId}")
+	public ResponseEntity<String> updateEmployee(@RequestBody User user,@PathVariable("empId") int empId){
+		try {
+			return new ResponseEntity<String>(employeeservice.updateEmployee(user).toString(), HttpStatus.OK);
 		} catch (AppException e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		} catch (DbException e) {

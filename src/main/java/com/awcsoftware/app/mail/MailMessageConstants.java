@@ -4,7 +4,7 @@ public enum MailMessageConstants {
 	ChangePasswordSubject("Change Password Request"), 
 	SendEmail("Email send successfully"),
 	PasswordChanged("Password changed"),
-	ForgotPasswordUriPath("/timesheetfrontend/confirm-reset.html"),
+	ForgotPasswordUriPath("/timesheetfrontend/reset-password.html"),
 	InvalidEmail("Email id does not exist"),
 	WelcomeEmailSubject("Welcome to AWC Timesheet"),
 	WelcomeEmailContent("<html>\r\n" + 
@@ -25,13 +25,13 @@ public enum MailMessageConstants {
 			"						<h5 style=\"font-size:18px; color: #343434; text-align:center;font-family: calibri;\">You have successfully registered in AWC Timesheet</h5>\r\n" + 
 			"						<p style=\" font-size:14px; color: #343434; text-align:center;font-family: calibri;\">Click on the button to login using the credentials below</p>\r\n" + 
 			"						<p style=\" font-size:14px; color: #343434; text-align:center;font-family: calibri;\">Email : <strong>user_email</strong></p>\r\n" + 
-			"						<p style=\" font-size:14px; color: #343434; text-align:center;font-family: calibri;\"> Password : <strong>user_password</strong></p>				\r\n" + 
+			"						<p style=\" font-size:14px; color: #343434; text-align:center;font-family: calibri;\">Password : <strong>user_password</strong></p>\r\n" + 
 			"					</td>\r\n" + 
 			"				</tr>\r\n" + 
 			"				<tr style=\"height: 47px;\"><td style=\"background-color: #F6F9FC; \"></td></tr>\r\n" + 
 			"				<tr>\r\n" + 
 			"					<td align=\"center\" style=\"background-color: #F6F9FC; \">\r\n" + 
-			"						<a href=\"http://192.168.1.32:8080/timesheetfrontend/log-in.html\"> <img src=\"https://i.ibb.co/KjWS6NF/login-now-btn.png\"></a>\r\n" + 
+			"						<a href=\"http://127.0.0.1:8080/timesheetfrontend/log-in.html\"> <img src=\"https://i.ibb.co/KjWS6NF/login-now-btn.png\"></a>\r\n" + 
 			"					</td>\r\n" + 
 			"				</tr>\r\n" + 
 			"				<tr style=\"height: 60px;\"><td style=\"border-bottom-left-radius: 5px;border-bottom-right-radius: 5px;background-color: #F6F9FC; \"></td></tr>\r\n" + 

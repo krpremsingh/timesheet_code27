@@ -3,7 +3,6 @@ package com.awcsoftware.spring.security;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.FilterType;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -11,7 +10,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.awcsoftware.app.scheduler.EmailNotificationScheduler;
 import com.awcsoftware.spring.security.auth.LoginFilter;
 import com.awcsoftware.spring.security.auth.LogoutFilter;
 import com.awcsoftware.spring.security.auth.TokenFilter;
@@ -19,7 +17,7 @@ import com.awcsoftware.spring.security.auth.user.AccessDeniedHandler;
 
 @Configuration
 @EnableWebSecurity
-@ComponentScan(basePackages = "com.awcsoftware",excludeFilters= {@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE,classes= {EmailNotificationScheduler.class})})
+@ComponentScan(basePackages = "com.awcsoftware")
 @EnableGlobalMethodSecurity(prePostEnabled = true, proxyTargetClass = true)
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -85,10 +83,11 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.csrf().disable()
+		         http.csrf().disable()
 		        .addFilterBefore(getLoginFilter(), UsernamePasswordAuthenticationFilter.class)
 				.addFilterBefore(getLogoutFilter(), UsernamePasswordAuthenticationFilter.class)
-				.addFilterBefore(getTokenFilter(), UsernamePasswordAuthenticationFilter.class).sessionManagement()
+				.addFilterBefore(getTokenFilter(), UsernamePasswordAuthenticationFilter.class)
+				.sessionManagement()
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 				.and()
 				.authorizeRequests()

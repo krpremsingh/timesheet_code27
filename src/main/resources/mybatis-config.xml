@@ -46,7 +46,14 @@
 		<typeAlias alias="TimecardProjectWorkDetails"
 			type="com.awcsoftware.app.timesheet.TimecardProjectWorkDetails" />
 			
-	
+		<typeAlias  alias="EmployeeAddressInfo" 
+		type="com.awcsoftware.app.employee.EmployeeAddressInfo"/>
+		
+		<typeAlias alias="EmployeePhoneInfo" 
+		type="com.awcsoftware.app.employee.EmployeePhoneInfo"/>
+		
+		<typeAlias alias ="EmployeeProjectInfo" 
+		type="com.awcsoftware.app.employee.EmployeeProjectInfo"/>
 
 		<!-- End of Mapping classes with Timesheet package -->
 

@@ -2,8 +2,13 @@ package com.awcsoftware.spring.security.auth.user;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.apache.log4j.Logger;
+
+import com.awcsoftware.app.employee.EmployeeAddressInfo;
+import com.awcsoftware.app.employee.EmployeePhoneInfo;
+import com.awcsoftware.app.employee.EmployeeProjectInfo;
 
 public class User implements Serializable {
 
@@ -47,6 +52,13 @@ public class User implements Serializable {
 	private int designationId;
 
 	private String mailFlag;
+	
+	private List<EmployeeAddressInfo> addressInfo;
+	
+	private List<EmployeePhoneInfo> phoneInfo;
+	
+	private List<EmployeeProjectInfo> projectInfo;
+	
 
 	public int getEmpId() {
 		return empId;
@@ -191,5 +203,33 @@ public class User implements Serializable {
 	public void setMailFlag(String mailFlag) {
 		this.mailFlag = mailFlag;
 	}
+
+	public List<EmployeeAddressInfo> getAddressInfo() {
+		return addressInfo;
+	}
+
+	public void setAddressInfo(List<EmployeeAddressInfo> addressInfo) {
+		this.addressInfo = addressInfo;
+	}
+
+	public List<EmployeePhoneInfo> getPhoneInfo() {
+		return phoneInfo;
+	}
+
+	public void setPhoneInfo(List<EmployeePhoneInfo> phoneInfo) {
+		this.phoneInfo = phoneInfo;
+	}
+
+	public List<EmployeeProjectInfo> getProjectInfo() {
+		return projectInfo;
+	}
+
+	public void setProjectInfo(List<EmployeeProjectInfo> projectInfo) {
+		this.projectInfo = projectInfo;
+	}
+
+
+
+	
 
 }
