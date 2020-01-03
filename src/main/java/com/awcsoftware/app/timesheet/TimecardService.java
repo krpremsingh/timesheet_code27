@@ -112,8 +112,20 @@ public class TimecardService {
 	}
 
 	public List<TimecardInfo> getTimecardViewForEmployee(TimecardInfo timecardInfoParam) throws DbException, AppException {
-		TimecardDao dao = new TimecardDao();
-		return (List<TimecardInfo>) dao.getTimecardViewForEmployee(timecardInfoParam);
+		TimecardValidator validator = new TimecardValidator();
+		Set<String> validatorResult = validator.validateTimeCardEmployeeView(timecardInfoParam);
+		if(validatorResult.size()==0)
+		{
+			TimecardDao dao = new TimecardDao();
+			return (List<TimecardInfo>) dao.getTimecardViewForEmployee(timecardInfoParam);
+		}
+		else
+		{
+			List<TimecardInfo> timecardReturn = new ArrayList<TimecardInfo>();
+			timecardInfoParam.setSearchStatus(validatorResult.toString());
+			timecardReturn.add(timecardInfoParam);
+			return timecardReturn;
+		}
 	}
 
 	/*		************************************************************************
@@ -127,8 +139,20 @@ public class TimecardService {
 	 */
 
 	public List<TimecardInfo> getTimecardViewForManager(TimecardInfo timecardInfoParam) throws DbException, AppException {
-		TimecardDao dao = new TimecardDao();
-		return (List<TimecardInfo>) dao.getTimecardViewForManager(timecardInfoParam);
+		TimecardValidator validator = new TimecardValidator();
+		Set<String> validatorResult = validator.validateTimeCardEmployeeView(timecardInfoParam);
+		if(validatorResult.size()==0)
+		{
+			TimecardDao dao = new TimecardDao();
+			return (List<TimecardInfo>) dao.getTimecardViewForManager(timecardInfoParam);
+		}
+		else
+		{
+			List<TimecardInfo> timecardReturn = new ArrayList<TimecardInfo>();
+			timecardInfoParam.setSearchStatus(validatorResult.toString());
+			timecardReturn.add(timecardInfoParam);
+			return timecardReturn;			
+		}
 	}
 
 	/*
@@ -138,25 +162,30 @@ public class TimecardService {
 	 *  user to add new record  or update the existing timecard details 
 	 * 
 	 */
-/*
-	public String approveTimecardByManager(TimecardProjectWorkDetails timecardProjectWorkDetailsParam) throws DbException, AppException, ParseException {
+
+	public String approveTimecardByManager(List<TimecardInfo> timecardInfoParam) throws DbException, AppException, ParseException {
 		TimecardValidator validator = new TimecardValidator();
-		Set<String> validatorResult = validator.validateTimecardApprovalData(timecardProjectWorkDetailsParam);
+		Set<String> validatorResult = validator.validateTimecardApprovalData(timecardInfoParam);
 		if (validatorResult.size() == AppConstant.WORKING_HOURS.Zero.getValue()) {
-			TimecardDao dao = new TimecardDao();
-			timecardProjectWorkDetailsParam.setStatus(AppConstant.TIME_CARD_STATUS.Draft.toString());
-			return dao.saveTimecard(timecardProjectWorkDetailsParam);
+			TimecardDao dao = new TimecardDao();			
+			return dao.approveTimecardByManager(timecardInfoParam);
 		} else
 			return validatorResult.toString();
 	}
-*/
-/*	public List<TimecardDayDetails> getWeekTimecard(TimecardInfo timecardInfo) throws AppException, DbException {
-		TimecardDao dao = new TimecardDao();
-		List<TimecardDayDetails> weekTimecard = dao.getWeekTimecard(timecardInfo);
-		if(weekTimecard!=null) {
-			return weekTimecard;
-		}
-		return null;
-		
-	}*/
+
+	/*
+	 *  This function is called when manager will reject employees timesheet information. 
+	 * 
+	 */
+
+	public String rejectTimecardByManager(List<TimecardInfo> timecardInfoParam) throws DbException, AppException, ParseException {
+		TimecardValidator validator = new TimecardValidator();
+		Set<String> validatorResult = validator.validateTimecardRejectData(timecardInfoParam);
+		if (validatorResult.size() == AppConstant.WORKING_HOURS.Zero.getValue()) {
+			TimecardDao dao = new TimecardDao();			
+			return dao.approveTimecardByManager(timecardInfoParam);
+		} else
+			return validatorResult.toString();
+	}
+
 }

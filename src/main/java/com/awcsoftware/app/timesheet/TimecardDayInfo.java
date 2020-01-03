@@ -19,6 +19,7 @@ public class TimecardDayInfo implements Serializable {
 	private String projectGroup;
 
 	private List<TimecardDayDetails> timecardDayDetails;
+	private String timeRemainToApprove;
 
 
 	public int getTcdId() {
@@ -101,6 +102,15 @@ public class TimecardDayInfo implements Serializable {
 
 	public void setProjectGroup(String projectGroup) {
 		this.projectGroup = projectGroup;
+	}
+
+
+	public String getTimeRemainToApprove() {
+		return timeRemainToApprove;
+	}
+
+	public void setTimeRemainToApprove(String timeRemainToApprove) {
+		this.timeRemainToApprove = timeRemainToApprove;
 	}
 
 	@Override

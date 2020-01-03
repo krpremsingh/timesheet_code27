@@ -9,12 +9,12 @@
 	<name>timesheet Maven Webapp</name>
 	<url>http://maven.apache.org</url>
 	<dependencies>
-		<dependency>
+<!-- 		<dependency>
 			<groupId>com.awc</groupId>
 			<artifactId>ExcelDataImport</artifactId>
 			<version>0.0.0.1</version>
 		</dependency>
-		<dependency>
+ -->		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>3.8.1</version>

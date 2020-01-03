@@ -169,30 +169,31 @@ public class TimecardController {
 		}
 	}
 
-/*	@RequestMapping(value = "/tc-Approve", method = RequestMethod.POST, headers = "Accept=application/json")
-	public ResponseEntity<String> approveTimecardByManager(@RequestBody TimecardProjectWorkDetails timecardProjectWorkDetailsParam) {
+	@RequestMapping(value = "/tc-Approve", method = RequestMethod.POST, headers = "Accept=application/json")
+	public ResponseEntity<String> approveTimecardByManager(@RequestBody List<TimecardInfo> timecardInfoParam) {
 		service = new TimecardService();
 		String timecardSaveResult = "";
 		try {
-			timecardSaveResult = service.approveTimecardByManager(timecardProjectWorkDetailsParam);
+			timecardSaveResult = service.approveTimecardByManager(timecardInfoParam);
 			return new ResponseEntity<String>(timecardSaveResult, HttpStatus.OK);
 		} catch (DbException | AppException | ParseException e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
+
 	@RequestMapping(value = "/tc-Reject", method = RequestMethod.POST, headers = "Accept=application/json")
-	public ResponseEntity<String> rejectTimecardByManager(@RequestBody TimecardProjectWorkDetails timecardProjectWorkDetailsParam) {
+	public ResponseEntity<String> rejectTimecardByManager(@RequestBody List<TimecardInfo> timecardInfoParam) {
 		service = new TimecardService();
 		String timecardSaveResult = "";
 		try {
-			timecardSaveResult = service.rejectTimecardByManager(timecardProjectWorkDetailsParam);
+			timecardSaveResult = service.rejectTimecardByManager(timecardInfoParam);
 			return new ResponseEntity<String>(timecardSaveResult, HttpStatus.OK);
 		} catch (DbException | AppException | ParseException e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-*/
+
 /*	@RequestMapping(value="/getWeekTimecard" ,method=RequestMethod.POST)
 	public ResponseEntity<List<TimecardDayDetails>> getWeekTimecard(@RequestBody TimecardInfo timecardInfo){
 		service=new TimecardService();

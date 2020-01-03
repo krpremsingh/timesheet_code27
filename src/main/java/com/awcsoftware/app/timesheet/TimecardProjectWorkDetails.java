@@ -9,13 +9,16 @@ import java.util.List;
 public class TimecardProjectWorkDetails implements Serializable {
 	
 	private int tcId;
+	private int empId;
 	private String projectId;
 	private String projectName;
 	private String totalProjectWorkHour;
-	private String approverComment;
+	private String approverName;
+	private String approverComment;	
 	private String status;
-	private List<TimecardDetailSearch> projectTimecard;
-
+	private List<TimecardDayDetails> projectTimecard;
+//	private List<TimecardDetailSearch> projectTimecard;
+	
 	public int getTcId() {
 		return tcId;
 	}
@@ -40,10 +43,10 @@ public class TimecardProjectWorkDetails implements Serializable {
 	public void setTotalProjectWorkHour(String totalProjectWorkHour) {
 		this.totalProjectWorkHour = totalProjectWorkHour;
 	}
-	public List<TimecardDetailSearch> getProjectTimecard() {
+	public List<TimecardDayDetails> getProjectTimecard() {
 		return projectTimecard;
 	}
-	public void setProjectTimecard(List<TimecardDetailSearch> projectTimecard) {
+	public void setProjectTimecard(List<TimecardDayDetails> projectTimecard) {
 		this.projectTimecard = projectTimecard;
 	}
 	public String getApproverComment() {
@@ -58,9 +61,27 @@ public class TimecardProjectWorkDetails implements Serializable {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	
+	public int getEmpId() {
+		return empId;
+	}
+	public void setEmpId(int empId) {
+		this.empId = empId;
+	}
+	public String getApproverName() {
+		return approverName;
+	}
+	public void setApproverName(String approverName) {
+		this.approverName = approverName;
+	}
+
 	
 
+//	public List<TimecardDayDetails> getProjectTimecardDetails() {
+//		return projectTimecardDetails;
+//	}
+//	public void setProjectTimecardDetails(List<TimecardDayDetails> projectTimecardDetails) {
+//		this.projectTimecardDetails = projectTimecardDetails;
+//	}	
 
 	
 }
