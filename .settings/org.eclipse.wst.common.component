@@ -5,9 +5,6 @@
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/target/generated-sources/annotations"/>
-        <dependent-module archiveName="ExcelDataImport-0.0.0.1.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/ExcelDataImport/ExcelDataImport">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
         <property name="context-root" value="timesheet"/>
         <property name="java-output-path" value="/timesheet/target/classes"/>
     </wb-module>

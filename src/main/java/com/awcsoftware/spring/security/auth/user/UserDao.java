@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 import com.awcsoftware.mybatis.MyBatisManager;
 
-@Component("userDao")
+@Component
 public class UserDao {
 	static Logger logger = Logger.getLogger(UserDao.class.getName());
 

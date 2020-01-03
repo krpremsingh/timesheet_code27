@@ -188,10 +188,20 @@ public class EmployeeService {
 	}
 
 	public String insertEmployee(User user) throws AppException, DbException {
-		Set<String> result = null;
-		result = employeevalidator.validateEmployee(user);
+		String result = null;
+		result = empDao.validateEmployee(user);
 		return result.toString();
 
+	}
+	
+	public String updateEmployee(User user) throws AppException, DbException {
+		if(employeevalidator.validateEmployee(user).size()==0) {
+			empDao.updateEmployee(user);
+			return EmployeeMessageConstants.EmployeeUpdated.getLabel().toString();
+		}
+		return employeevalidator.validateEmployee(user).toString();
+		
+		
 	}
 
 }

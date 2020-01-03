@@ -47,7 +47,7 @@ public class Mail {
 			forgotPasswordMailContent=forgotPasswordMailContent.replace("user_link", uriComponents.toUriString());
 		}*/
 		 uriComponents = UriComponentsBuilder.newInstance().scheme(request.getScheme()).host(request.getServerName())
-					.port(request.getServerPort()).path(MailMessageConstants.ForgotPasswordUriPath.getLabel().toString()).queryParam("token", confirmationToken.getToken()).build();
+					.port(request.getServerPort()).path(MailMessageConstants.ForgotPasswordUriPath.getLabel().toString()).queryParam("token", confirmationToken.getToken()).queryParam("email", confirmationToken.getUser().getEmail()).build();
 			String forgotPasswordMailContent = MailMessageConstants.ForgotPasswordEmailContent.getLabel().toString();
 			logger.debug("forgotPasswordMailContent "+forgotPasswordMailContent);
 			if(forgotPasswordMailContent.contains("user_link")) {
@@ -79,15 +79,16 @@ public class Mail {
          BodyPart messageBodyPart = new MimeBodyPart();
         // String content = mailtemplatecontent.welcomeEmail;
          String content = MailMessageConstants.WelcomeEmailContent.getLabel().toString();
-         logger.debug(content);
 		for( User sendTo:mailpojo.getUserList()) {
 			String contentupdate=null;
 			if(content.contains("user_email")) {
-				contentupdate=content.replaceAll("user_email", sendTo.getEmail());
+				contentupdate=content.replace("user_email", sendTo.getEmail());
+				System.out.println(contentupdate);
+				 if(contentupdate.contains("user_password")) {
+					 contentupdate=contentupdate.replace("user_password", sendTo.getPassword());
+				}
 			}
-			 if(contentupdate.contains("user_password")) {
-				 contentupdate=contentupdate.replaceAll("user_password", sendTo.getPassword());
-			}
+			
 	        messageBodyPart.setContent(contentupdate, "text/html");
 	        multipart.addBodyPart(messageBodyPart); 
 	        message.setContent(multipart);

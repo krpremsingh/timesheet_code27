@@ -9,11 +9,11 @@
 	<name>timesheet Maven Webapp</name>
 	<url>http://maven.apache.org</url>
 	<dependencies>
-		<dependency>
+<!-- 		<dependency>
 			<groupId>com.awc</groupId>
 			<artifactId>ExcelDataImport</artifactId>
 			<version>0.0.0.1</version>
-		</dependency>
+		</dependency> -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -86,16 +86,16 @@
 			<version>2.8.0</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
-	<!-- 	<dependency>
+		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<version>8.0.11</version>
-		</dependency> -->
-	  <dependency>
+		</dependency>
+<!-- 	  <dependency>
 		<groupId>mysql</groupId>
 		<artifactId>mysql-connector-java</artifactId>
 		<version>5.1.6</version>
-	 </dependency>
+	 </dependency> -->
 		<dependency>
 			<groupId>org.mybatis</groupId>
 			<artifactId>mybatis</artifactId>

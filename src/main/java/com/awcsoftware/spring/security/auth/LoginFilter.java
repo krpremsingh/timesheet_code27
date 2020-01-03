@@ -32,13 +32,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class LoginFilter extends AbstractAuthenticationProcessingFilter {
 	@Autowired
 	EmployeeDao employeedao;
-	
+
 	@Autowired
 	EmployeeService employeeservice;
-	
+
 	@Autowired
 	EmployeeLoginTransaction logintransaction;
-	
+
 	static Logger log = Logger.getLogger(LoginFilter.class.getName());
 
 	public LoginFilter(String defaultProcessUrl) {
@@ -54,9 +54,9 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
 		LoginRequest loginRequest = oMapper.readValue(request.getReader(), LoginRequest.class);
 		log.debug("credential " + loginRequest.getEmail());
 		log.debug("credential " + loginRequest.getPassword());
-		
+
 		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(loginRequest.getEmail(),
-				loginRequest.getPassword(),Collections.emptyList());
+				loginRequest.getPassword(), Collections.emptyList());
 		return authenticate(token);
 	}
 
@@ -64,7 +64,7 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
 		log.debug("LoginFilter - authenticate");
 		String username = auth.getName();
 		String password = auth.getCredentials().toString();
-        
+
 		log.debug("LoginFilter " + username);
 		log.debug("LoginFilter " + password);
 
@@ -80,17 +80,17 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
 			log.debug("User Found " + uSrv.isExists(username));
 
 			if (user.getEmail().equals(username) && user.getPassword().equals(password)) {
-				 
+
 				UserAuthenticationDetail authDetail = new UserAuthenticationDetail(username, password);
-				logintransaction= new EmployeeLoginTransaction(user);
-				log.debug("auutthhddeetails  "+authDetail+" "+logintransaction);
-				
-				 if(authDetail.isCredentialsNonExpired()==false) { 
-					 employeeservice.setLoginTransactionIfFailed(logintransaction);
-					 
-					  throw new BadCredentialsException(EmployeeMessageConstants.PasswordExpired.getLabel().toString());
+				logintransaction = new EmployeeLoginTransaction(user);
+				log.debug("auutthhddeetails  " + authDetail + " " + logintransaction);
+
+				if (authDetail.isCredentialsNonExpired() == false) {
+					employeeservice.setLoginTransactionIfFailed(logintransaction);
+
+					throw new BadCredentialsException(EmployeeMessageConstants.PasswordExpired.getLabel().toString());
 				}
-				employeeservice.setLoginTransactionIfSuccess(logintransaction);   
+				employeeservice.setLoginTransactionIfSuccess(logintransaction);
 				authDetail.setRole(roles);
 				authDetail.setName(user.getFirstName());
 				authDetail.setEmpId(user.getEmpId());
@@ -98,8 +98,8 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
 				authDetail.setFirstLoginStatus(user.getFirstLoginStatus());
 				authDetail.setDesignationId(user.getDesignationId());
 				return authDetail;
-			} 
-		
+			}
+
 			else {
 				throw new BadCredentialsException(EmployeeMessageConstants.validatePassword.getLabel().toString());
 			}

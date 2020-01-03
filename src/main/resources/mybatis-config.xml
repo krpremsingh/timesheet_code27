@@ -46,7 +46,14 @@
 		<typeAlias alias="TimecardProjectWorkDetails"
 			type="com.awcsoftware.app.timesheet.TimecardProjectWorkDetails" />
 			
-	
+		<typeAlias  alias="EmployeeAddressInfo" 
+		type="com.awcsoftware.app.employee.EmployeeAddressInfo"/>
+		
+		<typeAlias alias="EmployeePhoneInfo" 
+		type="com.awcsoftware.app.employee.EmployeePhoneInfo"/>
+		
+		<typeAlias alias ="EmployeeProjectInfo" 
+		type="com.awcsoftware.app.employee.EmployeeProjectInfo"/>
 
 		<!-- End of Mapping classes with Timesheet package -->
 
@@ -55,11 +62,11 @@
 		<environment id="development">
 			<transactionManager type="JDBC" />
 			<dataSource type="POOLED">
-				<property name="driver" value="com.mysql.jdbc.Driver" />
+				<property name="driver" value="com.mysql.cj.jdbc.Driver" />
 				<property name="url"
-					value="jdbc:mysql://192.168.1.32:3306/timesheet" />
+					value="jdbc:mysql://127.0.0.1:3306/timesheet" />
 				<property name="username" value="root" />
-				<property name="password" value="My@SQL" />
+				<property name="password" value="test123" />
 			</dataSource>
 		</environment>
 	</environments>

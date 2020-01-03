@@ -67,7 +67,7 @@ public class EmailNotificationScheduler {
 	  
 	  }*/
 	 
-	@Scheduled(cron = "0 44 22 * * THU")
+	@Scheduled(cron = "0 46 12 * * MON")
 	public String sendTuesdayEmailNotofication() throws AppException, DbException, MessagingException {
 
 		ExecutorService emailExecutor = Executors.newSingleThreadExecutor();
