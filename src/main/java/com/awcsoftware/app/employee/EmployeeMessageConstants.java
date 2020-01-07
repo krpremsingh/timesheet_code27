@@ -4,6 +4,7 @@ public enum EmployeeMessageConstants {
     InvalidPassword("New & confirm password must be same"),
 	InvalidCurrentPassword("Current password is wrong"),
 	WrongEmailId("Email id does not exist"),
+	TokenMissing("Authentication Token missing"),
 	PasswordChanged("Password changed"),
 	BlankEmpCode("Employee code can't be blank"),
 	BlankFirstName("First Name can't be blank"),

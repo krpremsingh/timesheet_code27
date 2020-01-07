@@ -5,6 +5,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -24,14 +25,15 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 	public static final String CREDENTIAL_BASED_LOGIN_ENTRY_POINT = "/auth/login";
 	public static final String TOKEN_BASED_AUTH_ENTRY_POINT = "/**";
 	public static final String LOGOUT_ENTRY_POINT = "/auth/logout";
-	public static final String FORGOT_PASSWORD = "/auth/forgotPassword";
-	public static final String CONFIRM_RESET = "/auth/confirm-reset";
-	public static final String INSERT_EMPLOYEE="/auth/insertEmployee";
-	public static final String CHANGE_PASSWORD = "/auth/changePassword";
+	public static final String FORGOT_PASSWORD = "/employee/forgotPassword";
+	public static final String CONFIRM_RESET = "/employee/confirm-reset";
+	public static final String CHANGE_PASSWORD = "/employee/changePassword";
+	//public static final String WITHOUT_TOKEN_BASED_AUTH_ENTRY_POINT="/*";
 		
 	@Bean
 	protected LoginFilter getLoginFilter() throws Exception {
 		LoginFilter filter = new LoginFilter(CREDENTIAL_BASED_LOGIN_ENTRY_POINT);
+		//filter.setRequiresAuthenticationRequestMatcher(new OrRequestMatcher(new AntPathRequestMatcher("/auth/forgotPassword")));
 		filter.setAuthenticationManager(authenticationManagerBean());
 		return filter;
 	}
@@ -94,7 +96,6 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers(FORGOT_PASSWORD).permitAll()
 				.antMatchers(CONFIRM_RESET).permitAll()
 				.antMatchers(CHANGE_PASSWORD).permitAll()
-				.antMatchers(INSERT_EMPLOYEE).permitAll()
 				.and().authorizeRequests()
 				.antMatchers(CREDENTIAL_BASED_LOGIN_ENTRY_POINT).permitAll()
 				.antMatchers(LOGOUT_ENTRY_POINT)
@@ -109,4 +110,9 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 				.logoutSuccessUrl(LOGOUT_ENTRY_POINT).invalidateHttpSession(true);
 
 	}
+	
+	 @Override
+	 public void configure(final WebSecurity webSecurity) {
+	  webSecurity.ignoring().antMatchers("/employee/**");
+	 }
 }

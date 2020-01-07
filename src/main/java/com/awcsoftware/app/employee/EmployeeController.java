@@ -52,7 +52,7 @@ public class EmployeeController {
 
 	}
 
-	@RequestMapping(value = "/auth/forgotPassword", method = RequestMethod.POST, headers = "Accept=application/json")
+	@RequestMapping(value = "/employee/forgotPassword", method = RequestMethod.POST, headers = "Accept=application/json")
 	public ResponseEntity<String> forgotPassword(@RequestBody User user, HttpServletRequest request)
 			throws MessagingException {
 		try {
@@ -66,7 +66,7 @@ public class EmployeeController {
 		
 	}
 
-	@RequestMapping(value = "/auth/confirm-reset", method = RequestMethod.GET, headers = "Accept=application/json")
+	@RequestMapping(value = "/employee/confirm-reset", method = RequestMethod.GET, headers = "Accept=application/json")
 	public ResponseEntity<String> validateResetToken(@RequestParam("token") String confirmationToken) {
 		try {
 
@@ -78,7 +78,7 @@ public class EmployeeController {
 		}
 	}
 
-	@RequestMapping(value = "/auth/changePassword", method = RequestMethod.PUT, headers = "Accept=application/json")
+	@RequestMapping(value = "/employee/changePassword", method = RequestMethod.PUT, headers = "Accept=application/json")
 	public ResponseEntity<String> changePassword(@RequestBody User user) {
 		try {
 			return new ResponseEntity<String>(employeeservice.changePassword(user).toString(), HttpStatus.OK);
@@ -92,7 +92,7 @@ public class EmployeeController {
 
 	}
 	
-	@RequestMapping(value="/auth/insertEmployee",method=RequestMethod.POST)
+	@RequestMapping(value="/insertEmployee",method=RequestMethod.POST)
 	public ResponseEntity<String> insertEmployee(@RequestBody User user){
 		try {
 			return new ResponseEntity<String>(employeeservice.insertEmployee(user).toString(), HttpStatus.OK);
@@ -105,8 +105,9 @@ public class EmployeeController {
 	}
 	
 	@PutMapping(path="/updateEmployee/{empId}")
-	public ResponseEntity<String> updateEmployee(@RequestBody User user,@PathVariable("empId") int empId){
+	public ResponseEntity<String> updateEmployee(@PathVariable("empId") int empId,@RequestBody User user){
 		try {
+			user.setEmpId(empId);
 			return new ResponseEntity<String>(employeeservice.updateEmployee(user).toString(), HttpStatus.OK);
 		} catch (AppException e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);

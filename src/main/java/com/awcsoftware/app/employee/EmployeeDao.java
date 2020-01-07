@@ -30,7 +30,7 @@ public class EmployeeDao {
 
 	@Autowired
 	UserDao userdao;
-	
+
 	@Autowired
 	EmployeeValidator empValidator;
 
@@ -48,14 +48,14 @@ public class EmployeeDao {
 	public boolean insertEmployee(User user) throws AppException, DbException {
 		SqlSession session = MyBatisManager.openSession();
 		try {
-				int result = session.insert("User.insertEmployee", user);
-				if (result != 0) {
-					addEmployeeAddress(user,session);
-					addEmployeePhone(user,session);
-					addEmployeeProject(user,session);
-					session.commit();
-					return true;
-				}		
+			int result = session.insert("User.insertEmployee", user);
+			if (result != 0) {
+				addEmployeeAddress(user, session);
+				addEmployeePhone(user, session);
+				addEmployeeProject(user, session);
+				session.commit();
+				return true;
+			}
 			return false;
 		} finally
 
@@ -64,21 +64,14 @@ public class EmployeeDao {
 		}
 
 	}
-	
-	public String validateEmployee(User user) throws AppException, DbException{
-		if(empValidator.validateEmployeeBasicDetails(user).size()==0) {
-			if(checkEmployee(user)==true) {
-				insertEmployee(user);
-				return EmployeeMessageConstants.EmployeeAdded.getLabel().toString();
+
+	public boolean validateEmployee(User user) throws AppException, DbException {
+		if (checkEmployee(user) == true) {
+			insertEmployee(user);
+		} else if (checkEmployee(user) == false) {
+			return false;
 		}
-			else if(checkEmployee(user)==false) {
-				return EmployeeMessageConstants.EmployeeAlreadyExist.getLabel().toString();
-			}
-			
-		}
-			return empValidator.validateEmployeeBasicDetails(user).toString(); 
-		
-		
+		return true;
 	}
 
 	public boolean checkEmployee(User user) {
@@ -97,59 +90,102 @@ public class EmployeeDao {
 
 	}
 
-	public boolean addEmployeeAddress(User user,SqlSession session) {
-		int result=0;
-			for (EmployeeAddressInfo empAddressInfo : user.getAddressInfo()) {
-				empAddressInfo.setEmpId(user.getEmpId());
-				result = session.insert("User.addEmployeeAddress", empAddressInfo);
-			}
-			if (result != 0) {
-				return true;
-			}
-			return false;
-	
+	public boolean addEmployeeAddress(User user, SqlSession session) {
+		int result = 0;
+		for (EmployeeAddressInfo empAddressInfo : user.getAddressInfo()) {
+			empAddressInfo.setEmpId(user.getEmpId());
+			result = session.insert("User.addEmployeeAddress", empAddressInfo);
+		}
+		if (result != 0) {
+			return true;
+		}
+		return false;
+
 	}
 
-	public boolean addEmployeePhone(User user,SqlSession session) {
-		//SqlSession session = MyBatisManager.openSession();
-		int result=0;
-		 for(EmployeePhoneInfo empPhoneInfo:user.getPhoneInfo()) {
+	public boolean addEmployeePhone(User user, SqlSession session) {
+		// SqlSession session = MyBatisManager.openSession();
+		int result = 0;
+		for (EmployeePhoneInfo empPhoneInfo : user.getPhoneInfo()) {
 			empPhoneInfo.setEmpId(user.getEmpId());
 			result = session.insert("User.addEmployeePhone", empPhoneInfo);
-		  }		
-			if (result != 0) {
-				return true;
-			}
-			return false;
+		}
+		if (result != 0) {
+			return true;
+		}
+		return false;
 	}
-	
-	
-	public boolean addEmployeeProject(User user,SqlSession session) {
-		int result=0;
-		 for(EmployeeProjectInfo empProjectInfo:user.getProjectInfo()) {
+
+	public boolean addEmployeeProject(User user, SqlSession session) {
+		int result = 0;
+		for (EmployeeProjectInfo empProjectInfo : user.getProjectInfo()) {
 			empProjectInfo.setEmpId(user.getEmpId());
 			result = session.insert("User.addEmployeeProjects", empProjectInfo);
-		  }		
-			if (result != 0) {
-				return true;
-			}
-			return false;
+		}
+		if (result != 0) {
+			return true;
+		}
+		return false;
 	}
-	
-	public boolean updateEmployee(User user){
+
+	public boolean updateEmployee(User user) {
 		SqlSession session = MyBatisManager.openSession();
 		try {
-				int result = session.update("User.updateEmployee", user);
-				if (result != 0) {
-					session.commit();
-					return true;
-				}		
-			return false;
+			    session.update("User.updateEmployee", user);
+				updateEmployeeAddress(user);
+				updateEmployeePhone(user);
+				updateEmployeeProject(user);
+				session.commit();
+				return true;
 		} finally
 
 		{
 			session.close();
 		}
+
+	}
+
+	public boolean updateEmployeePhone(User user) {
+		SqlSession session = MyBatisManager.openSession();
+		int result = 0;
+		for (EmployeePhoneInfo empPhoneInfo : user.getPhoneInfo()) {
+			empPhoneInfo.setEmpId(user.getEmpId());
+			result = session.update("User.updateEmployeePhone", empPhoneInfo);
+		}
+		if (result != 0) {
+			session.commit();
+			return true;
+		}
+		return false;
+
+	}
+	
+	public boolean updateEmployeeAddress(User user) {
+		SqlSession session = MyBatisManager.openSession();
+		int result=0;
+		for (EmployeeAddressInfo empAddressInfo : user.getAddressInfo()) {
+			empAddressInfo.setEmpId(user.getEmpId());
+			result = session.update("User.updateEmployeeAddress", empAddressInfo);
+		}
+		if (result != 0) {
+			session.commit();
+			return true;
+		}
+		return false;	
+	}
+	
+	public boolean updateEmployeeProject(User user) {
+		SqlSession session = MyBatisManager.openSession();
+		int result = 0;
+		for (EmployeeProjectInfo empProjectInfo : user.getProjectInfo()) {
+			empProjectInfo.setEmpId(user.getEmpId());
+			result = session.update("User.updateEmployeeProject", empProjectInfo);
+		}
+		if (result != 0) {
+			session.commit();
+			return true;
+		}
+		return false;
 		
 	}
 

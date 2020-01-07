@@ -18,7 +18,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 
-import com.awcsoftware.app.employee.EmployeeDao;
 import com.awcsoftware.app.employee.EmployeeLoginTransaction;
 import com.awcsoftware.app.employee.EmployeeMessageConstants;
 import com.awcsoftware.app.employee.EmployeeService;
@@ -30,8 +29,6 @@ import com.awcsoftware.spring.security.auth.user.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class LoginFilter extends AbstractAuthenticationProcessingFilter {
-	@Autowired
-	EmployeeDao employeedao;
 
 	@Autowired
 	EmployeeService employeeservice;
@@ -76,7 +73,6 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
 			List<Role> roles = uSrv.getRoles(user.getEmpId());
 			log.debug("roles  " + roles);
 			log.debug("email  " + user.getEmail());
-
 			log.debug("User Found " + uSrv.isExists(username));
 
 			if (user.getEmail().equals(username) && user.getPassword().equals(password)) {

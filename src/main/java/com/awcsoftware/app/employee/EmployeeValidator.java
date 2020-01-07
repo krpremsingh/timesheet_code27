@@ -161,6 +161,16 @@ public class EmployeeValidator {
 			errorMsg.add(EmployeeMessageConstants.BlankEmpCode.getLabel().toString());
 			return errorMsg;
 		}
+		if (Util.isEmptyOrNull(user.getFirstName())) {
+			errorMsg.add(EmployeeMessageConstants.BlankFirstName.getLabel().toString());
+			return errorMsg;
+		}
+		
+		if (Util.isEmptyOrNull(user.getLastName())) {
+			errorMsg.add(EmployeeMessageConstants.BlankLastName.getLabel().toString());
+			return errorMsg;
+		}
+		
 		if (Util.isEmptyOrNull(user.getDob())) {
 			errorMsg.add(EmployeeMessageConstants.BlankDob.getLabel().toString());
 			return errorMsg;
@@ -213,6 +223,7 @@ public class EmployeeValidator {
 	}
 	
 	public Set<String> validateEmployeeAddress(User user)throws AppException, DbException {	
+	errorMsg.clear();	
 	for (EmployeeAddressInfo addressInfo : user.getAddressInfo()) {
 
 		if (Util.isEmptyOrNull(addressInfo.getAddressType())) {
@@ -240,6 +251,7 @@ public class EmployeeValidator {
 
 }
 	public Set<String> validateEmployeePhone(User user){
+		errorMsg.clear();
 		for (EmployeePhoneInfo phoneInfo : user.getPhoneInfo()) {
 			if (Util.isEmptyOrNull(phoneInfo.getPhoneNumber())) {
 				errorMsg.add(EmployeeMessageConstants.BlankPhoneNumber.getLabel().toString());
@@ -255,7 +267,7 @@ public class EmployeeValidator {
 	}
 	
 	public Set<String> validateEmployeeProjects(User user){
-
+		errorMsg.clear();
 		for (EmployeeProjectInfo projectInfo : user.getProjectInfo()) {
 			if (Util.isEmptyOrNull(projectInfo.getStartDate())) {
 				errorMsg.add(EmployeeMessageConstants.BlankStartDate.getLabel().toString());

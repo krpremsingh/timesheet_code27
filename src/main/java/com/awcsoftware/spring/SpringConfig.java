@@ -6,7 +6,6 @@ import java.util.List;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.FilterType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.scheduling.TaskScheduler;
@@ -16,11 +15,9 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
-import com.awcsoftware.app.scheduler.EmailNotificationScheduler;
-
 @Configuration
 @EnableScheduling
-@ComponentScan(basePackages = "com.awcsoftware",excludeFilters= {@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE,classes= {EmailNotificationScheduler.class})})
+@ComponentScan(basePackages = "com.awcsoftware")
 public class SpringConfig extends WebMvcConfigurationSupport {
 	
 	protected void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
