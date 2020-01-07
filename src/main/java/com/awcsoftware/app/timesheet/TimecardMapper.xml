@@ -573,8 +573,7 @@
 	</select>
 
 	<select id="getDayApprovedRecord"
-		parameterType="int" resultType="TimecardDayInfo">
-
+		parameterType="TimecardInfo" resultType="TimecardDayInfo">
 			select tcd.tcId tcId,tcd.tcdId tcdId,tcd.totalWeekWorkHours totalWeekWorkHours, 
 				ifnull((select SEC_TO_TIME(SUM(TIME_TO_SEC(workingHours))) from TimecardDayDetails tcdd where tcdd.tcId=tcd.tcId 
 				and tcdd.tcdId= tcd.tcdId and recordType='Active' and status='Pending'),'0') timeRemainToApprove,workingDate from 

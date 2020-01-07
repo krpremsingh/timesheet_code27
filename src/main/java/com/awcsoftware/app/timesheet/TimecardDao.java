@@ -385,7 +385,7 @@ public class TimecardDao {
 				updateTimecardDayDetailsStatus(timecardProjectWorkDetailsObj, session);
 				updateTimecardApproverStatus(timecardProjectWorkDetailsObj, session);
 				List<TimecardDayInfo> allTimecardDayInfoObj = (List<TimecardDayInfo>) getTimecardWorkHour(
-						timecardInfoObj.getTcId(), session);
+						timecardInfoObj, session);
 
 				for (int dayApproveCtr = 0; dayApproveCtr < allTimecardDayInfoObj.size(); dayApproveCtr++) {
 					TimecardDayInfo timecardDayInfo = (TimecardDayInfo) allTimecardDayInfoObj.get(dayApproveCtr);
@@ -425,6 +425,23 @@ public class TimecardDao {
 						.getEmployeeProjectTimecard();
 				updateTimecardDayDetailsStatus(timecardProjectWorkDetailsObj, session);
 				updateTimecardApproverStatus(timecardProjectWorkDetailsObj, session);
+
+				List<TimecardDayInfo> allTimecardDayInfoObj = (List<TimecardDayInfo>) getTimecardWorkHour(
+						timecardInfoObj, session);
+
+				for (int dayApproveCtr = 0; dayApproveCtr < allTimecardDayInfoObj.size(); dayApproveCtr++) {
+					TimecardDayInfo timecardDayInfo = (TimecardDayInfo) allTimecardDayInfoObj.get(dayApproveCtr);
+					if (timecardDayInfo.getTimeRemainToApprove().equals("0")) {
+						timecardDayInfo.setStatus(AppConstant.TIME_CARD_STATUS.Approved.toString());
+						updateTimecardDayInfoStatus(timecardDayInfo, session);
+					}
+				}
+				timecardInfoObj.setStatus(AppConstant.TIME_CARD_STATUS.Approved.toString());
+				notApprovedDayNo = getNotApprovedDay(timecardInfoObj, session);
+				if (notApprovedDayNo == 0)
+					updateTimecardInfo(timecardInfoObj, session);
+
+			
 			}
 			saveTimecardReturn=TimecardMessageConstant.Timecard_Rejected_successfully.getLabel();
 			session.commit();
@@ -454,9 +471,9 @@ public class TimecardDao {
 			return true;
 	}
 
-	public List<TimecardDayInfo> getTimecardWorkHour(int tcId,SqlSession session)
+	public List<TimecardDayInfo> getTimecardWorkHour(TimecardInfo timecardInfoParam,SqlSession session)
 	{
-		return (List) session.selectList("TimecardMapper.getDayApprovedRecord", tcId);
+		return (List) session.selectList("TimecardMapper.getDayApprovedRecord", timecardInfoParam);
 	}
 
 	public int getNotApprovedDay(TimecardInfo timecardInfoParam,SqlSession session)
