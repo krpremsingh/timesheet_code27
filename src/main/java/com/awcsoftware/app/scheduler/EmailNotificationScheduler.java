@@ -1,4 +1,4 @@
-package com.awcsoftware.app.scheduler;
+/*package com.awcsoftware.app.scheduler;
 
 import java.util.Calendar;
 import java.util.List;
@@ -29,7 +29,7 @@ public class EmailNotificationScheduler {
 	@Autowired
 	MailConfig mailconfig;
 
-/*	public EmailNotificationScheduler() {
+	public EmailNotificationScheduler() {
 		this.startScheduler();
 	}
 	
@@ -55,8 +55,8 @@ public class EmailNotificationScheduler {
 	     ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);            
 	     scheduler.scheduleAtFixedRate(new EmailNotificationScheduler(), delayInHours,
 	                                   179, TimeUnit.HOURS);
-	}*/
-/*	
+	}
+	
 	  public TimecardInfo getTimecardStatus() throws AppException, DbException, MessagingException { dao= new TimecardDao();
 	  List<TimecardInfo> timecard=dao.getPreviousWeekStatus();
 	  Iterator<TimecardInfo> itr = timecard.iterator(); TimecardInfo timecardInfo =
@@ -65,7 +65,7 @@ public class EmailNotificationScheduler {
 	  if(timecardInfo.getStatus().equalsIgnoreCase("draft")) {
 	  sendTuesdayEmailNotofication(); } } return timecardInfo;
 	  
-	  }*/
+	  }
 	 
 	@Scheduled(cron = "0 46 12 * * MON")
 	public String sendTuesdayEmailNotofication() throws AppException, DbException, MessagingException {
@@ -112,3 +112,4 @@ public class EmailNotificationScheduler {
 	}
 
 }
+*/

@@ -188,14 +188,44 @@ public class EmployeeService {
 	}
 
 	public String insertEmployee(User user) throws AppException, DbException {
-		String result = null;
-		result = empDao.validateEmployee(user);
-		return result.toString();
+
+		if (employeevalidator.validateEmployeeBasicDetails(user).size() != 0) {
+			return employeevalidator.validateEmployeeBasicDetails(user).toString();
+		}
+		if (employeevalidator.validateEmployeeAddress(user).size() != 0) {
+			return employeevalidator.validateEmployeeAddress(user).toString();
+		}
+		if (employeevalidator.validateEmployeePhone(user).size() != 0) {
+			return employeevalidator.validateEmployeePhone(user).toString();
+		}
+		if (employeevalidator.validateEmployeeProjects(user).size() != 0) {
+			return employeevalidator.validateEmployeeProjects(user).toString();
+		} else {
+
+			if (empDao.validateEmployee(user) == false) {
+				return EmployeeMessageConstants.EmployeeAlreadyExist.getLabel().toString();
+			}
+		}
+		return EmployeeMessageConstants.EmployeeAdded.getLabel().toString();
 
 	}
 
 	public String updateEmployee(User user) throws AppException, DbException {
-		empDao.updateEmployee(user);
+		if (employeevalidator.validateEmployeeBasicDetails(user).size() != 0) {
+			return employeevalidator.validateEmployeeBasicDetails(user).toString();
+		}
+		if (employeevalidator.validateEmployeeAddress(user).size() != 0) {
+			return employeevalidator.validateEmployeeAddress(user).toString();
+		}
+		if (employeevalidator.validateEmployeePhone(user).size() != 0) {
+			return employeevalidator.validateEmployeePhone(user).toString();
+		}
+		if (employeevalidator.validateEmployeeProjects(user).size() != 0) {
+			return employeevalidator.validateEmployeeProjects(user).toString();
+		}
+		else {
+			empDao.updateEmployee(user);	
+		}		
 		return EmployeeMessageConstants.EmployeeUpdated.getLabel().toString();
 
 	}

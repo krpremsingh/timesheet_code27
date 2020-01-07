@@ -119,8 +119,33 @@ values(#{pId},#{empId},#{role},#{workingLocation},#{startDate},#{endDate},#{stat
 </select>
 
 <update id="updateEmployee" parameterType="User">
-update EmployeeInfo set empCode=#{empCode},email=#{email},firstName=#{firstName},middleName=#{middleName},lastName=#{lastName},designationId=#{designationId},
-status=#{status} where empId=#{empId};
+update EmployeeInfo set empCode=#{empCode},email=#{email}
+,firstName=#{firstName},middleName=#{middleName},lastName=#{lastName},
+designationId=#{designationId},status=#{status} where empId=#{empId};
+</update>
+
+<update id="updateEmployeePhone" parameterType="EmployeePhoneInfo">
+update PhoneNumberInfo set empId=#{empId},phoneNumberType=#{phoneNumberType}
+,phoneNumber=#{phoneNumber},status=#{status},
+lastModifiedOn=now() where empId=#{empId} and phoneNumberId=#{phoneNumberId}
+</update>
+
+<update id="updateEmployeeProject" parameterType="EmployeeProjectInfo">
+ update ProjectTeamDetails set
+ role=#{role},
+ workingLocation=#{workingLocation},
+ startDate=#{startDate},
+ endDate=#{endDate},
+ status=#{status},
+ lastModifiedOn=now() where empId=#{empId} and pdId=#{pdId}
+</update>
+
+<update id="updateEmployeeAddress" parameterType="EmployeeAddressInfo">
+ update AddressInfo set empId=#{empId},
+ addressType=#{addressType},street1=#{street1},street2=#{street2},
+ landmark=#{landmark},city=#{city},state=#{state},country=#{country},
+ zipcode=#{zipcode},status=#{status},
+ lastModifiedOn=now() where empId=#{empId} and addressId=#{addressId}
 </update>
 
 <!--

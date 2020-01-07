@@ -77,7 +77,7 @@ public class TokenFilter extends AbstractAuthenticationProcessingFilter{
 		log.debug("TokenFilter token " + token);
 		if (token == null || token.equals("")) {
 			 throw new
-             BadCredentialsException("903 - Authentication Token missing");
+             BadCredentialsException(EmployeeMessageConstants.TokenMissing.getLabel().toString());
 		}
 		
 		String username = ""; 

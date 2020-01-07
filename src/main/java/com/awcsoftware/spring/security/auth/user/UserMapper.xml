@@ -14,7 +14,7 @@
 	
 	<select id="getUser" parameterType="string" resultType="User">
 		select
-		e.empId,e.firstName,e.email,e.password,e.designationId,e.empCode,e.firstLoginStatus
+		e.empId,e.firstName,e.email,e.password,e.designationId,e.empCode,e.firstLoginStatus,e.status
 		from EmployeeInfo e where e.email=#{email}
 	</select>
 
