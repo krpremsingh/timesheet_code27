@@ -101,10 +101,12 @@ public class EmployeeService {
 			throws AppException, DbException, MessagingException {
 		EmployeeValidator validator = new EmployeeValidator();
 		Set<String> verifyemail = validator.verifyEmailId(email);
+		log.debug("Error Size>>>>>>>>>>>>>>"+verifyemail.size());
 		if (verifyemail.size() != 0) {
 			return verifyemail.toString();
 		}
 		User user = userDao.getUser(email);
+		log.debug("user>>>>>>>>>>>>>>"+user);
 		ctoken = new ConfirmationToken(user);
 		log.debug(user + " " + ctoken);
 		saveUpdateToken(ctoken);

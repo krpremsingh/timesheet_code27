@@ -454,8 +454,22 @@
 			ifnull((select group_concat(tcadsub.projectId) from TimecardApproverDetails tcadsub where 
 			tcadsub.tcID=tcad.tcId),' ') projectGroup,tci.empId empId
 			from TimecardApproverDetails tcad, TimecardInfo tci 
-			where empId=#{empId} and weekStart=#{weekStart} and weekEnd=#{weekEnd} and tci.tcId=tcad.tcId and tci.status='Pending'
-			) as Main group by 1;
+			where empId=#{empId} and tci.tcId=tcad.tcId 
+
+			<if test="weekStart!= null">
+				and weekStart =#{weekStart,jdbcType=VARCHAR}
+			</if>
+			<if test="weekEnd!= null">
+				and weekEnd =#{weekEnd,jdbcType=VARCHAR}
+			</if>					
+			<if test="status!= 'All'">
+				and tci.status in (
+					<foreach item="item" index="index" collection="statusValue" separator="," >
+						#{item} 
+					</foreach>
+				)  
+			</if>
+			) as Main group by 1 order by if(status in ('Pending'),'01',status), weekStart desc ;
 		
 	</select>
 

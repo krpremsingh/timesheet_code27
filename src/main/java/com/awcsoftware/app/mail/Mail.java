@@ -44,8 +44,11 @@ public class Mail {
 			if(forgotPasswordMailContent.contains("user_link")) {
 				forgotPasswordMailContent=forgotPasswordMailContent.replace("user_link", uriComponents.toUriString());
 			}
+
+		logger.debug("uriComponents>>>>>>>>>>>>>>"+uriComponents);
 		MimeMessage message = mailconfig.javaMailSender().createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(message, true);
+		logger.debug("confirmationToken.getUser().getEmail()>>>>>>>>>>>>>>"+confirmationToken.getUser().getEmail());
 		helper.setTo(confirmationToken.getUser().getEmail());
 		helper.setSubject(MailMessageConstants.ChangePasswordSubject.getLabel().toString());
 		helper.setText(forgotPasswordMailContent, true);

@@ -117,6 +117,13 @@ public class TimecardService {
 		if(validatorResult.size()==0)
 		{
 			TimecardDao dao = new TimecardDao();
+			List<String> statusValue = null;
+			statusValue = new ArrayList<String>();
+			for (String statusAdd : timecardInfoParam.getStatus().split("-")) {
+				statusValue.add(statusAdd);
+			}
+			timecardInfoParam.setStatusValue(statusValue);
+
 			return (List<TimecardInfo>) dao.getTimecardViewForEmployee(timecardInfoParam);
 		}
 		else

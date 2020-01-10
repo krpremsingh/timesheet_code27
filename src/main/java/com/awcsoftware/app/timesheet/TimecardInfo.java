@@ -60,7 +60,8 @@ public class TimecardInfo implements Serializable {
 	private List<Integer> projectValue;
 	private String approverId;
 	private String searchType;	
-
+	private List<String> statusValue;
+	
 	private List<TimecardProjectWorkDetails> employeeProjectTimecard;
 	
 	
@@ -237,6 +238,16 @@ public class TimecardInfo implements Serializable {
 
 	public void setSearchType(String searchType) {
 		this.searchType = searchType;
+	}
+
+
+	
+	public List<String> getStatusValue() {
+		return statusValue;
+	}
+
+	public void setStatusValue(List<String> statusValue) {
+		this.statusValue = statusValue;
 	}
 
 	@Override
