@@ -8,10 +8,32 @@
 			Start Of Defining Result Map 
 		********************************************** 
 -->
+
 	<resultMap type="User" id="User">
-	<id column="empId" property="empId" jdbcType="INTEGER" />
+		<id column="empId" property="empId"  />
+		<collection property="addressInfo"
+		ofType="EmployeeAddressInfo" select="getEmployeeAddress"
+		column="empId"/>
+		<collection property="phoneInfo"
+		ofType="EmployeePhoneInfo" select="getEmployeeContact"
+		column="empId"/>
+		<collection property="projectInfo"
+		ofType="EmployeeProjectInfo" select="getEmployeeProjects"
+		column="empId"/>	
+  </resultMap>
+
+	<resultMap type="EmployeeAddressInfo" id="EmployeeAddressInfoMap">
+		<id column="empId" property="empId" jdbcType="INTEGER" />	
+     </resultMap> 
+     
+     <resultMap type="EmployeePhoneInfo" id="EmployeePhoneInfoMap">
+		<id column="empId" property="empId" jdbcType="INTEGER" />	
      </resultMap>
      
+      <resultMap type="EmployeeProjectInfo" id="EmployeeProjectInfoMap">
+		<id column="empId" property="empId" jdbcType="INTEGER" />	
+     </resultMap>
+      
     <select id="getUser" parameterType="string" resultType="User">
 		select
 		e.empId,e.firstName,e.email,e.password,e.designationId,e.empCode,e.firstLoginStatus
@@ -148,6 +170,32 @@ lastModifiedOn=now() where empId=#{empId} and phoneNumberId=#{phoneNumberId}
  lastModifiedOn=now() where empId=#{empId} and addressId=#{addressId}
 </update>
 
+<select id="getEmployee" resultMap="User" parameterType="User">
+select  empId,empCode,firstName,middleName,lastName,email,dob,doj,designationId,status,addedOn,lastModifiedOn,firstLoginStatus from EmployeeInfo where empId=#{empId}
+<!-- <where>
+<if test="empId!=0">
+ empId=#{empId}
+</if>
+</where>
+ -->
+ </select>
+
+<select id="getEmployeeAddress" resultMap="EmployeeAddressInfoMap" parameterType="User">
+select addressId,empId,addressType,street1,street2,landmark,city,state,country,zipcode,status,addedOn,lastModifiedOn from AddressInfo where empId=#{empId}
+</select>
+
+<select id="getEmployeeContact" resultMap="EmployeePhoneInfoMap" parameterType="User">
+select phoneNumberId,empId,phoneNumberType,phoneNumber,status,addedOn,lastModifiedOn from PhoneNumberInfo where empId=#{empId}
+</select>
+
+
+<select id="getEmployeeProjects" resultMap="EmployeeProjectInfoMap" parameterType="User">
+select pdId,empId, pId,role,workingLocation,startDate,endDate,status as projectStatus,addedOn,lastModifiedOn  from ProjectTeamDetails where empId=#{empId}
+</select>
+
+<select id="getEmployees" resultMap="User">
+select empId,empCode,firstName,middleName,lastName,email,dob,doj,designationId,status,addedOn,lastModifiedOn,firstLoginStatus from EmployeeInfo
+</select>
 <!--
 <update id="updateFirstLogin" parameterType="EmployeeLoginTransaction">
 update EmployeeInfo e inner join LoginTransaction lt on e.empId=lt.empId set firstLoginStatus=0 where e.empId=#{empId}
