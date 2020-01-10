@@ -1,6 +1,12 @@
 package com.awcsoftware.app.employee;
 
-public class EmployeeProjectInfo {
+import java.io.Serializable;
+
+public class EmployeeProjectInfo implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int pdId;
 	private int pId;
 	private int empId;

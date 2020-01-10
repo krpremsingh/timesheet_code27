@@ -1,5 +1,7 @@
 package com.awcsoftware.app.employee;
 
+import java.util.List;
+
 import org.apache.ibatis.session.SqlSession;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +15,8 @@ import com.awcsoftware.spring.security.auth.user.UserDao;
 
 /**
  * 
- * @author Arun methods to generate and verify confirmation token
+ * @author Arun 
+ *         methods to generate and verify confirmation token
  *         1.saveToken(assigned a token to user with expiry date)
  *         2.updateToken(update token if user generate a link more than one time
  *         without changing the password) 3.checkToken(to check token in the
@@ -131,18 +134,66 @@ public class EmployeeDao {
 	public boolean updateEmployee(User user) {
 		SqlSession session = MyBatisManager.openSession();
 		try {
-			    session.update("User.updateEmployee", user);
-				updateEmployeeAddress(user);
-				updateEmployeePhone(user);
-				updateEmployeeProject(user);
-				session.commit();
-				return true;
+			session.update("User.updateEmployee", user);
+			updateEmployeeAddress(user);
+			updateEmployeePhone(user);
+			updateEmployeeProject(user);
+			session.commit();
+			return true;
 		} finally
 
 		{
 			session.close();
 		}
 
+	}
+
+	public User getEmployee(int empId) throws AppException, DbException {
+		SqlSession session = MyBatisManager.openSession();
+		try {
+			User employee = session.selectOne("User.getEmployee", empId);
+			return employee;
+		} finally
+
+		{
+			session.close();
+		}
+
+	}
+	
+	public List<User> getEmployees()throws AppException, DbException{
+		SqlSession session = MyBatisManager.openSession();
+		try {
+			List<User> users = session.selectList("User.getEmployees");
+			for(User user:users) {
+				getEmployeeAddress(user.getEmpId(),session);
+				getEmployeePhone(user.getEmpId(), session);
+				getEmployeeProject(user.getEmpId(), session);
+			}
+			session.commit();
+			return users;
+		} finally
+
+		{
+			session.close();
+		}
+		
+	}
+
+	public List<EmployeeAddressInfo> getEmployeeAddress(int empId, SqlSession session) {
+		 List<EmployeeAddressInfo> addressInfo = session.selectList("User.getEmployeeAddress", empId);
+		return addressInfo;
+
+	}
+	
+	public List<EmployeePhoneInfo> getEmployeePhone(int empId, SqlSession session) {
+		List<EmployeePhoneInfo> phoneInfo = session.selectList("User.getEmployeeContact", empId);
+		return phoneInfo;	
+	}
+	
+	public List<EmployeeProjectInfo> getEmployeeProject(int empId, SqlSession session) {
+		 List<EmployeeProjectInfo> projectInfo = session.selectList("User.getEmployeeProjects", empId);
+		return projectInfo;
 	}
 
 	public boolean updateEmployeePhone(User user) {
@@ -159,10 +210,10 @@ public class EmployeeDao {
 		return false;
 
 	}
-	
+
 	public boolean updateEmployeeAddress(User user) {
 		SqlSession session = MyBatisManager.openSession();
-		int result=0;
+		int result = 0;
 		for (EmployeeAddressInfo empAddressInfo : user.getAddressInfo()) {
 			empAddressInfo.setEmpId(user.getEmpId());
 			result = session.update("User.updateEmployeeAddress", empAddressInfo);
@@ -171,9 +222,9 @@ public class EmployeeDao {
 			session.commit();
 			return true;
 		}
-		return false;	
+		return false;
 	}
-	
+
 	public boolean updateEmployeeProject(User user) {
 		SqlSession session = MyBatisManager.openSession();
 		int result = 0;
@@ -186,7 +237,7 @@ public class EmployeeDao {
 			return true;
 		}
 		return false;
-		
+
 	}
 
 	public boolean saveToken(ConfirmationToken token) {

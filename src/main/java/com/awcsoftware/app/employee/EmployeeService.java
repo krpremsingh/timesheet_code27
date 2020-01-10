@@ -1,5 +1,6 @@
 package com.awcsoftware.app.employee;
 
+import java.util.List;
 import java.util.Set;
 
 import javax.mail.MessagingException;
@@ -230,6 +231,16 @@ public class EmployeeService {
 		}		
 		return EmployeeMessageConstants.EmployeeUpdated.getLabel().toString();
 
+	}
+	
+	public User getEmployee(int empId)throws AppException, DbException {
+		return empDao.getEmployee(empId);
+		
+	}
+	
+	public List<User> getEmployees() throws AppException,DbException{
+		return empDao.getEmployees();
+		
 	}
 
 }
