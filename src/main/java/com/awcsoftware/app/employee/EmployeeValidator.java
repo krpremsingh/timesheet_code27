@@ -34,7 +34,7 @@ public class EmployeeValidator {
 	}
 	User result = null;
 
-	private static final String PASSWORD_PATTERN = "((?=.*[a-z])(?=.*\\d)(?=.*[A-Z])(?=.*[@#$%!&*]).{8,20})";
+	private static final String PASSWORD_PATTERN = "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).{8,20})";
 
 	private Pattern pattern;
 

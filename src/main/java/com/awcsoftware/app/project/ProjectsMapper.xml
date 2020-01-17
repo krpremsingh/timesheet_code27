@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Projects">
+	<cache />
+<!-- 	********************************************** 
+			Start Of Defining Result Map 
+		********************************************** 
+-->
+	<resultMap type="Projects" id="ProjectMap">
+		<id column="projectId" property="projectId"/>
+		<collection property="projectLocations" ofType="ProjectLocations" select="viewProjectLocation"
+		column="projectId"/>	
+   </resultMap>
+   
+   <resultMap type="ProjectLocations" id="ProjectLocationsInfoMap">
+		<id column="projectId" property="projectId" jdbcType="INTEGER" />	
+     </resultMap>
+
+<select id="checkProject" resultType="int" parameterType="Projects">
+ select count(*) from ProjectsInfo where upper(projectName)=upper(#{projectName}) or projectId=#{projectId};
+</select>
+  
+<insert id="addProject" parameterType="Projects" keyProperty="projectId" useGeneratedKeys="true"> 
+insert into ProjectsInfo(projectName,budget,startDate,endDate,status,addedOn) values(#{projectName},#{budget},#{startDate},#{endDate},#{status},now());
+ </insert>
+ 
+ <insert id="addProjectLocation" parameterType="ProjectLocations" keyProperty="projectId" useGeneratedKeys="true">
+ insert into ProjectLocationDetails(projectId,workLocationId) values(#{projectId},#{workLocationId});
+ </insert>
+ 
+ <update id="updateProjectInfo" parameterType="Projects">
+ update ProjectsInfo set projectName=#{projectName},budget=#{budget},startDate=#{startDate},endDate=#{endDate},status=#{status},lastModifiedOn=now() where projectId=#{projectId}
+ </update>
+ 
+ <update id="updateProjectLocationDetails" parameterType="ProjectLocations">
+ update ProjectLocationDetails set workLocationId=#{workLocationId} where projectId=#{projectId} and workLocationId=#{workLocationId}
+ </update>
+ 
+ <select id="viewProject" parameterType="Projects" resultMap="ProjectMap">
+ select p.projectId,p.projectName,p.startDate,p.endDate,p.budget,p.addedOn,p.lastModifiedOn from ProjectsInfo p 
+ where p.projectId=#{projectId};
+ </select>
+ 
+ <select id="viewProjectLocation" resultMap="ProjectLocationsInfoMap" parameterType="Projects">
+ select projectId,workLocationId,ifnull((select location from WorkLocationsInfo wli where wli.workLocationId=pld.workLocationId),' ') workLocation from ProjectLocationDetails PLD where projectId=#{projectId}
+ </select>
+ 
+  <select id="viewProjects" resultType="Projects">
+ select p.projectId,p.projectName,p.startDate,p.endDate,p.budget,p.addedOn,p.lastModifiedOn from ProjectsInfo p 
+ <where>
+<if test="startDate!= null">
+  p.startDate=#{startDate}
+</if>
+<if test="endDate!= null">
+and p.endDate=#{endDate}
+</if>
+ </where> 
+ </select>
+ 
+ 
+</mapper>

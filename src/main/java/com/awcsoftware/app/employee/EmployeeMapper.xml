@@ -110,6 +110,10 @@ update EmployeeInfo set mailFlag='YES' where mailFlag='NO' and
 		)
 </update>
 
+<select id="getemaillist" resultType="User"> 
+select e.email,e.mailFlag,e.empId,e.password from EmployeeInfo e where e.mailFlag='NO';
+</select>
+
 <insert id="insertEmployee" parameterType="User" keyProperty="empId" useGeneratedKeys="true">
 insert into EmployeeInfo(empCode,firstName,middleName,lastName,email,dob,doj,
 password,designationId,status,addedOn,lastModifiedOn,firstLoginStatus,mailFlag) 
@@ -192,6 +196,8 @@ select phoneNumberId,empId,phoneNumberType,phoneNumber,status,addedOn,lastModifi
 <select id="getEmployeeProjects" resultMap="EmployeeProjectInfoMap" parameterType="User">
 select pdId,empId, pId,role,workingLocation,startDate,endDate,status as projectStatus,addedOn,lastModifiedOn  from ProjectTeamDetails where empId=#{empId}
 </select>
+
+
 
 <select id="getEmployees" resultMap="User">
 select empId,empCode,firstName,middleName,lastName,email,dob,doj,designationId,status,addedOn,lastModifiedOn,firstLoginStatus from EmployeeInfo

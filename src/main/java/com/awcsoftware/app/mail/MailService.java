@@ -21,7 +21,7 @@ public class MailService {
 		if (result != null) {
 			mailpojo.setUserList(result);
 			mail.welcomeEmail(mailpojo);
-			for (User user : result) {
+			for (User user : result) {				
 				maildao.updatemailFlag(mailpojo);
 			}
 			return result;

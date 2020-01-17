@@ -69,26 +69,26 @@ public class Mail {
 	public String welcomeEmail(MailPojo mailpojo) throws MessagingException, IOException {
 		MimeMessage message = mailconfig.javaMailSender().createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(message, true);
-		 MimeMultipart multipart = new MimeMultipart();
-         BodyPart messageBodyPart = new MimeBodyPart();
+	/*	 MimeMultipart multipart = new MimeMultipart();
+         BodyPart messageBodyPart = new MimeBodyPart();*/
         // String content = mailtemplatecontent.welcomeEmail;
          String content = MailMessageConstants.WelcomeEmailContent.getLabel().toString();
 		for( User sendTo:mailpojo.getUserList()) {
 			String contentupdate=null;
 			if(content.contains("user_email")) {
 				contentupdate=content.replace("user_email", sendTo.getEmail());
-				System.out.println(contentupdate);
+				//System.out.println(contentupdate);
 				 if(contentupdate.contains("user_password")) {
 					 contentupdate=contentupdate.replace("user_password", sendTo.getPassword());
 				}
 			}
 			
-	        messageBodyPart.setContent(contentupdate, "text/html");
+	     /*   messageBodyPart.setContent(contentupdate, "text/html");
 	        multipart.addBodyPart(messageBodyPart); 
-	        message.setContent(multipart);
+	        message.setContent(multipart);*/
 			helper.setTo(sendTo.getEmail());
 			helper.setSubject(MailMessageConstants.WelcomeEmailSubject.getLabel().toString());
-			helper.setText(messageBodyPart.getContent().toString());
+			helper.setText(contentupdate,true);
 			mailconfig.javaMailSender().send(message);
 		}
 		return  MailMessageConstants.SendEmail.getLabel().toString();

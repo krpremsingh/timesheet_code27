@@ -12,26 +12,31 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class MailController{
+public class MailController {
 	static Logger logger = Logger.getLogger(MailController.class.getName());
 	@Autowired
 	MailService service;
 
 	@GetMapping("/WelcomeEmail")
-	public String sendWelcomeMail(MailPojo mailpojo) throws MessagingException {
-		ExecutorService emailExecutor = Executors.newSingleThreadExecutor();
-        emailExecutor.execute(new Runnable() {
-            @Override
-            public void run(){
-                try {
-            		service.sendWelcomeEmail(mailpojo);
-                } catch (MessagingException | IOException e) {
+	public String sendWelcomeMail(MailPojo mailpojo){
+/*		ExecutorService emailExecutor = Executors.newSingleThreadExecutor();
+		emailExecutor.execute(new Runnable() {
+			@Override
+			public void run() {*/
+
+				try {
+					service.sendWelcomeEmail(mailpojo);
+				} catch (MessagingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-            }
-        });
-        emailExecutor.shutdown();
+
+			//}
+/*		});
+		emailExecutor.shutdown();*/
 
 		return MailMessageConstants.SendEmail.getLabel().toString();
 
