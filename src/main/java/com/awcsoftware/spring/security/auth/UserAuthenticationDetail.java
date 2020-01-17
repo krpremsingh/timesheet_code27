@@ -33,8 +33,10 @@ public class UserAuthenticationDetail extends UsernamePasswordAuthenticationToke
 	private String empCode;
 	private int designationId;
 	private String firstName;
+	private LocalDateTime loginTimestamp;
 
 	private static final long serialVersionUID = 1L;
+	
 
 	public UserAuthenticationDetail(Object principal, Object credentials) {
 		super(principal, credentials);
@@ -100,6 +102,14 @@ public class UserAuthenticationDetail extends UsernamePasswordAuthenticationToke
 
 	public void setName(String firstName) {
 		this.firstName = firstName;
+	}
+	
+	public LocalDateTime getLoginTimestamp() {
+		return loginTimestamp;
+	}
+
+	public void setLoginTimestamp(LocalDateTime loginTimestamp) {
+		this.loginTimestamp = loginTimestamp;
 	}
 
 	@Override

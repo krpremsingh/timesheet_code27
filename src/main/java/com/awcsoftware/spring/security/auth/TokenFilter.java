@@ -100,6 +100,7 @@ public class TokenFilter extends AbstractAuthenticationProcessingFilter{
 		// get other details from session store and set it for easy access downstream
 		authDetail.setRole(TokenSession.getTokenStore().getAuthenticationDetail(token).getRole());
 		authDetail.setEmpId(TokenSession.getTokenStore().getAuthenticationDetail(token).getEmpId());
+	
 		return authDetail;
 	}
 }

@@ -18,7 +18,6 @@ public class MailDao {
 		try {
 			List<User> result = session.selectList("User.getemaillist");
 			if (result != null) {
-				session.commit();
 				return result;
 			}
 			return null;

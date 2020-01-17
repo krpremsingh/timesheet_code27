@@ -17,6 +17,7 @@ public class EmployeeLoginTransaction implements Serializable {
 	private User user;
 	private int empId;
 	private LocalDateTime loginTimestamp;
+	//private String loginToken;
 	private String activityStatus;
 	private String statusReason;
 	private LocalDateTime lastPasswordChange;
@@ -34,9 +35,18 @@ public class EmployeeLoginTransaction implements Serializable {
 		this.passwordExpiryDate = AppConstant.TIME_FORMAT_CONST.DATETIME_FORMAT(LocalDateTime.now()).plusMonths(AppConstant.WORKING_HOURS.Two.getValue());
 	}
 
+
 	public User getUser() {
 		return user;
 	}
+	
+/*	public String getLoginToken() {
+		return loginToken;
+	}
+
+	public void setLoginToken(String loginToken) {
+		this.loginToken = loginToken;
+	}*/
 
 	public void setUser(User user) {
 		this.user = user;

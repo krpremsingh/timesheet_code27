@@ -16,6 +16,7 @@ import com.awcsoftware.app.AppException;
 import com.awcsoftware.app.Util;
 import com.awcsoftware.app.mail.Mail;
 import com.awcsoftware.mybatis.DbException;
+import com.awcsoftware.spring.security.auth.UserAuthenticationDetail;
 import com.awcsoftware.spring.security.auth.user.User;
 import com.awcsoftware.spring.security.auth.user.UserDao;
 
@@ -36,7 +37,7 @@ import com.awcsoftware.spring.security.auth.user.UserDao;
  * 2.setLoginTransactionIfSuccess 
  */
 @Component
-public class EmployeeService {
+public class EmployeeService  {
 
 	static Logger log = Logger.getLogger(EmployeeService.class.getName());
 	boolean valid = false;
@@ -175,14 +176,18 @@ public class EmployeeService {
 	public EmployeeLoginTransaction setLoginTransactionIfSuccess(EmployeeLoginTransaction transaction) {
 		transaction.setActivityStatus(EmployeeMessageConstants.LoginSuccess.getLabel().toString());
 		EmployeeLoginTransaction result = empDao.getLoginTransaction(transaction);
+/*		User user= new User();
+		UserAuthenticationDetail userdetails=new UserAuthenticationDetail(user.getEmail(),user.getPassword());*/
 		log.debug(result);
 		if (Util.isEmptyOrNull(result)) {
 			transaction.setStatusReason(EmployeeMessageConstants.LoginSuccessReason.getLabel().toString());
+			//transaction.setLoginToken(userdetails.getToken());
 			empDao.saveLastLogin(transaction);
 			return transaction;
 		}
 		transaction.setPasswordExpiryDate(result.getPasswordExpiryDate());
 		transaction.setLastPasswordChange(result.getLastPasswordChange());
+		//transaction.setLoginToken(userdetails.getToken());
 		transaction.setStatusReason(EmployeeMessageConstants.LoginSuccessReason.getLabel().toString());
 		empDao.saveLastLogin(transaction);
 

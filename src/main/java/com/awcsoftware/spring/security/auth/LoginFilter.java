@@ -86,6 +86,8 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
 
 					throw new BadCredentialsException(EmployeeMessageConstants.PasswordExpired.getLabel().toString());
 				}
+               // log.debug(authDetail.getToken());
+			
 				employeeservice.setLoginTransactionIfSuccess(logintransaction);
 				authDetail.setRole(roles);
 				authDetail.setName(user.getFirstName());
@@ -93,6 +95,7 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
 				authDetail.setEmpCode(user.getEmpCode());
 				authDetail.setFirstLoginStatus(user.getFirstLoginStatus());
 				authDetail.setDesignationId(user.getDesignationId());
+				authDetail.setLoginTimestamp(logintransaction.getLoginTimestamp());
 				return authDetail;
 			}
 
@@ -112,8 +115,9 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
 		UserAuthenticationDetail auth = (UserAuthenticationDetail) authResult;
 		ObjectMapper mapper = new ObjectMapper();
 		String token = TokenManager.generateToken(auth.getName(), auth.getCredentials().toString());
+		log.debug("token " +token);
 		auth.setToken(token);
-
+		log.debug("authtoken " +auth.getToken());
 		TokenSession.getTokenStore().addAuthenticaionDetail(auth);
 		response.setStatus(HttpStatus.OK.value());
 		response.setContentType(MediaType.APPLICATION_JSON_VALUE);

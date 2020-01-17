@@ -13,17 +13,23 @@ public class MailConfig {
 	public JavaMailSender javaMailSender() {
 		JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
 
-		Properties mailProperties = new Properties();
-		mailProperties.put("mail.smtp.auth", true);
-		mailProperties.put("mail.smtp.starttls.enable", true);
-		mailProperties.put("mail.smtp.ssl.trust", "smtp.gmail.com");
-		mailSender.setJavaMailProperties(mailProperties);
-		mailSender.setHost("smtp.gmail.com");
-		mailSender.setPort(25);
+		Properties props = new Properties();
+		props.setProperty("mail.transport.protocol", "smtp");
+		props.setProperty("mail.host", "awcsoftware.net");
+		props.put("mail.smtp.starttls.enable", "false");
+		props.put("mail.smtp.auth", "true");
+		props.put("mail.smtp.ssl.enable", "false");
+		props.put("mail.smtp.socketFactory.port", 465);
+		props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+
+		props.setProperty("mail.smtp.socketFactory.fallback", "false");
+		mailSender.setJavaMailProperties(props);
+		mailSender.setHost("awcsoftware.net");
+		mailSender.setPort(465);
 		mailSender.setProtocol("smtp");
-		mailSender.setUsername("awctimesheet@gmail.com");
-		mailSender.setPassword("awc@1234");
+		mailSender.setUsername("akumar1@awcsoftware.net");
+		mailSender.setPassword("welcome@123");
 
 		return mailSender;
-}
+	}
 }

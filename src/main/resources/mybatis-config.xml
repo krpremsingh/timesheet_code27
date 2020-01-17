@@ -56,6 +56,9 @@
 		type="com.awcsoftware.app.employee.EmployeeProjectInfo"/>
 
 		<!-- End of Mapping classes with Timesheet package -->
+		<typeAlias alias="Projects" type="com.awcsoftware.app.project.ProjectsInfo"/>
+		
+		<typeAlias alias="ProjectLocations"  type="com.awcsoftware.app.project.ProjectLocations"/>
 
 	</typeAliases>
 	<environments default="development">
@@ -81,6 +84,10 @@
 		<!-- Mapper Definition for employee password functionality -->
 		<mapper
 			resource="com/awcsoftware/app/employee/EmployeeMapper.xml" />
+			
+			<!-- Mapper Definition for project crud functionality -->
+			<mapper
+			resource="com/awcsoftware/app/project/ProjectsMapper.xml" />
 	</mappers>
 
 </configuration>
