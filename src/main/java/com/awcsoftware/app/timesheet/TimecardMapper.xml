@@ -480,14 +480,30 @@
 	<select id="getTimecardApproverSummary"
 		parameterType="TimecardInfo" resultType="TimecardInfo">
 
-		select tcId, weekStart, weekEnd, status, totalHours, approverId, projectGroup,empId from (  
+		select tcId, weekStart, weekEnd, status, totalHours, approverId, projectGroup,empId,empName,searchType from (  
 			select tci.tcId tcId, tci.weekStart weekStart ,tci.weekEnd weekEnd, tci.status status , tci.totalHours totalHours, 
 			tcad.approverId approverId, tcad.projectID projectId, 
 			ifnull((select group_concat(tcadsub.projectId) from TimecardApproverDetails tcadsub where 
-			tcadsub.approverId=tcad.approverId and tcadsub.tcID=tcad.tcId),' ') projectGroup,tci.empId empId
+			tcadsub.approverId=tcad.approverId and tcadsub.tcID=tcad.tcId),' ') projectGroup,tci.empId empId,
+			ifnull((select concat_ws(' ',firstName,middleName,lastName) from EmployeeInfo EI where EI.empId=tci.empId),' ' ) empName,			
+			ifnull((select role from RolesInfo,EmployeeInfo EI where tci.empId=EI.empId and EI.designationId=roleId),' ') searchType		
 			from TimecardApproverDetails tcad, TimecardInfo tci 
-			where approverId=#{empId} and tci.tcId=tcad.tcId and tci.status='Pending'
-		) as Main group by 1;
+			where approverId=#{empId} and tci.tcId=tcad.tcId 
+
+			<if test="weekStart!= null">
+				and weekStart =#{weekStart,jdbcType=VARCHAR}
+			</if>
+			<if test="weekEnd!= null">
+				and weekEnd =#{weekEnd,jdbcType=VARCHAR}
+			</if>					
+			<if test="status!= 'All'">
+				and tci.status in (
+					<foreach item="item" index="index" collection="statusValue" separator="," >
+						#{item} 
+					</foreach>
+				)  
+			</if>
+		) as Main group by 1 order by if(status in ('Pending'),'01',status), weekStart desc, tcId;
 		
 	</select>
 
