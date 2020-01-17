@@ -1,11 +1,14 @@
 package com.awcsoftware.app.timesheet;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Comparator;
 
 
-public class TimecardDayDetails implements Serializable {
+public class TimecardDayDetails implements Serializable,Comparator<TimecardDayDetails> {
 	
 	private int tcddId;
 	private int tcdId;
@@ -172,5 +175,15 @@ public class TimecardDayDetails implements Serializable {
 				+ ", startTime=" + startTime + ", endTime=" + endTime + ", workingHours=" + workingHours + ", status="
 				+ status + ", taskDetails=" + taskDetails + ", addedOn=" + addedOn + ", lastModifiedOn="
 				+ lastModifiedOn + "]";
+	}
+
+	@Override
+	public int compare(TimecardDayDetails o1, TimecardDayDetails o2) {
+		// TODO Auto-generated method stub
+        try {
+            return new SimpleDateFormat("HH:mm").parse(o1.getStartTime()).compareTo(new SimpleDateFormat("HH:mm").parse(o2.getStartTime()));
+        } catch (ParseException e) {
+            return 0;
+        }
 	}	
 }

@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -143,7 +144,10 @@ public class TimecardValidator extends AppValidator {
 		LocalTime currentRowStartTime = null, currentRowEndTime = null, nextRowStartTime = null, nextRowEndTime = null;
 		int leaveCountInSameDay = 0;
 		TimecardDayDetails timecardDayDetailsNextRow = null;
-
+		
+		Collections.sort(timecardDayDetailsParam, new TimecardDayDetails());
+		logger.debug(timecardDayDetailsParam);
+		
 		for (dayDetCtr = 0; dayDetCtr < (timecardDayDetailsParam.size()); dayDetCtr++) {
 			currentRowStartTime = null;
 			currentRowEndTime = null;
@@ -195,17 +199,15 @@ public class TimecardValidator extends AppValidator {
 			currentRowEndTime = LocalTime.parse(timecardDayDetails.getEndTime() + ":00", DateTimeFormatter.ISO_TIME);
 
 			if (currentRowStartTime.compareTo(currentRowEndTime) == 0) {
-				errorMsg.add(TimecardMessageConstant.StartEndTimeCantBeSame.getLabel() + " Date ["
-						+ timecardDayDetails.getWorkingDate() + "] Start Time[" + currentRowStartTime + "] End Time["
-						+ currentRowEndTime + "]");
+				errorMsg.add(TimecardMessageConstant.StartEndTimeCantBeSame.getLabel() + " Date "
+						+ timecardDayDetails.getWorkingDate() + " ");
 
 				break;
 			}
 
 			if (currentRowStartTime.isAfter(currentRowEndTime)) {
 				errorMsg.add(TimecardMessageConstant.StartTimeBiggerThanEndTime.getLabel() + " Date ["
-						+ timecardDayDetails.getWorkingDate() + "] Start Time[" + currentRowStartTime + "] End Time["
-						+ currentRowEndTime + "]");
+						+ timecardDayDetails.getWorkingDate() + " ");
 				break;
 			}
 
@@ -213,9 +215,8 @@ public class TimecardValidator extends AppValidator {
 				nextRowStartTime = currentRowEndTime;
 
 			if (nextRowStartTime.isBefore(currentRowEndTime)) {
-				errorMsg.add(TimecardMessageConstant.TimeOverlapping.getLabel() + " Date ["
-						+ timecardDayDetails.getWorkingDate() + "] Start Time[" + currentRowStartTime + "] End Time["
-						+ currentRowEndTime + "] ");
+				errorMsg.add(TimecardMessageConstant.TimeOverlapping.getLabel() + " Date "
+						+ timecardDayDetails.getWorkingDate() + "  ");
 				break;
 			}
 
@@ -228,9 +229,8 @@ public class TimecardValidator extends AppValidator {
 
 			if (timecardDayDetails.getActivityId() == 18 && Integer.parseInt(timeDiff.substring(0, 2)) > 9) {
 				errorMsg.add(TimecardMessageConstant.Leave_cant_be_Less_Parameterized_Hour.getLabel()
-						+ AppConstant.WORKING_HOURS.Nine.getValue() + " hours Working Date ["
-						+ timecardDayDetails.getWorkingDate() + "] Start Time [" + timecardDayDetails.getStartTime()
-						+ "] End Time[" + timecardDayDetails.getEndTime() + "]");
+						+ AppConstant.WORKING_HOURS.Nine.getValue() + " hours Working Date "
+						+ timecardDayDetails.getWorkingDate() + " ");
 			}
 
 			timecardDayDetails.setWorkingHours(timeDiff);
