@@ -469,7 +469,7 @@
 					</foreach>
 				)  
 			</if>
-			) as Main group by 1 order by if(status in ('Pending'),'01',status), weekStart desc ;
+			) as Main group by 1 order by weekStart desc, if(status in ('Pending'),'01',status) ;
 		
 	</select>
 
@@ -534,7 +534,7 @@
 				and tci.weekEnd &lt;=#{weekEnd,jdbcType=VARCHAR}
 			</if>		
  -->			and tci.tcId=tcdd.tcId and tcdd.tcId=tcdi.tcId and tcdd.tcdId=tcdi.tcdId and 
-			tcdd.recordType='Active' group by tcdd.projectId,location,activityId 
+			tcdd.recordType='Active' group by tcdd.projectId,location,activityId,rowIndex  
 			order by tcdd.projectId,location,activityId,rowIndex  ;
 	</select>
 	

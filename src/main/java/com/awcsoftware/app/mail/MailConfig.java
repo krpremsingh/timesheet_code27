@@ -15,7 +15,7 @@ public class MailConfig {
 
 		Properties props = new Properties();
 		props.setProperty("mail.transport.protocol", "smtp");
-		props.setProperty("mail.host", "awcsoftware.net");
+		props.setProperty("mail.host", "smtp.gmail.com");
 		props.put("mail.smtp.starttls.enable", "false");
 		props.put("mail.smtp.auth", "true");
 		props.put("mail.smtp.ssl.enable", "false");
@@ -24,11 +24,11 @@ public class MailConfig {
 
 		props.setProperty("mail.smtp.socketFactory.fallback", "false");
 		mailSender.setJavaMailProperties(props);
-		mailSender.setHost("awcsoftware.net");
+		mailSender.setHost("smtp.gmail.com");
 		mailSender.setPort(465);
 		mailSender.setProtocol("smtp");
-		mailSender.setUsername("akumar1@awcsoftware.net");
-		mailSender.setPassword("welcome@123");
+		mailSender.setUsername("awctimesheet@gmail.com");
+		mailSender.setPassword("awc@1234");
 
 		return mailSender;
 	}
