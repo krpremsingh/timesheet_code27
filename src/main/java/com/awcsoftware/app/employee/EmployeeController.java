@@ -97,7 +97,7 @@ public class EmployeeController {
 
 	}
 	
-	@RequestMapping(value="/insertEmployee",method=RequestMethod.POST)
+	@RequestMapping(value="/employee/insertEmployee",method=RequestMethod.POST)
 	public ResponseEntity<String> insertEmployee(@RequestBody User user){
 		try {
 			return new ResponseEntity<String>(employeeservice.insertEmployee(user).toString(), HttpStatus.OK);

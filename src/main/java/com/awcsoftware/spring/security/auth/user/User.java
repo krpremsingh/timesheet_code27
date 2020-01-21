@@ -11,7 +11,6 @@ import com.awcsoftware.app.employee.EmployeePhoneInfo;
 import com.awcsoftware.app.employee.EmployeeProjectInfo;
 
 public class User implements Serializable {
-
 	/**
 	 * 
 	 */
@@ -228,7 +227,14 @@ public class User implements Serializable {
 		this.projectInfo = projectInfo;
 	}
 	
-
-	
-
+	@Override
+	public String toString() {
+		return "User [empId=" + empId + ", firstName=" + firstName + ", middleName=" + middleName + ", lastName="
+				+ lastName + ", empCode=" + empCode + ", dob=" + dob + ", doj=" + doj + ", addedOn=" + addedOn
+				+ ", lastModifiedOn=" + lastModifiedOn + ", email=" + email + ", password=" + password
+				+ ", currentPassword=" + currentPassword + ", confirmPassword=" + confirmPassword + ", newPassword="
+				+ newPassword + ", firstLoginStatus=" + firstLoginStatus + ", status=" + status + ", designationId="
+				+ designationId + ", mailFlag=" + mailFlag + ", addressInfo=" + addressInfo + ", phoneInfo=" + phoneInfo
+				+ ", projectInfo=" + projectInfo + "]";
+	}
 }

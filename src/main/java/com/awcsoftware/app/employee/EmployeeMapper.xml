@@ -145,9 +145,8 @@ values(#{pId},#{empId},#{role},#{workingLocation},#{startDate},#{endDate},#{stat
 </select>
 
 <update id="updateEmployee" parameterType="User">
-update EmployeeInfo set empCode=#{empCode},email=#{email}
-,firstName=#{firstName},middleName=#{middleName},lastName=#{lastName},
-designationId=#{designationId},status=#{status} where empId=#{empId};
+update EmployeeInfo set firstName=#{firstName},middleName=#{middleName},lastName=#{lastName},
+designationId=#{designationId},status=#{status},doj=#{doj} where empId=#{empId};
 </update>
 
 <update id="updateEmployeePhone" parameterType="EmployeePhoneInfo">

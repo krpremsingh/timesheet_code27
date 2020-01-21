@@ -2,9 +2,12 @@ package com.awcsoftware.app.mail;
 
 import java.io.IOException;
 import java.util.List;
+
 import javax.mail.MessagingException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
 import com.awcsoftware.spring.security.auth.user.User;
 
 @Component

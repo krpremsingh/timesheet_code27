@@ -22,7 +22,7 @@ public class ProjectsService {
 
 	public String addProject(ProjectsInfo info) throws AppException, DbException {
 
-		if (validator.validateProject(info).size() == 0 && validator.validateStartDateEndDate(info).size()==0) {
+		if (validator.validateProject(info).size() == 0) {
 			result = dao.addProject(info);
 			if (result == true) {
 				return ProjectsMessageConstants.ProjectAddedSuccessFully.toString();
@@ -35,7 +35,7 @@ public class ProjectsService {
 	}
 
 	public String updateProject(ProjectsInfo info) throws AppException, DbException {
-		if (validator.validateProject(info).size() == 0 && validator.validateStartDateEndDate(info).size()==0) {
+		if (validator.validateProject(info).size() == 0) {
 			result = dao.updateProject(info);
 		}
 		if (result == true) {
