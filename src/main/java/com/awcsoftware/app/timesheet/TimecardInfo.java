@@ -3,17 +3,9 @@ package com.awcsoftware.app.timesheet;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
-
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 import org.apache.log4j.Logger;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 public class TimecardInfo implements Serializable {
 	static Logger logger = Logger.getLogger(TimecardInfo.class);

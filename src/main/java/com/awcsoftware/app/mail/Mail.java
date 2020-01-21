@@ -2,16 +2,12 @@ package com.awcsoftware.app.mail;
 
 import java.io.IOException;
 
-import javax.mail.BodyPart;
 import javax.mail.MessagingException;
-import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponents;
@@ -26,29 +22,30 @@ import com.awcsoftware.spring.security.auth.user.User;
 @Component
 public class Mail {
 	static Logger logger = Logger.getLogger(Mail.class.getName());
-	
-	@Autowired(required = true)
-	@Qualifier("mailconfig")
+
+	@Autowired
 	MailConfig mailconfig;
-	
+
 	@Autowired
 	EmployeeService employeeservice;
-  
-	UriComponents uriComponents =null;
+
+	UriComponents uriComponents = null;
 
 	public String changePasswordRequestEmail(ConfirmationToken confirmationToken, HttpServletRequest request)
 			throws MessagingException, AppException, DbException {
-		 uriComponents = UriComponentsBuilder.newInstance().scheme(request.getScheme()).host(request.getServerName())
-					.port(request.getServerPort()).path(MailMessageConstants.ForgotPasswordUriPath.getLabel().toString()).queryParam("token", confirmationToken.getToken()).queryParam("email", confirmationToken.getUser().getEmail()).build();
-			String forgotPasswordMailContent = MailMessageConstants.ForgotPasswordEmailContent.getLabel().toString();
-			if(forgotPasswordMailContent.contains("user_link")) {
-				forgotPasswordMailContent=forgotPasswordMailContent.replace("user_link", uriComponents.toUriString());
-			}
+		uriComponents = UriComponentsBuilder.newInstance().scheme(request.getScheme()).host(request.getServerName())
+				.port(request.getServerPort()).path(MailMessageConstants.ForgotPasswordUriPath.getLabel().toString())
+				.queryParam("token", confirmationToken.getToken())
+				.queryParam("email", confirmationToken.getUser().getEmail()).build();
+		String forgotPasswordMailContent = MailMessageConstants.ForgotPasswordEmailContent.getLabel().toString();
+		if (forgotPasswordMailContent.contains("user_link")) {
+			forgotPasswordMailContent = forgotPasswordMailContent.replace("user_link", uriComponents.toUriString());
+		}
 
-		logger.debug("uriComponents>>>>>>>>>>>>>>"+uriComponents);
+		logger.debug("uriComponents>>>>>>>>>>>>>>" + uriComponents);
 		MimeMessage message = mailconfig.javaMailSender().createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(message, true);
-		logger.debug("confirmationToken.getUser().getEmail()>>>>>>>>>>>>>>"+confirmationToken.getUser().getEmail());
+		logger.debug("confirmationToken.getUser().getEmail()>>>>>>>>>>>>>>" + confirmationToken.getUser().getEmail());
 		helper.setTo(confirmationToken.getUser().getEmail());
 		helper.setSubject(MailMessageConstants.ChangePasswordSubject.getLabel().toString());
 		helper.setText(forgotPasswordMailContent, true);
@@ -64,34 +61,38 @@ public class Mail {
 		helper.setText(MailMessageConstants.PasswordChangedEmailContent.getLabel().toString(), true);
 		mailconfig.javaMailSender().send(message);
 		return null;
-		
+
 	}
+
 	public String welcomeEmail(MailPojo mailpojo) throws MessagingException, IOException {
 		MimeMessage message = mailconfig.javaMailSender().createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(message, true);
-	/*	 MimeMultipart multipart = new MimeMultipart();
-         BodyPart messageBodyPart = new MimeBodyPart();*/
-        // String content = mailtemplatecontent.welcomeEmail;
-         String content = MailMessageConstants.WelcomeEmailContent.getLabel().toString();
-		for( User sendTo:mailpojo.getUserList()) {
-			String contentupdate=null;
-			if(content.contains("user_email")) {
-				contentupdate=content.replace("user_email", sendTo.getEmail());
-				//System.out.println(contentupdate);
-				 if(contentupdate.contains("user_password")) {
-					 contentupdate=contentupdate.replace("user_password", sendTo.getPassword());
+		/*
+		 * MimeMultipart multipart = new MimeMultipart(); BodyPart messageBodyPart = new
+		 * MimeBodyPart();
+		 */
+		// String content = mailtemplatecontent.welcomeEmail;
+		String content = MailMessageConstants.WelcomeEmailContent.getLabel().toString();
+		for (User sendTo : mailpojo.getUserList()) {
+			String contentupdate = null;
+			if (content.contains("user_email")) {
+				contentupdate = content.replace("user_email", sendTo.getEmail());
+				// System.out.println(contentupdate);
+				if (contentupdate.contains("user_password")) {
+					contentupdate = contentupdate.replace("user_password", sendTo.getPassword());
 				}
 			}
-			
-	     /*   messageBodyPart.setContent(contentupdate, "text/html");
-	        multipart.addBodyPart(messageBodyPart); 
-	        message.setContent(multipart);*/
+
+			/*
+			 * messageBodyPart.setContent(contentupdate, "text/html");
+			 * multipart.addBodyPart(messageBodyPart); message.setContent(multipart);
+			 */
 			helper.setTo(sendTo.getEmail());
 			helper.setSubject(MailMessageConstants.WelcomeEmailSubject.getLabel().toString());
-			helper.setText(contentupdate,true);
+			helper.setText(contentupdate, true);
 			mailconfig.javaMailSender().send(message);
 		}
-		return  MailMessageConstants.SendEmail.getLabel().toString();
-		
+		return MailMessageConstants.SendEmail.getLabel().toString();
+
 	}
 }

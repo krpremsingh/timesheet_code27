@@ -14,6 +14,7 @@ public enum EmployeeMessageConstants {
 	BlankWorkLocation("Work location can't be blank"),
 	BlankProjectStatus("Project status can't be blank"),
 	StartDateEndDateRange("End date can't be less than start date"),
+	EmailIdCantBeChanged("Can't update the email id"),
 	EmployeeUpdated("Employee updated successfully"),
 	BlankDob("Date of birth can't be blank"),
 	BlankDoj("Date of Joining can't be blank"),

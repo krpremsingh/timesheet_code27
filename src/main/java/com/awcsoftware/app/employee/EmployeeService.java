@@ -222,6 +222,9 @@ public class EmployeeService  {
 		if (employeevalidator.validateEmployeeBasicDetails(user).size() != 0) {
 			return employeevalidator.validateEmployeeBasicDetails(user).toString();
 		}
+        if(Util.isEmptyOrNull(userDao.getUser(user.getEmail()))) {
+        	return EmployeeMessageConstants.EmailIdCantBeChanged.getLabel().toString();
+        }
 		if (employeevalidator.validateEmployeeAddress(user).size() != 0) {
 			return employeevalidator.validateEmployeeAddress(user).toString();
 		}

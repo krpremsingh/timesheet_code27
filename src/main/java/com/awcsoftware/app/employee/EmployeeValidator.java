@@ -234,6 +234,7 @@ public class EmployeeValidator {
 			errorMsg.add(EmployeeMessageConstants.BlankCity.getLabel().toString());
 			return errorMsg;
 		}
+
 		if (Util.isEmptyOrNull(addressInfo.getCountry())) {
 			errorMsg.add(EmployeeMessageConstants.BlankCountry.getLabel().toString());
 			return errorMsg;

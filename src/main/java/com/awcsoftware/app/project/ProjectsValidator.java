@@ -45,11 +45,34 @@ public class ProjectsValidator {
 			errorMsg.add(ProjectsMessageConstants.InvalidDateFormat.getLabel().toString());
 			return errorMsg;
 		}
-
-		if (Util.isEmptyOrNull(info.getProjectLocations().get(0).getWorkLocationId())) {
-			errorMsg.add(ProjectsMessageConstants.BlankProjectLocation.getLabel().toString());
+		if (Util.isEmptyOrNull(info.getStartDate())) {
+			errorMsg.add(ProjectsMessageConstants.BlankStartDate.getLabel().toString());
 			return errorMsg;
 		}
+
+		if (Util.isEmptyOrNull(info.getEndDate())) {
+			errorMsg.add(ProjectsMessageConstants.BlankEndDate.getLabel().toString());
+			return errorMsg;
+		}
+		if (!Util.isValidDate(info.getEndDate())) {
+			errorMsg.add(ProjectsMessageConstants.InvalidDateFormat.getLabel().toString());
+			return errorMsg;
+		}
+		if (dateFormatter(info.getEndDate()).isBefore(dateFormatter(info.getStartDate()))) {
+			errorMsg.add(ProjectsMessageConstants.ProjectEndDateRange.getLabel().toString());
+			return errorMsg;
+		}
+		
+         for(ProjectLocations projectLocation:info.getProjectLocations()) {
+        	 if(Util.isEmptyOrNull(projectLocation.getWorkLocationId())) {
+        		errorMsg.add(ProjectsMessageConstants.BlankProjectLocation.getLabel().toString());
+     			return errorMsg; 
+        	 }
+         }
+/*		if (Util.isEmptyOrNull(info.getProjectLocations().get(0).getWorkLocationId())) {
+			errorMsg.add(ProjectsMessageConstants.BlankProjectLocation.getLabel().toString());
+			return errorMsg;
+		}*/
 		return errorMsg;
 
 	}
