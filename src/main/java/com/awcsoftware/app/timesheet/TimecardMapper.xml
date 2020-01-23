@@ -410,7 +410,7 @@
 		FROM
 		ProjectTeamDetails PTM, ProjectApproverDetails PAD, EmployeeInfo
 		ei
-		WHERE Pad.TCAPPROVER=#{empId} and PAD.pId=PTM.pId AND PTM.empId
+		WHERE Pad.TCAPPROVER=#{empId} and PAD.pId=PTM.projectId AND PTM.empId
 		&lt;&gt; TCAPPROVER AND
 		ei.empId=PTM.empId and ei.status='Active';
 	</select>
