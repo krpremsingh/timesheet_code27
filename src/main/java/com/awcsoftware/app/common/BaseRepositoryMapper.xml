@@ -3,12 +3,12 @@
 <mapper namespace="ParentBasePojo">
 <!--<cache /> -->
 <resultMap id="DesignationResult" type="ParentBasePojo">
-<id column="DesignationId" property="id" jdbcType="INTEGER" />
+<id column="designationId" property="id" jdbcType="INTEGER" />
 <collection property="basepojo"  select="getActivities" column="DesignationId" />
 </resultMap>
 
 <resultMap id="ProjectResult" type="ParentBasePojo">
-<id column="ProjectId" property="id" jdbcType="INTEGER" />
+<id column="projectId" property="id" jdbcType="INTEGER" />
 <collection property="basepojo"  select="getProjects" column="ProjectId" />
 </resultMap>
 
@@ -33,7 +33,7 @@ select distinct activity,activityId from ActivitiesInfo
 </select>
 	
 <select id="getProjects" resultMap="projectResult">
-select distinct p.projectName,p.projectId from ProjectsInfo p inner join ProjectTeamDetails ep on ep.pId=p.projectId inner join ProjectLocationDetails b on p.projectId=b.projectId  where ep.empId=#{empId};
+select distinct p.projectName,p.projectId from ProjectsInfo p inner join ProjectTeamDetails ep on ep.projectId=p.projectId inner join ProjectLocationDetails b on p.projectId=b.projectId  where ep.empId=#{empId};
 </select>
 
 <select id="getProjectLocations" resultMap="locationResult">

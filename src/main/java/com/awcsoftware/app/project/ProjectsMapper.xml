@@ -59,7 +59,7 @@ insert into ProjectsInfo(projectName,budget,startDate,endDate,status,addedOn,cli
  
  <select id="viewProjectLocation" resultMap="ProjectLocationsInfoMap" parameterType="Projects">
  select pldId,projectId,workLocationId,ifnull((select location from WorkLocationsInfo wli where wli.workLocationId=pld.workLocationId),' ') workLocation 
- from ProjectLocationDetails PLD where projectId=#{projectId}
+ from ProjectLocationDetails pld where projectId=#{projectId}
  </select>
  
  <select id="viewProjectTeam" resultMap="ProjectsTeamDetailsMap" parameterType="Projects">
