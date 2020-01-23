@@ -101,19 +101,6 @@ select * from LoginTransaction lt inner join EmployeeInfo e on e.empId=lt.empId 
 insert into LoginTransaction values(#{empId},#{loginTimestamp},#{lastPasswordChange},#{passwordExpiryDate},#{activityStatus},#{statusReason});
 </insert>
 
-<update id="updateMailFlag" parameterType="MailPojo">
-update EmployeeInfo set mailFlag='YES' where mailFlag='NO' and
-	email in( 	
-     <foreach item="item" index="index" collection="userList" separator=",">
-		#{item.email}
-		</foreach>
-		)
-</update>
-
-<select id="getemaillist" resultType="User"> 
-select e.email,e.mailFlag,e.empId,e.password from EmployeeInfo e where e.mailFlag='NO';
-</select>
-
 <insert id="insertEmployee" parameterType="User" keyProperty="empId" useGeneratedKeys="true">
 insert into EmployeeInfo(empCode,firstName,middleName,lastName,email,dob,doj,
 password,designationId,status,addedOn,lastModifiedOn,firstLoginStatus,mailFlag) 
@@ -174,13 +161,24 @@ lastModifiedOn=now() where empId=#{empId} and phoneNumberId=#{phoneNumberId}
 </update>
 
 <select id="getEmployee" resultMap="User" parameterType="User">
-select  empId,empCode,firstName,middleName,lastName,email,dob,doj,designationId,status,addedOn,lastModifiedOn,firstLoginStatus from EmployeeInfo where empId=#{empId}
-<!-- <where>
-<if test="empId!=0">
- empId=#{empId}
+select empId,empCode,firstName,middleName,lastName,email,dob,doj,designationId,status,addedOn,lastModifiedOn,firstLoginStatus from EmployeeInfo 
+ <where>
+<if test="firstName!=null">
+  concat(firstName,lastName) like #{firstName}
 </if>
+
+<if test="empCode!=null">
+  or empCode like #{empCode} 
+</if>
+<if test="email!=null">
+  or email like #{email} 
+</if>
+<if test="doj!=null">
+  doj between doj=#{fromDate} and doj=#{toDate} 
+</if>
+
 </where>
- -->
+
  </select>
 
 <select id="getEmployeeAddress" resultMap="EmployeeAddressInfoMap" parameterType="User">
@@ -197,10 +195,10 @@ select pdId,empId, pId,role,workingLocation,startDate,endDate,status as projectS
 </select>
 
 
-
+<!-- 
 <select id="getEmployees" resultMap="User">
 select empId,empCode,firstName,middleName,lastName,email,dob,doj,designationId,status,addedOn,lastModifiedOn,firstLoginStatus from EmployeeInfo
-</select>
+</select> -->
 <!--
 <update id="updateFirstLogin" parameterType="EmployeeLoginTransaction">
 update EmployeeInfo e inner join LoginTransaction lt on e.empId=lt.empId set firstLoginStatus=0 where e.empId=#{empId}

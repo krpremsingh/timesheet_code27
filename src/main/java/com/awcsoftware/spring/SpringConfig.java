@@ -8,9 +8,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.concurrent.ConcurrentTaskScheduler;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
@@ -32,12 +30,7 @@ public class SpringConfig extends WebMvcConfigurationSupport {
         return converter;
     }
     
-    @Bean
-    public TaskScheduler taskScheduler() {
-        return new ConcurrentTaskScheduler();
-    }
-    
-
+  
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry

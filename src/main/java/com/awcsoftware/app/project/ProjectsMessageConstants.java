@@ -9,8 +9,13 @@ public enum ProjectsMessageConstants {
 	BlankProjectLocation("Project location can't be blank"),
 	ProjectAlreadyExist("Project already exist"),
 	InvalidDateFormat("Date format is invalid"),
+	EmployeeIdCantBeBlank("Employee id can't be blank"),
+	EmployeeRoleCantBeBlank("Employee role can't be blank"),
+	EmployeeWorkLocation("Work location can't be blank"),
+	ProjectAndWorkLocationNotMatched("Work location not matched with project location"),
 	ProjectAddedSuccessFully("Project added successfully"),
 	ProjectNotAdded("Project not added"),
+	ProjectNotFound("Project not found"),
 	ProjectLocationNotFound("Project location not found"),
 	ProjectEndDateRange("End date can't be less than start date"),
 	ProjectUpdated("Project updated successfully");

@@ -1,8 +1,5 @@
 package com.awcsoftware.app.common;
 
-import org.springframework.stereotype.Component;
-
-@Component
 public class BasePojo {
 
 	private int id;

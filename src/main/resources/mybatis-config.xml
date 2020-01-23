@@ -59,7 +59,8 @@
 		<typeAlias alias="Projects" type="com.awcsoftware.app.project.ProjectsInfo"/>
 		
 		<typeAlias alias="ProjectLocations"  type="com.awcsoftware.app.project.ProjectLocations"/>
-
+         
+         <typeAlias  alias="ProjectsTeamDetails" type="com.awcsoftware.app.project.ProjectsTeamDetails"/>
 	</typeAliases>
 	<environments default="development">
 		<environment id="development">
@@ -67,7 +68,7 @@
 			<dataSource type="POOLED">
 				<property name="driver" value="com.mysql.jdbc.Driver" />
 				<property name="url"
-					value="jdbc:mysql://192.168.132:3306/timesheet" />
+					value="jdbc:mysql://192.168.1.32:3306/timesheet" />
 				<property name="username" value="root" />
 				<property name="password" value="My@SQL" />
 			</dataSource>
@@ -88,6 +89,9 @@
 			<!-- Mapper Definition for project crud functionality -->
 			<mapper
 			resource="com/awcsoftware/app/project/ProjectsMapper.xml" />
+			<mapper 
+			resource="com/awcsoftware/app/mail/MailMapper.xml"
+			/>
 	</mappers>
 
 </configuration>

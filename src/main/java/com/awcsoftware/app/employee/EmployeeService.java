@@ -1,5 +1,6 @@
 package com.awcsoftware.app.employee;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -9,14 +10,12 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponents;
 
 import com.awcsoftware.app.AppException;
 import com.awcsoftware.app.Util;
 import com.awcsoftware.app.mail.Mail;
 import com.awcsoftware.mybatis.DbException;
-import com.awcsoftware.spring.security.auth.UserAuthenticationDetail;
 import com.awcsoftware.spring.security.auth.user.User;
 import com.awcsoftware.spring.security.auth.user.UserDao;
 
@@ -36,15 +35,13 @@ import com.awcsoftware.spring.security.auth.user.UserDao;
  * 1.setLoginTransactionIfFailed
  * 2.setLoginTransactionIfSuccess 
  */
-@Component
-public class EmployeeService  {
+public class EmployeeService {
 
 	static Logger log = Logger.getLogger(EmployeeService.class.getName());
 	boolean valid = false;
 	UriComponents uriComponents = null;
 
-	@Autowired(required = true)
-	@Qualifier("empDao")
+	@Autowired
 	EmployeeDao empDao;
 
 	@Autowired(required = true)
@@ -103,12 +100,12 @@ public class EmployeeService  {
 			throws AppException, DbException, MessagingException {
 		EmployeeValidator validator = new EmployeeValidator();
 		Set<String> verifyemail = validator.verifyEmailId(email);
-		log.debug("Error Size>>>>>>>>>>>>>>"+verifyemail.size());
+		log.debug("Error Size>>>>>>>>>>>>>>" + verifyemail.size());
 		if (verifyemail.size() != 0) {
 			return verifyemail.toString();
 		}
 		User user = userDao.getUser(email);
-		log.debug("user>>>>>>>>>>>>>>"+user);
+		log.debug("user>>>>>>>>>>>>>>" + user);
 		ctoken = new ConfirmationToken(user);
 		log.debug(user + " " + ctoken);
 		saveUpdateToken(ctoken);
@@ -176,18 +173,20 @@ public class EmployeeService  {
 	public EmployeeLoginTransaction setLoginTransactionIfSuccess(EmployeeLoginTransaction transaction) {
 		transaction.setActivityStatus(EmployeeMessageConstants.LoginSuccess.getLabel().toString());
 		EmployeeLoginTransaction result = empDao.getLoginTransaction(transaction);
-/*		User user= new User();
-		UserAuthenticationDetail userdetails=new UserAuthenticationDetail(user.getEmail(),user.getPassword());*/
+		/*
+		 * User user= new User(); UserAuthenticationDetail userdetails=new
+		 * UserAuthenticationDetail(user.getEmail(),user.getPassword());
+		 */
 		log.debug(result);
 		if (Util.isEmptyOrNull(result)) {
 			transaction.setStatusReason(EmployeeMessageConstants.LoginSuccessReason.getLabel().toString());
-			//transaction.setLoginToken(userdetails.getToken());
+			// transaction.setLoginToken(userdetails.getToken());
 			empDao.saveLastLogin(transaction);
 			return transaction;
 		}
 		transaction.setPasswordExpiryDate(result.getPasswordExpiryDate());
 		transaction.setLastPasswordChange(result.getLastPasswordChange());
-		//transaction.setLoginToken(userdetails.getToken());
+		// transaction.setLoginToken(userdetails.getToken());
 		transaction.setStatusReason(EmployeeMessageConstants.LoginSuccessReason.getLabel().toString());
 		empDao.saveLastLogin(transaction);
 
@@ -206,49 +205,58 @@ public class EmployeeService  {
 		if (employeevalidator.validateEmployeePhone(user).size() != 0) {
 			return employeevalidator.validateEmployeePhone(user).toString();
 		}
-		if (employeevalidator.validateEmployeeProjects(user).size() != 0) {
-			return employeevalidator.validateEmployeeProjects(user).toString();
-		} else {
+		/*
+		 * if (employeevalidator.validateEmployeeProjects(user).size() != 0) { return
+		 * employeevalidator.validateEmployeeProjects(user).toString(); }
+		 */ else {
 
 			if (empDao.validateEmployee(user) == false) {
 				return EmployeeMessageConstants.EmployeeAlreadyExist.getLabel().toString();
 			}
 		}
 		return EmployeeMessageConstants.EmployeeAdded.getLabel().toString();
-
 	}
 
 	public String updateEmployee(User user) throws AppException, DbException {
 		if (employeevalidator.validateEmployeeBasicDetails(user).size() != 0) {
 			return employeevalidator.validateEmployeeBasicDetails(user).toString();
 		}
-        if(Util.isEmptyOrNull(userDao.getUser(user.getEmail()))) {
-        	return EmployeeMessageConstants.EmailIdCantBeChanged.getLabel().toString();
-        }
+		if (Util.isEmptyOrNull(userDao.getUser(user.getEmail()))) {
+			return EmployeeMessageConstants.EmailIdCantBeChanged.getLabel().toString();
+		}
 		if (employeevalidator.validateEmployeeAddress(user).size() != 0) {
 			return employeevalidator.validateEmployeeAddress(user).toString();
 		}
 		if (employeevalidator.validateEmployeePhone(user).size() != 0) {
 			return employeevalidator.validateEmployeePhone(user).toString();
 		}
-		if (employeevalidator.validateEmployeeProjects(user).size() != 0) {
-			return employeevalidator.validateEmployeeProjects(user).toString();
-		}
+		/*
+		 * if (employeevalidator.validateEmployeeProjects(user).size() != 0) { return
+		 * employeevalidator.validateEmployeeProjects(user).toString(); }
+		 */
 		else {
-			empDao.updateEmployee(user);	
-		}		
+			empDao.updateEmployee(user);
+		}
 		return EmployeeMessageConstants.EmployeeUpdated.getLabel().toString();
 
 	}
+
+	public List<User> getEmployee(User user) throws AppException, DbException {
+		List<User> list = empDao.getEmployee(user);
+		 if(list.size()==0) {
+			list = new ArrayList<User>();
+			user.setStatus(EmployeeMessageConstants.EmployeeNotFound.getLabel().toString());
+			list.add(user);
+			return list;
+		}
+		return list;
 	
-	public User getEmployee(int empId)throws AppException, DbException {
-		return empDao.getEmployee(empId);
-		
+
 	}
-	
-	public List<User> getEmployees() throws AppException,DbException{
+
+/*	public List<User> getEmployees() throws AppException, DbException {
 		return empDao.getEmployees();
-		
-	}
+
+	}*/
 
 }

@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -19,7 +18,6 @@ import com.awcsoftware.app.employee.EmployeeService;
 import com.awcsoftware.mybatis.DbException;
 import com.awcsoftware.spring.security.auth.user.User;
 
-@Component
 public class Mail {
 	static Logger logger = Logger.getLogger(Mail.class.getName());
 

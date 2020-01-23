@@ -16,7 +16,7 @@ public class MailDao {
 	public List<User> getEmailList() {
 		SqlSession session = MyBatisManager.openSession();
 		try {
-			List<User> result = session.selectList("User.getemaillist");
+			List<User> result = session.selectList("MailMapper.getemaillist");
 			if (result != null) {
 				return result;
 			}
@@ -30,7 +30,7 @@ public class MailDao {
 	public boolean updatemailFlag(MailPojo mailpojo) {
 		SqlSession session = MyBatisManager.openSession();
 		try {
-			int result = session.update("User.updateMailFlag", mailpojo);
+			int result = session.update("MailMapper.updateMailFlag", mailpojo);
 			
 			if (result == 0) {
 				return false;

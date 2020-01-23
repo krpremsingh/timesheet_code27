@@ -8,7 +8,8 @@ public class ProjectLocations implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
+private int pldId;	
 private int projectId;
 private int workLocationId;
 private String workLocation;
@@ -18,6 +19,12 @@ public int getProjectId() {
 }
 public void setProjectId(int projectId) {
 	this.projectId = projectId;
+}
+public int getPldId() {
+	return pldId;
+}
+public void setPldId(int pldId) {
+	this.pldId = pldId;
 }
 public int getWorkLocationId() {
 	return workLocationId;

@@ -9,7 +9,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
-import org.springframework.stereotype.Component;
 
 import com.awcsoftware.app.AppException;
 import com.awcsoftware.app.Util;
@@ -25,7 +24,6 @@ import com.awcsoftware.spring.security.auth.user.UserDao;
  * check confirmation token validity
  * check confirmation token null or not
  */
-@Component
 public class EmployeeValidator {
 	static Logger logger = Logger.getLogger(EmployeeValidator.class);
 	static Set<String> errorMsg;
@@ -34,19 +32,16 @@ public class EmployeeValidator {
 	}
 	User result = null;
 
-	private static final String PASSWORD_PATTERN = "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).{8,20})";
+	private static final String PASSWORD_PATTERN = "^(?=[a-zA-Z0-9#@$*%&]{8,20}$)(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9]).*";
 
 	private Pattern pattern;
 
 	private Matcher matcher;
-
+       
 	public EmployeeValidator() {
 		pattern = Pattern.compile(PASSWORD_PATTERN);
 	}
 
-	/*
-	 * 
-	 */
 	public boolean validatePattern(final String password) {
 
 		matcher = pattern.matcher(password);
@@ -99,17 +94,6 @@ public class EmployeeValidator {
 		}
 		return errorMsg;
 	}
-	/*
-	 * public Set<String> verifyEmail(String email) { errorMsg.clear(); EmployeeDao
-	 * dao = new EmployeeDao(); String emailId = dao.verifyEmailId(email); if
-	 * (Util.isEmptyOrNull(emailId) || !Util.validateEmail.test(email)) {
-	 * logger.debug("email id not found"); return null; } if
-	 * (Util.isEmptyOrNull(emailId) || !Util.validateEmail.test(email)) {
-	 * errorMsg.add(EmployeeMessageConstants.WrongEmailId.getLabel()); } return
-	 * errorMsg;
-	 * 
-	 * }
-	 */
 
 	public Set<String> verifyEmailId(String email) throws AppException, DbException {
 		errorMsg.clear();
@@ -208,16 +192,6 @@ public class EmployeeValidator {
 		
 		}
 
-
-		/*
-		 * else {
-		 * 
-		 * if(checkEmployee==false) {
-		 * errorMsg.add(EmployeeMessageConstants.EmployeeAlreadyExist.getLabel().
-		 * toString()); return errorMsg; } if(checkEmployee==true) {
-		 * dao.insertEmployee(user); }
-		 * errorMsg.add(EmployeeMessageConstants.EmployeeAdded.getLabel().toString()); }
-		 */
 		return errorMsg;
 
 	}

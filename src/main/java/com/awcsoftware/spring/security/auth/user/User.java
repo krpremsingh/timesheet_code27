@@ -29,7 +29,7 @@ public class User implements Serializable {
 	private String dob;
 
 	private String doj;
-	
+
 	private LocalDateTime addedOn;
 
 	private LocalDateTime lastModifiedOn;
@@ -51,13 +51,16 @@ public class User implements Serializable {
 	private int designationId;
 
 	private String mailFlag;
-	
+
+	private String fromDate;
+
+	private String toDate;
+
 	private List<EmployeeAddressInfo> addressInfo;
-	
+
 	private List<EmployeePhoneInfo> phoneInfo;
-	
+
 	private List<EmployeeProjectInfo> projectInfo;
-	
 
 	public int getEmpId() {
 		return empId;
@@ -226,7 +229,23 @@ public class User implements Serializable {
 	public void setProjectInfo(List<EmployeeProjectInfo> projectInfo) {
 		this.projectInfo = projectInfo;
 	}
-	
+
+	public String getFromDate() {
+		return fromDate;
+	}
+
+	public void setFromDate(String fromDate) {
+		this.fromDate = fromDate;
+	}
+
+	public String getToDate() {
+		return toDate;
+	}
+
+	public void setToDate(String toDate) {
+		this.toDate = toDate;
+	}
+
 	@Override
 	public String toString() {
 		return "User [empId=" + empId + ", firstName=" + firstName + ", middleName=" + middleName + ", lastName="
@@ -234,7 +253,8 @@ public class User implements Serializable {
 				+ ", lastModifiedOn=" + lastModifiedOn + ", email=" + email + ", password=" + password
 				+ ", currentPassword=" + currentPassword + ", confirmPassword=" + confirmPassword + ", newPassword="
 				+ newPassword + ", firstLoginStatus=" + firstLoginStatus + ", status=" + status + ", designationId="
-				+ designationId + ", mailFlag=" + mailFlag + ", addressInfo=" + addressInfo + ", phoneInfo=" + phoneInfo
-				+ ", projectInfo=" + projectInfo + "]";
+				+ designationId + ", mailFlag=" + mailFlag + ", fromDate=" + fromDate + ", toDate=" + toDate
+				+ ", addressInfo=" + addressInfo + ", phoneInfo=" + phoneInfo + ", projectInfo=" + projectInfo + "]";
 	}
+
 }

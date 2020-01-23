@@ -22,6 +22,7 @@ public class ProjectsDao {
 				int result = session.insert("Projects.addProject", info);
 				if (result != 0) {
 					addProjectLocation(info, session);
+					addProjectTeam(info,session);
 					session.commit();
 					return true;
 				}
@@ -47,6 +48,20 @@ public class ProjectsDao {
 		return false;
 
 	}
+	
+	public boolean addProjectTeam(ProjectsInfo info,SqlSession session) {
+		int result = 0;
+		for ( ProjectsTeamDetails projectteam : info.getProjectsTeamDetails()) {
+			projectteam.setProjectId(info.getProjectId());
+			result = session.insert("Projects.addProjectTeam", projectteam);
+		}
+		if (result != 0) {
+			session.commit();
+			return true;
+		}
+		return false;
+		
+	}
 
 	public boolean checkProject(ProjectsInfo info, SqlSession session) throws AppException, DbException {
 		int result = session.selectOne("Projects.checkProject", info);
@@ -63,7 +78,8 @@ public class ProjectsDao {
 			int result = session.update("Projects.updateProjectInfo", info);
 			logger.debug("Result " + result);
 			if (result != 0) {
-				updateProjectLocationDetails(info);
+				updateProjectLocationDetails(info,session);
+				updateProjectTeamDetails(info,session);
 				session.commit();
 				return true;
 			}
@@ -76,24 +92,29 @@ public class ProjectsDao {
 
 	}
 
-	public boolean updateProjectLocationDetails(ProjectsInfo info) {
-		SqlSession session = MyBatisManager.openSession();
+	public boolean updateProjectLocationDetails(ProjectsInfo info,SqlSession session) {
 		int result = 0;
-		try {
 			for (ProjectLocations projectLocations : info.getProjectLocations()) {
 				projectLocations.setProjectId(info.getProjectId());
 				result = session.update("Projects.updateProjectLocationDetails", projectLocations);
 			}			
 			if (result != 0) {
-				session.commit();
 				return true;
 			} else {
 				return false;
 			}
-			
-		} finally {
-			session.close();
-		}
+	}
+	public boolean updateProjectTeamDetails(ProjectsInfo info,SqlSession session) {
+		int result = 0;
+			for ( ProjectsTeamDetails projectteam : info.getProjectsTeamDetails()) {
+				projectteam.setProjectId(info.getProjectId());
+				result = session.update("Projects.updateProjectTeamDetails", projectteam);
+			}			
+			if (result != 0) {
+				return true;
+			} else {
+				return false;
+			}	
 	}
 	public List<ProjectsInfo> viewProject(int projectId)throws AppException,DbException {
 		SqlSession session = MyBatisManager.openSession();

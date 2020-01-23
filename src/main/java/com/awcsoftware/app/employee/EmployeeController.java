@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -122,19 +121,18 @@ public class EmployeeController {
 		
 	}
 	
-	@RequestMapping(value = "/getEmployee/{empId}", method = RequestMethod.POST, headers = "Accept=application/json")
-	public ResponseEntity<User> getEmployee(@PathVariable("empId") int empId) {
+	@RequestMapping(value = "/getEmployee", method = RequestMethod.POST, headers = "Accept=application/json")
+	public ResponseEntity<List<User>> getEmployee(@RequestBody User user) {
 		try {
-			return new ResponseEntity<User>(employeeservice.getEmployee(empId), HttpStatus.OK);
+			return new ResponseEntity<List<User>>(employeeservice.getEmployee(user), HttpStatus.OK);
 		} catch (AppException e) {
-			return new ResponseEntity<User>(HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<List<User>>(HttpStatus.INTERNAL_SERVER_ERROR);
 		} catch (DbException e) {
-			return new ResponseEntity<User>(HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<List<User>>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
 	}
-	@PreAuthorize(value="hasRole('ROLE_MANAGER')")
-	@RequestMapping(value = "/getEmployees", method = RequestMethod.GET, headers = "Accept=application/json")
+/*	@RequestMapping(value = "/getEmployees", method = RequestMethod.GET, headers = "Accept=application/json")
 	public ResponseEntity<List<User>> getEmployees() {
 		try {
 			return new ResponseEntity<List<User>>(employeeservice.getEmployees(), HttpStatus.OK);
@@ -144,7 +142,7 @@ public class EmployeeController {
 			return new ResponseEntity<List<User>>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
-	}
+	}*/
 	
 
 }

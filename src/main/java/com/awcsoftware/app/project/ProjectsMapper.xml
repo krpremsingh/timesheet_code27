@@ -11,10 +11,16 @@
 	<resultMap type="Projects" id="ProjectMap">
 		<id column="projectId" property="projectId"/>
 		<collection property="projectLocations" ofType="ProjectLocations" select="viewProjectLocation"
-		column="projectId"/>	
+		column="projectId"/>
+	<collection property="projectsTeamDetails" ofType="ProjectsTeamDetails" select="viewProjectTeam"
+		column="projectId"/>
    </resultMap>
    
-   <resultMap type="ProjectLocations" id="ProjectLocationsInfoMap">
+    <resultMap type="ProjectLocations" id="ProjectLocationsInfoMap">
+		<id column="projectId" property="projectId" jdbcType="INTEGER" />	
+     </resultMap>
+     
+     <resultMap type="ProjectsTeamDetails" id="ProjectsTeamDetailsMap">
 		<id column="projectId" property="projectId" jdbcType="INTEGER" />	
      </resultMap>
 
@@ -23,11 +29,15 @@
 </select>
   
 <insert id="addProject" parameterType="Projects" keyProperty="projectId" useGeneratedKeys="true"> 
-insert into ProjectsInfo(projectName,budget,startDate,endDate,status,addedOn) values(#{projectName},#{budget},#{startDate},#{endDate},#{status},now());
+insert into ProjectsInfo(projectName,budget,startDate,endDate,status,addedOn,clientId) values(#{projectName},#{budget},#{startDate},#{endDate},#{status},now(),#{clientId});
  </insert>
  
  <insert id="addProjectLocation" parameterType="ProjectLocations" keyProperty="projectId" useGeneratedKeys="true">
  insert into ProjectLocationDetails(projectId,workLocationId) values(#{projectId},#{workLocationId});
+ </insert>
+ 
+ <insert id="addProjectTeam" parameterType="ProjectsTeamDetails" keyProperty="pdId">
+ insert into ProjectTeamDetails(projectId,empId,role,workingLocation,startDate,endDate,status,addedOn) values(#{projectId},#{empId},#{role},#{workingLocation},#{startDate},#{endDate},#{status},now());
  </insert>
  
  <update id="updateProjectInfo" parameterType="Projects">
@@ -35,26 +45,36 @@ insert into ProjectsInfo(projectName,budget,startDate,endDate,status,addedOn) va
  </update>
  
  <update id="updateProjectLocationDetails" parameterType="ProjectLocations">
- update ProjectLocationDetails set workLocationId=#{workLocationId} where projectId=#{projectId} and workLocationId=#{workLocationId}
+ update ProjectLocationDetails set workLocationId=#{workLocationId} where projectId=#{projectId} and pldId=#{pldId}
+ </update>
+ <update id="updateProjectTeamDetails" parameterType="ProjectsTeamDetails">
+ update ProjectTeamDetails set empId=#{empId},projectId=#{projectId},role=#{role},workingLocation=#{workingLocation}
+ ,startDate=#{startDate},endDate=#{endDate},status=#{status},lastModifiedOn=now();
  </update>
  
  <select id="viewProject" parameterType="Projects" resultMap="ProjectMap">
- select p.projectId,p.projectName,p.startDate,p.endDate,p.budget,p.addedOn,p.lastModifiedOn from ProjectsInfo p 
+ select p.projectId,p.projectName,p.startDate,p.endDate,p.budget,p.addedOn,p.lastModifiedOn,p.clientId,p.status from ProjectsInfo p 
  where p.projectId=#{projectId};
  </select>
  
  <select id="viewProjectLocation" resultMap="ProjectLocationsInfoMap" parameterType="Projects">
- select projectId,workLocationId,ifnull((select location from WorkLocationsInfo wli where wli.workLocationId=pld.workLocationId),' ') workLocation from ProjectLocationDetails PLD where projectId=#{projectId}
+ select pldId,projectId,workLocationId,ifnull((select location from WorkLocationsInfo wli where wli.workLocationId=pld.workLocationId),' ') workLocation 
+ from ProjectLocationDetails PLD where projectId=#{projectId}
+ </select>
+ 
+ <select id="viewProjectTeam" resultMap="ProjectsTeamDetailsMap" parameterType="Projects">
+ select pdId,projectId,empId,ifnull((select concat(firstName,middleName,lastName),email from EmployeeInfo e where e.empId=ptd.empId),' ') name,role,workingLocation,startDate,endDate,status,addedOn,lastModifiedOn from 
+ ProjectTeamDetails ptd where projectId=#{projectId}
  </select>
  
   <select id="viewProjects" resultType="Projects">
- select p.projectId,p.projectName,p.startDate,p.endDate,p.budget,p.addedOn,p.lastModifiedOn from ProjectsInfo p 
+ select p.projectId,p.projectName,p.startDate,p.endDate,p.budget,p.addedOn,p.lastModifiedOn,p.status from ProjectsInfo p 
  <where>
 <if test="startDate!= null">
-  p.startDate=#{startDate}
+  p.startDate &gt;= #{startDate,jdbcType=VARCHAR}
 </if>
 <if test="endDate!= null">
-and p.endDate=#{endDate}
+and p.endDate &lt;= #{endDate,jdbcType=VARCHAR}
 </if>
  </where> 
  </select>

@@ -3,17 +3,15 @@ package com.awcsoftware.app.employee;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-import org.springframework.stereotype.Component;
-
 import com.awcsoftware.app.AppConstant;
 import com.awcsoftware.spring.security.auth.token.TokenManager;
 import com.awcsoftware.spring.security.auth.user.User;
+
 /*
  * set the token expiry time in confirmation token
  * set current date as tokencreationdate
  * take instance of principal in constructor 
  */
-@Component("confirmationtoken")
 public class ConfirmationToken implements Serializable {
 	/**
 	 * 

@@ -6,17 +6,14 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import com.awcsoftware.app.AppException;
 import com.awcsoftware.mybatis.DbException;
 import com.awcsoftware.mybatis.MyBatisManager;
 import com.awcsoftware.spring.security.auth.user.User;
-import com.awcsoftware.spring.security.auth.user.UserDao;
 
 /**
  * 
- * @author Arun 
- *         methods to generate and verify confirmation token
+ * @author Arun methods to generate and verify confirmation token
  *         1.saveToken(assigned a token to user with expiry date)
  *         2.updateToken(update token if user generate a link more than one time
  *         without changing the password) 3.checkToken(to check token in the
@@ -28,11 +25,8 @@ import com.awcsoftware.spring.security.auth.user.UserDao;
  *         maintain the state of user 1.getLoginTransaction 2.saveLastLogin
  *         3.saveLoginTransaction
  */
-@Component("empDao")
+@Component
 public class EmployeeDao {
-
-	@Autowired
-	UserDao userdao;
 
 	@Autowired
 	EmployeeValidator empValidator;
@@ -55,7 +49,7 @@ public class EmployeeDao {
 			if (result != 0) {
 				addEmployeeAddress(user, session);
 				addEmployeePhone(user, session);
-				addEmployeeProject(user, session);
+				// addEmployeeProject(user, session);
 				session.commit();
 				return true;
 			}
@@ -137,7 +131,7 @@ public class EmployeeDao {
 			session.update("User.updateEmployee", user);
 			updateEmployeeAddress(user);
 			updateEmployeePhone(user);
-			updateEmployeeProject(user);
+			// updateEmployeeProject(user);
 			session.commit();
 			return true;
 		} finally
@@ -148,10 +142,10 @@ public class EmployeeDao {
 
 	}
 
-	public User getEmployee(int empId) throws AppException, DbException {
+	public List<User> getEmployee(User user) throws AppException, DbException {
 		SqlSession session = MyBatisManager.openSession();
 		try {
-			User employee = session.selectOne("User.getEmployee", empId);
+			List<User> employee = session.selectList("User.getEmployee", user);
 			return employee;
 		} finally
 
@@ -160,39 +154,20 @@ public class EmployeeDao {
 		}
 
 	}
-	
-	public List<User> getEmployees()throws AppException, DbException{
-		SqlSession session = MyBatisManager.openSession();
-		try {
-			List<User> users = session.selectList("User.getEmployees");
-			for(User user:users) {
-				getEmployeeAddress(user.getEmpId(),session);
-				getEmployeePhone(user.getEmpId(), session);
-				getEmployeeProject(user.getEmpId(), session);
-			}
-			session.commit();
-			return users;
-		} finally
-
-		{
-			session.close();
-		}
-		
-	}
 
 	public List<EmployeeAddressInfo> getEmployeeAddress(int empId, SqlSession session) {
-		 List<EmployeeAddressInfo> addressInfo = session.selectList("User.getEmployeeAddress", empId);
+		List<EmployeeAddressInfo> addressInfo = session.selectList("User.getEmployeeAddress", empId);
 		return addressInfo;
 
 	}
-	
+
 	public List<EmployeePhoneInfo> getEmployeePhone(int empId, SqlSession session) {
 		List<EmployeePhoneInfo> phoneInfo = session.selectList("User.getEmployeeContact", empId);
-		return phoneInfo;	
+		return phoneInfo;
 	}
-	
+
 	public List<EmployeeProjectInfo> getEmployeeProject(int empId, SqlSession session) {
-		 List<EmployeeProjectInfo> projectInfo = session.selectList("User.getEmployeeProjects", empId);
+		List<EmployeeProjectInfo> projectInfo = session.selectList("User.getEmployeeProjects", empId);
 		return projectInfo;
 	}
 
@@ -302,18 +277,7 @@ public class EmployeeDao {
 			session.close();
 		}
 		return null;
-
 	}
-
-	/*
-	 * public String getCurrentPassword(String email) { SqlSession session =
-	 * MyBatisManager.openSession(); try { String result =
-	 * session.selectOne("User.getCurrentPassword"); if (result != null) {
-	 * session.commit(); return result; } return null; } finally { session.close();
-	 * }
-	 * 
-	 * }
-	 */
 	public int deleteToken(User user) {
 		SqlSession session = MyBatisManager.openSession();
 		try {
@@ -326,14 +290,6 @@ public class EmployeeDao {
 		} finally {
 			session.close();
 		}
-
-	}
-
-	public String verifyEmailId(String email) {
-		User user = null;
-		user = userdao.getUser(email);
-		return user.getEmail();
-
 	}
 
 	public boolean resetPassword(User user) {
