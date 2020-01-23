@@ -1,6 +1,9 @@
 package com.awcsoftware.app;
 
+import java.io.IOException;
 import java.text.ParseException;
+
+import javax.mail.MessagingException;
 
 public class AppException extends Exception {
 	private static final long serialVersionUID = 1L;
@@ -19,6 +22,14 @@ public class AppException extends Exception {
     }
 	
 	public AppException(ParseException cause) {
+        super(cause);
+    }
+
+	public AppException(IOException cause) {
+        super(cause);
+    }
+
+	public AppException(MessagingException cause) {
         super(cause);
     }
 

@@ -33,6 +33,9 @@ public class TimecardDayDetails implements Serializable,Comparator<TimecardDayDe
 	private String activityName;
 	private String locationName;
 	
+	private String prevWeekPendingStat;
+	private String nextWeekPendingStat;
+
 	private String timecardRowDetails;	
 	public int getTcddId() {
 		return tcddId;
@@ -167,6 +170,19 @@ public class TimecardDayDetails implements Serializable,Comparator<TimecardDayDe
 	}
 	public void setLocationName(String locationName) {
 		this.locationName = locationName;
+	}	
+	
+	public String getPrevWeekPendingStat() {
+		return prevWeekPendingStat;
+	}
+	public void setPrevWeekPendingStat(String prevWeekPendingStat) {
+		this.prevWeekPendingStat = prevWeekPendingStat;
+	}
+	public String getNextWeekPendingStat() {
+		return nextWeekPendingStat;
+	}
+	public void setNextWeekPendingStat(String nextWeekPendingStat) {
+		this.nextWeekPendingStat = nextWeekPendingStat;
 	}
 	@Override
 	public String toString() {

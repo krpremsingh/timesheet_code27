@@ -177,7 +177,7 @@ public enum MailMessageConstants {
 			"\r\n" + 
 			"\r\n" + 
 			""),
-	
+
 	;
 
 	private final String label;

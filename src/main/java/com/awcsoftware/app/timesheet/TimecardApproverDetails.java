@@ -1,9 +1,10 @@
 package com.awcsoftware.app.timesheet;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class TimecardApproverDetails {
+public class TimecardApproverDetails implements Serializable {
 	
 	private int tcadId;
 	private int tcId;
@@ -14,6 +15,9 @@ public class TimecardApproverDetails {
 	private String comments;
 	private LocalDateTime addedOn;
 	private LocalDateTime lastModifiedOn;
+	private String approverEmailId;
+	private String approverName;
+	private String employeeName;
 	
 	private List<TimecardInfo> timecardInfo;
 
@@ -96,6 +100,30 @@ public class TimecardApproverDetails {
 
 	public void setTimecardInfo(List<TimecardInfo> timecardInfo) {
 		this.timecardInfo = timecardInfo;
+	}
+
+	public String getApproverEmailId() {
+		return approverEmailId;
+	}
+
+	public void setApproverEmailId(String approverEmailId) {
+		this.approverEmailId = approverEmailId;
+	}
+
+	public String getApproverName() {
+		return approverName;
+	}
+
+	public void setApproverName(String approverName) {
+		this.approverName = approverName;
+	}
+	
+	public String getEmployeeName() {
+		return employeeName;
+	}
+
+	public void setEmployeeName(String employeeName) {
+		this.employeeName = employeeName;
 	}
 
 	@Override

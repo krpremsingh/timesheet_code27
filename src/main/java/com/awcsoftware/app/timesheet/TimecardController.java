@@ -35,7 +35,7 @@ public class TimecardController {
 		String timecardSaveResult = "";
 		try {
 			timecardSaveResult = service.saveTimecard(timecardInfo);
-			timecardSaveResult=timecardSaveResult+" ["+timecardInfo.getTcId()+"]";
+			timecardSaveResult=timecardSaveResult+" {"+timecardInfo.getTcId()+"}("+timecardInfo.getManagerName()+")";
 			
 			return new ResponseEntity<String>(timecardSaveResult, HttpStatus.OK);
 		} catch (DbException | AppException | ParseException e) {
@@ -58,6 +58,7 @@ public class TimecardController {
 		String timecardSubmitResult = "";
 		try {
 			timecardSubmitResult = service.submitTimeCard(timecardInfo);
+			timecardSubmitResult=timecardSubmitResult+" {"+timecardInfo.getTcId()+"}("+timecardInfo.getManagerName()+")";
 			return new ResponseEntity<String>(timecardSubmitResult, HttpStatus.OK);
 		} catch (DbException | AppException | ParseException e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);

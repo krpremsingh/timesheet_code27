@@ -371,10 +371,9 @@
 	<select id="getProjectApproverList"
 		parameterType="TimecardDayDetails"
 		resultType="TimecardApproverDetails">
-			select pId projectId,tcApprover approverId,level levelId from
-			ProjectApproverDetails
-			where pId=#{projectId} and startDate &lt;=#{workingDate} and endDate
-			&gt;=#{workingDate}
+			select pId projectId,tcApprover approverId,level levelId,concat(firstName,' ',middleName,' ',lastName),email from
+			ProjectApproverDetails PAD,EmployeeInfo EI
+			where pId=#{projectId} and PAD.status='Active' and level=1 and PAD.tcApprover=EI.empId
 	</select>
 
 	<select id="isApproverExistforCurrentTimecardProject"
@@ -391,6 +390,15 @@
 		(tcId,projectId,approverId,levelId,status,comments,addedOn)
 		values (#{tcId},#{projectId},#{approverId},#{levelId},'Pending',' ',now())
 	</insert>
+
+	<select id="srhSubmittedTimecardDetails"
+		parameterType="int" resultType="TimecardApproverDetails">
+		select concat(ManagerDet.firstName,' ',ManagerDet.middleName,' ',ManagerDet.lastName) approverName,email approverEmailId,
+		IFNULL((select concat(firstName,' ',middleName,' ',lastName) from EmployeeInfo EmpDet,TimecardInfo TCI where TCI.tcId=TCAD.tcId and
+		TCI.empId=EmpDet.empId),' ') employeeName 
+		from TimecardApproverDetails TCAD,EmployeeInfo ManagerDet
+		where TCAD.tcId=#{tcId} and approverId=ManagerDet.empId
+	</select>
 
 	<!-- Operation ended for submit data into table TimecardApprover Details -->
 
@@ -568,8 +576,12 @@
 			ifnull((select projectName from ProjectsInfo PI where PI.projectId= tcdd.projectId),' ') projectName,
 			ifnull((select activity from ActivitiesInfo PI where PI.activityId= tcdd.activityId),' ') activityName,
 			ifnull((select location from WorkLocationsInfo PI where PI.workLocationId = tcdd.location),' ') locationName,
-			convert(sec_to_time(sum(Time_to_sec(workingHours))),char) projectWorkHour 
-			 from TimecardDayDetails tcdd, 
+			convert(sec_to_time(sum(Time_to_sec(workingHours))),char) projectWorkHour,
+			ifnull((select group_concat(if(TI.status='Pending','Y','N')) from TimecardInfo TI 
+			where TI.weekstart &lt; tci.weekStart order by TI.weekstart desc limit 2),'N,N') prevWeekPendingStat, 
+			ifnull((select group_concat(if(TI.status='Pending','Y','N')) from TimecardInfo TI 
+			where TI.weekstart &gt; tci.weekStart order by TI.weekstart asc limit 2),'N,N') nextWeekPendingStat
+			from TimecardDayDetails tcdd, 
 			TimecardDayInfo tcdi, TimecardInfo tci
 			where empId=#{empId}  	
 

@@ -95,4 +95,17 @@ public class Mail {
 		return MailMessageConstants.SendEmail.getLabel().toString();
 
 	}
+
+	public String sendMailtoManagerOnSubmitTimecard(String recipientParam,String senderParam,String weekStartDT,String weekEndDT) throws MessagingException {
+		MimeMessage message = mailconfig.javaMailSender().createMimeMessage();
+		MimeMessageHelper helper = new MimeMessageHelper(message, true);
+		helper.setTo(recipientParam);
+		String sendMailSubject="Timecard Submitted by "+senderParam+" From Period "+weekStartDT+" To "+weekEndDT;
+		helper.setSubject(sendMailSubject);
+		String sendMailContent="Hello Sir\n I have submitted timecard for period "+weekStartDT+" To "+weekEndDT;
+		helper.setText(sendMailContent, true);
+		mailconfig.javaMailSender().send(message);
+		return null;
+
+	}
 }

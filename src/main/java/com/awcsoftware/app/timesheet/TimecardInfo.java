@@ -55,6 +55,7 @@ public class TimecardInfo implements Serializable {
 	private List<String> statusValue;
 	
 	private List<TimecardProjectWorkDetails> employeeProjectTimecard;
+	private List<TimecardApproverDetails> timecardApproverDetails;
 	
 	
 	public String getSearchStatus() {
@@ -240,6 +241,15 @@ public class TimecardInfo implements Serializable {
 
 	public void setStatusValue(List<String> statusValue) {
 		this.statusValue = statusValue;
+	}
+
+
+	public List<TimecardApproverDetails> getTimecardApproverDetails() {
+		return timecardApproverDetails;
+	}
+
+	public void setTimecardApproverDetails(List<TimecardApproverDetails> timecardApproverDetails) {
+		this.timecardApproverDetails = timecardApproverDetails;
 	}
 
 	@Override

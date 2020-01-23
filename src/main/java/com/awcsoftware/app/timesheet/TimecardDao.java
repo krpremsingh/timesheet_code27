@@ -1,14 +1,21 @@
 package com.awcsoftware.app.timesheet;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import javax.mail.MessagingException;
 
 import org.apache.ibatis.session.SqlSession;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.awcsoftware.app.AppConstant;
 import com.awcsoftware.app.AppException;
+import com.awcsoftware.app.mail.Mail;
 import com.awcsoftware.mybatis.DbException;
 import com.awcsoftware.mybatis.MyBatisManager;
 
@@ -26,6 +33,8 @@ public class TimecardDao {
 	 * Parent method for saving/editing of timecard detail by an employee
 	 * 
 	 */
+	@Autowired
+	Mail mail;
 
 	public String saveTimecard(TimecardInfo timecardInfo) throws DbException, AppException {
 		SqlSession session = MyBatisManager.openSession();
@@ -66,7 +75,8 @@ public class TimecardDao {
 						submitTimecardReturn = TimecardMessageConstant.Timecard_Data_Exist.getLabel();
 				} else {
 					if (updateTimecardByView(timecardInfo, session)
-							.equals(TimecardMessageConstant.TimecardUpdateMessage.getLabel())) {
+							.equals(TimecardMessageConstant.TimecardUpdateMessage.getLabel())) {						
+						sendMailtoManager(timecardInfo,session);
 						submitTimecardReturn = TimecardMessageConstant.TimecardSubmitMessage.getLabel();
 					}
 				}
@@ -140,8 +150,36 @@ public class TimecardDao {
 			TimecardApproverDetails timecardApproverDetails = timecardAppDetails.get(approverCtr);
 			timecardApproverDetails.setTcId(timecardDayDetails.getTcId());
 			if (isApproverExistforCurrentTimecardProject(timecardApproverDetails, session) == false)
-				addTimecardApproverDetails(timecardApproverDetails, session);
+			{
+				addTimecardApproverDetails(timecardApproverDetails, session);				
+			}
 		}
+	}
+	
+	public void sendMailtoManager(TimecardInfo timecardInfoParam, SqlSession session) throws AppException {
+		List<TimecardApproverDetails> timecardAppDetails = session
+				.selectList("TimecardMapper.srhSubmittedTimecardDetails", timecardInfoParam.getTcId());
+		String tcManagerName = "";
+		for (int approverCtr = 0; approverCtr < timecardAppDetails.size(); approverCtr++) {
+			TimecardApproverDetails timecardApproverDetails = timecardAppDetails.get(approverCtr);
+/*			ExecutorService emailExecutor = Executors.newSingleThreadExecutor();
+			emailExecutor.execute(new Runnable() {
+				@Override
+				public void run() {
+					try {
+						mail.sendMailtoManagerOnSubmitTimecard(timecardApproverDetails.getApproverEmailId(),
+								timecardInfoParam.getEmpName(), String.valueOf(timecardInfoParam.getWeekStart()),
+								String.valueOf(timecardInfoParam.getWeekEnd()));
+					} catch (MessagingException e) {
+						e.printStackTrace();
+					}
+				}
+			});
+			emailExecutor.shutdown();
+*/			tcManagerName = tcManagerName + timecardApproverDetails.getApproverName() + ",";
+		}
+logger.debug("Timecard Managers>>>>>>>>>>>>>>>>>"+tcManagerName);
+		timecardInfoParam.setManagerName(tcManagerName);
 	}
 
 	public List<TimecardInfo> getEmployeeTimeCard(TimecardInfo timecardInfoParam) throws DbException {
