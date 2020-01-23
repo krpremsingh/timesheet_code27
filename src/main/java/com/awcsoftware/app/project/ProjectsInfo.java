@@ -5,13 +5,14 @@ import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
+
 @Component
 public class ProjectsInfo implements Serializable {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	private int projectId;
 	private String projectName;
 	private float budget;
@@ -20,7 +21,9 @@ public class ProjectsInfo implements Serializable {
 	private String status;
 	private LocalDate addedOn;
 	private LocalDate lastModifiedOn;
+	private int clientId;
 	private List<ProjectLocations> projectLocations;
+	private List<ProjectsTeamDetails> projectsTeamDetails;
 
 	public int getProjectId() {
 		return projectId;
@@ -28,6 +31,14 @@ public class ProjectsInfo implements Serializable {
 
 	public void setProjectId(int projectId) {
 		this.projectId = projectId;
+	}
+
+	public int getClientId() {
+		return clientId;
+	}
+
+	public void setClientId(int clientId) {
+		this.clientId = clientId;
 	}
 
 	public String getProjectName() {
@@ -92,6 +103,14 @@ public class ProjectsInfo implements Serializable {
 
 	public void setProjectLocations(List<ProjectLocations> projectLocations) {
 		this.projectLocations = projectLocations;
+	}
+
+	public List<ProjectsTeamDetails> getProjectsTeamDetails() {
+		return projectsTeamDetails;
+	}
+
+	public void setProjectsTeamDetails(List<ProjectsTeamDetails> projectsTeamDetails) {
+		this.projectsTeamDetails = projectsTeamDetails;
 	}
 
 }

@@ -19,8 +19,8 @@ public class Util {
 	static Pattern pattern;
 	static Matcher matcher;
 	static {
-		//emailRegex = "[a-zA-Z0-9]+@{1}[a-z]+\\.{1}[a-z]+";
-		emailRegex="(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])";
+		// emailRegex = "[a-zA-Z0-9]+@{1}[a-z]+\\.{1}[a-z]+";
+		emailRegex = "(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])";
 		pattern = Pattern.compile(emailRegex);
 	}
 	public static Predicate<String> validateString = (str) -> str == null || str.isEmpty();
@@ -33,6 +33,13 @@ public class Util {
 			return true;
 		}
 		return false;
+	}
+
+	public static boolean isListEmpty(Integer integer) {
+		if (integer == 0) {
+			return false;
+		}
+		return true;
 	}
 
 	public static boolean isEmptyOrNull(String string) {
@@ -65,49 +72,45 @@ public class Util {
 		return ((target.compareTo(start) >= 0) && (target.compareTo(end) <= 0));
 	}
 
-	public static String TimeAdd(String startTimeParam, String endTimeParam)  {
+	public static String TimeAdd(String startTimeParam, String endTimeParam) {
 		String returnTime = "";
-		try
-		{
+		try {
 			String startTime = startTimeParam;
 			String endTime = endTimeParam;
-	
-			SimpleDateFormat timeFormat = new SimpleDateFormat(AppConstant.TIME_FORMAT_CONST.TIME_24_HOUR_FORMAT.getValue());
+
+			SimpleDateFormat timeFormat = new SimpleDateFormat(
+					AppConstant.TIME_FORMAT_CONST.TIME_24_HOUR_FORMAT.getValue());
 			timeFormat.setTimeZone(TimeZone.getTimeZone(AppConstant.TIME_FORMAT_CONST.TIME_ZONE.getValue()));
-	
+
 			Date startFormatDate = timeFormat.parse(startTime);
 			Date endFormatDate = timeFormat.parse(endTime);
-	
+
 			long sum = startFormatDate.getTime() + endFormatDate.getTime();
-	
+
 			returnTime = timeFormat.format(new Date(sum)).toString();
-		}
-		catch(ParseException ex)
-		{
+		} catch (ParseException ex) {
 			return new AppException(ex).toString();
 		}
 		return returnTime;
 	}
 
 	public static String TimeDiff(String startTimeParam, String endTimeParam) {
-		String returnTime ="";
-		try
-		{
+		String returnTime = "";
+		try {
 			String startTime = startTimeParam;
 			String endTime = endTimeParam;
-	
-			SimpleDateFormat timeFormat = new SimpleDateFormat(AppConstant.TIME_FORMAT_CONST.TIME_24_HOUR_FORMAT.getValue());
+
+			SimpleDateFormat timeFormat = new SimpleDateFormat(
+					AppConstant.TIME_FORMAT_CONST.TIME_24_HOUR_FORMAT.getValue());
 			timeFormat.setTimeZone(TimeZone.getTimeZone(AppConstant.TIME_FORMAT_CONST.TIME_ZONE.getValue()));
-	
+
 			Date startFormatDate = timeFormat.parse(startTime);
 			Date endFormatDate = timeFormat.parse(endTime);
-	
+
 			long diff = endFormatDate.getTime() - startFormatDate.getTime();
-	
+
 			returnTime = timeFormat.format(new Date(diff));
-		}
-		catch(ParseException ex)
-		{
+		} catch (ParseException ex) {
 			return new AppException(ex).toString();
 		}
 		return returnTime;
@@ -124,10 +127,8 @@ public class Util {
 
 		boolean result = false;
 		/*
-		 * Regular expression that matches String with format HH:mm:ss 
-		 * HH -> 0-23 
-		 * mm -> 0-59 
-		 * ss -> 0-59
+		 * Regular expression that matches String with format HH:mm:ss HH -> 0-23 mm ->
+		 * 0-59 ss -> 0-59
 		 */
 		String pattern = "(0?[0-9]|1[0-9]|2[0-3]):(0?[0-9]|[1-5][0-9])";
 		if (inputTime.matches(pattern)) {
@@ -136,58 +137,53 @@ public class Util {
 		return result;
 	}
 
-	public static boolean isValidDate(String inputDate)
-	{
-		boolean result= false;
-		Pattern DATE_PATTERN = Pattern.compile(
-			      "^((2000|2400|2800|(19|2[0-9](0[48]|[2468][048]|[13579][26])))-02-29)$"
-			      + "|^(((19|2[0-9])[0-9]{2})-02-(0[1-9]|1[0-9]|2[0-8]))$"
-			      + "|^(((19|2[0-9])[0-9]{2})-(0[13578]|10|12)-(0[1-9]|[12][0-9]|3[01]))$"
-			      + "|^(((19|2[0-9])[0-9]{2})-(0[469]|11)-(0[1-9]|[12][0-9]|30))$");
-		
+	public static boolean isValidDate(String inputDate) {
+		boolean result = false;
+		Pattern DATE_PATTERN = Pattern.compile("^((2000|2400|2800|(19|2[0-9](0[48]|[2468][048]|[13579][26])))-02-29)$"
+				+ "|^(((19|2[0-9])[0-9]{2})-02-(0[1-9]|1[0-9]|2[0-8]))$"
+				+ "|^(((19|2[0-9])[0-9]{2})-(0[13578]|10|12)-(0[1-9]|[12][0-9]|3[01]))$"
+				+ "|^(((19|2[0-9])[0-9]{2})-(0[469]|11)-(0[1-9]|[12][0-9]|30))$");
+
 		return DATE_PATTERN.matcher(inputDate).matches();
-		
+
 	}
 
-	public static String getDateDay(String inputDate) throws ParseException
-	{
+	public static String getDateDay(String inputDate) throws ParseException {
 		SimpleDateFormat dateFormat = new SimpleDateFormat(AppConstant.TIME_FORMAT_CONST.DATE_FORMAT.getValue());
 		Date parsedDate = dateFormat.parse(inputDate);
 		Calendar calcInstance = Calendar.getInstance();
-		calcInstance.setTime(parsedDate);		
-        int dayNumber = calcInstance.get(Calendar.DAY_OF_WEEK);
-        String[] strDayArray= {"Sunday","Monday","Tuesday","Wednesday","ThursDay","Friday","Saturday"};       
-        return strDayArray[dayNumber-1];
-		
+		calcInstance.setTime(parsedDate);
+		int dayNumber = calcInstance.get(Calendar.DAY_OF_WEEK);
+		String[] strDayArray = { "Sunday", "Monday", "Tuesday", "Wednesday", "ThursDay", "Friday", "Saturday" };
+		return strDayArray[dayNumber - 1];
+
 	}
 
-
- 	public static Date getWeekStartDate() {
-	    Calendar calendar = Calendar.getInstance();
-	    while (calendar.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY) {
-	        calendar.add(Calendar.DATE, -1);
-	    }
-	    return calendar.getTime();
+	public static Date getWeekStartDate() {
+		Calendar calendar = Calendar.getInstance();
+		while (calendar.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY) {
+			calendar.add(Calendar.DATE, -1);
+		}
+		return calendar.getTime();
 	}
 
- 	public static String addNumberOfdays(Date inputDate)
- 	{
- 		SimpleDateFormat dateFormat = new SimpleDateFormat(AppConstant.TIME_FORMAT_CONST.DATE_FORMAT.getValue());
- 		Calendar calendar = Calendar.getInstance();
-	    calendar.setTime(inputDate);
-	    calendar.add(Calendar.DATE, AppConstant.WORKING_HOURS.Number_of_future_Days_allowed.getValue());	    
-	    String futureDate = dateFormat.format(calendar.getTime());		    
-	    return futureDate;
- 		
- 	}
- 	
+	public static String addNumberOfdays(Date inputDate) {
+		SimpleDateFormat dateFormat = new SimpleDateFormat(AppConstant.TIME_FORMAT_CONST.DATE_FORMAT.getValue());
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(inputDate);
+		calendar.add(Calendar.DATE, AppConstant.WORKING_HOURS.Number_of_future_Days_allowed.getValue());
+		String futureDate = dateFormat.format(calendar.getTime());
+		return futureDate;
+
+	}
+
 	public static Date getWeekEndDate() {
-	    Calendar calendar = Calendar.getInstance();
-	    while (calendar.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY) {
-	        calendar.add(Calendar.DATE, 1);
-	    }
-	    calendar.add(Calendar.DATE, -1);
-	    return calendar.getTime(); 
+		Calendar calendar = Calendar.getInstance();
+		while (calendar.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY) {
+			calendar.add(Calendar.DATE, 1);
+		}
+		calendar.add(Calendar.DATE, -1);
+		return calendar.getTime();
 	}
 
 }

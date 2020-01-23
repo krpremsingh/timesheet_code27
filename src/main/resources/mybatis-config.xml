@@ -59,7 +59,8 @@
 		<typeAlias alias="Projects" type="com.awcsoftware.app.project.ProjectsInfo"/>
 		
 		<typeAlias alias="ProjectLocations"  type="com.awcsoftware.app.project.ProjectLocations"/>
-
+         
+         <typeAlias  alias="ProjectsTeamDetails" type="com.awcsoftware.app.project.ProjectsTeamDetails"/>
 	</typeAliases>
 	<environments default="development">
 		<environment id="development">
@@ -88,6 +89,9 @@
 			<!-- Mapper Definition for project crud functionality -->
 			<mapper
 			resource="com/awcsoftware/app/project/ProjectsMapper.xml" />
+			<mapper 
+			resource="com/awcsoftware/app/mail/MailMapper.xml"
+			/>
 	</mappers>
 
 </configuration>

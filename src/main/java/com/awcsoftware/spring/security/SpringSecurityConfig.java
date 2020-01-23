@@ -28,12 +28,10 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 	public static final String FORGOT_PASSWORD = "/employee/forgotPassword";
 	public static final String CONFIRM_RESET = "/employee/confirm-reset";
 	public static final String CHANGE_PASSWORD = "/employee/changePassword";
-	//public static final String WITHOUT_TOKEN_BASED_AUTH_ENTRY_POINT="/*";
 		
 	@Bean
 	protected LoginFilter getLoginFilter() throws Exception {
 		LoginFilter filter = new LoginFilter(CREDENTIAL_BASED_LOGIN_ENTRY_POINT);
-		//filter.setRequiresAuthenticationRequestMatcher(new OrRequestMatcher(new AntPathRequestMatcher("/auth/forgotPassword")));
 		filter.setAuthenticationManager(authenticationManagerBean());
 		return filter;
 	}
@@ -56,32 +54,6 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 	AccessDeniedHandler accessDeniedHandler() {
 		return new AccessDeniedHandler();
 	}
-	
-
-/*	
-    @Bean
-    public TaskScheduler taskScheduler() {
-        return new ConcurrentTaskScheduler();
-    }*/
-
-/*	@Bean
-	public AuthenticationFailureHandler customAuthenticationFailureHandler() {
-		ExceptionMappingAuthenticationFailureHandler exceptionMappingAuthenticationFailureHandler = new ExceptionMappingAuthenticationFailureHandler();
-		Map<Object, Object> map = new HashMap<>();
-		map.put("org.springframework.security.authentication.CredentialsExpiredException", "/resetPassword");
-
-		exceptionMappingAuthenticationFailureHandler.setExceptionMappings(map);
-
-		exceptionMappingAuthenticationFailureHandler.setRedirectStrategy(new RedirectStrategy() {
-			@Override
-			public void sendRedirect(HttpServletRequest request, HttpServletResponse response, String url)
-					throws IOException {
-				response.sendRedirect(request.getContextPath() + url);
-			}
-		});
-
-		return exceptionMappingAuthenticationFailureHandler;
-	}*/
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {

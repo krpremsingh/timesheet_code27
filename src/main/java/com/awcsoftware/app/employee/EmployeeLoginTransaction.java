@@ -3,12 +3,9 @@ package com.awcsoftware.app.employee;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-import org.springframework.stereotype.Component;
-
 import com.awcsoftware.app.AppConstant;
 import com.awcsoftware.spring.security.auth.user.User;
 
-@Component
 public class EmployeeLoginTransaction implements Serializable {
 	/**
 	 * 
