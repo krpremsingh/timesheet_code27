@@ -258,7 +258,7 @@ public class TimecardDao {
 	public List<TimecardInfo> getTimecardViewForEmployee(TimecardInfo timecardInfoManager) throws DbException {
 		SqlSession session = MyBatisManager.openSession();
 		try {
-
+logger.debug("timecardInfoManager>>>>>>"+timecardInfoManager);
 			List<TimecardInfo> managerTimecardView = session.selectList("TimecardMapper.getTimecardEmployeeView",
 					timecardInfoManager);
 			managerTimecardView = getTimecardViewPerProjectForManager(managerTimecardView, session);

@@ -142,7 +142,7 @@ public class TimecardValidator extends AppValidator {
 		String timeDiff = "00:00:00";
 		String dailyTimeHour = "00:00:00";
 		LocalTime currentRowStartTime = null, currentRowEndTime = null, nextRowStartTime = null, nextRowEndTime = null;
-		int leaveCountInSameDay = 0;
+		int leaveCountInSameDay = 0,otherThanleaveCountInSameDay = 0;
 		TimecardDayDetails timecardDayDetailsNextRow = null;
 		
 		Collections.sort(timecardDayDetailsParam, new TimecardDayDetails());
@@ -159,6 +159,10 @@ public class TimecardValidator extends AppValidator {
 
 			if (timecardDayDetails.getActivityId() == 18) {
 				leaveCountInSameDay++;
+			}
+			else
+			{
+				otherThanleaveCountInSameDay++;
 			}
 			if (timecardDayDetails.getStartTime() == null || timecardDayDetails.getStartTime().trim().equals("")) {
 				errorMsg.add(TimecardMessageConstant.StartEndTimeCantBeNull.getLabel() + " ["
@@ -242,6 +246,10 @@ public class TimecardValidator extends AppValidator {
 			errorMsg.add(TimecardMessageConstant.Multi_Leave_Same_Day_Msg.getLabel());
 		}
 
+		if(leaveCountInSameDay>0&&otherThanleaveCountInSameDay>0)
+		{
+			errorMsg.add(TimecardMessageConstant.Work_And_Leave_Cannot_on_Same_Day_Msg.getLabel());
+		}
 		if (Integer.parseInt(dailyTimeHour.substring(0, 2)) > 24) {
 			errorMsg.add(TimecardMessageConstant.Daily_Working_Limit.getLabel());
 		}

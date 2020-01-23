@@ -32,7 +32,7 @@ public enum TimecardMessageConstant {
 	HALF_DAY_TIME_ERROR("Half day leave cannot be more than 4 hours"),
 	Leave_cant_be_Less_Parameterized_Hour("Leave can not be less than 8 hours"),
 	Multi_Leave_Same_Day_Msg("Cannot apply multiple leaves on same day"),
-	
+	Work_And_Leave_Cannot_on_Same_Day_Msg("cannot add leave & working hrs for same day"),	
 	StartTimeBiggerThanEndTime("Start Time can not be greater than End Time"),
 	Enter_Time_is_wrong("Entered time is incorrect"),
 		
