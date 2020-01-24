@@ -191,7 +191,7 @@ select phoneNumberId,empId,phoneNumberType,phoneNumber,status,addedOn,lastModifi
 
 
 <select id="getEmployeeProjects" resultMap="EmployeeProjectInfoMap" parameterType="User">
-select pdId,empId, pId,role,workingLocation,startDate,endDate,status as projectStatus,addedOn,lastModifiedOn  from ProjectTeamDetails where empId=#{empId}
+select pdId,empId, projectId,role,workingLocation,startDate,endDate,status as projectStatus,addedOn,lastModifiedOn  from ProjectTeamDetails where empId=#{empId}
 </select>
 
 

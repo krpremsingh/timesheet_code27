@@ -31,7 +31,7 @@ public enum MailMessageConstants {
 			"				<tr style=\"height: 47px;\"><td style=\"background-color: #F6F9FC; \"></td></tr>\r\n" + 
 			"				<tr>\r\n" + 
 			"					<td align=\"center\" style=\"background-color: #F6F9FC; \">\r\n" + 
-			"						<a href=\"http://127.0.0.1:8080/timesheetfrontend/log-in.html\"> <img src=\"https://i.ibb.co/KjWS6NF/login-now-btn.png\"></a>\r\n" + 
+			"						<a href=\"http://192.168.1.32:8080/timesheetfrontend/log-in.html\"> <img src=\"https://i.ibb.co/KjWS6NF/login-now-btn.png\"></a>\r\n" + 
 			"					</td>\r\n" + 
 			"				</tr>\r\n" + 
 			"				<tr style=\"height: 60px;\"><td style=\"border-bottom-left-radius: 5px;border-bottom-right-radius: 5px;background-color: #F6F9FC; \"></td></tr>\r\n" + 
@@ -140,14 +140,14 @@ public enum MailMessageConstants {
 			"				<tr>\r\n" + 
 			"					<td style=\"background-color: #F6F9FC; \">\r\n" + 
 			"						<h5 style=\"font-size:18px; color: #343434; text-align:center;font-family: calibri;\">Password has been changed succesfully</h5>\r\n" + 
-			"						<p style=\" font-size:14px; color: #343434; text-align:center;font-family: calibri;opacity: .7;\">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod <br>tempor incididunt ut labore et dolore magna aliqua.</p>\r\n" + 
+			"						<p style=\" font-size:14px; color: #343434; text-align:center;font-family: calibri;opacity: .7;\">Your account password has been successfully changed</p>\r\n" + 
 			"										\r\n" + 
 			"					</td>\r\n" + 
 			"				</tr>\r\n" + 
 			"				<tr style=\"height: 47px;\"><td style=\"background-color: #F6F9FC; \"></td></tr>\r\n" + 
 			"				<tr>\r\n" + 
 			"					<td align=\"center\" style=\"background-color: #F6F9FC; \">\r\n" + 
-			"						<a href=\"#\"> <img src=\"https://i.ibb.co/KjWS6NF/login-now-btn.png\"></a>\r\n" + 
+			"						<a href=\"http://192.168.1.32:8080/timesheetfrontend/log-in.html\"> <img src=\"https://i.ibb.co/KjWS6NF/login-now-btn.png\"></a>\r\n" + 
 			"					</td>\r\n" + 
 			"				</tr>\r\n" + 
 			"				<tr style=\"height: 60px;\"><td style=\"border-bottom-left-radius: 5px;border-bottom-right-radius: 5px;background-color: #F6F9FC; \"></td></tr>\r\n" + 

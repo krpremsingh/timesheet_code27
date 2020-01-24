@@ -32,13 +32,14 @@ public class ProjectsService {
 			}
 		}
 		return validator.validateProject(info).toString();
-
 	}
 
 	public String updateProject(ProjectsInfo info) throws AppException, DbException {
 		boolean result = false;
 		if (validator.validateProject(info).size() == 0) {
-			result = dao.updateProject(info);
+			if(dao.deleteProjectLocations(info)==true) {
+				result = dao.updateProject(info);	
+			}			
 		}
 		if (result == true) {
 			return ProjectsMessageConstants.ProjectUpdated.toString();

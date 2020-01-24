@@ -94,19 +94,23 @@ public class ProjectsValidator {
 					errorMsg.add(ProjectsMessageConstants.ProjectEndDateRange.getLabel().toString());
 					return errorMsg;
 				}
+				if(dateFormatter(projectteam.getStartDate()).isBefore(dateFormatter(info.getStartDate()))) {
+					errorMsg.add(ProjectsMessageConstants.EmployeeWorkingDateNotBeforeProjectStartDate.getLabel().toString());
+					return errorMsg;	
+				}
 				if (projectteam.getWorkingLocation() == 0) {
 					errorMsg.add(ProjectsMessageConstants.EmployeeWorkLocation.getLabel().toString());
 					return errorMsg;
 				}
 
-				for (ProjectLocations workLocation : info.getProjectLocations()) {
+/*				for (ProjectLocations workLocation : info.getProjectLocations()) {
 					logger.debug("worklocation " + workLocation.getWorkLocationId());
 					if (projectteam.getWorkingLocation() == workLocation.getWorkLocationId()) {
 						logger.debug(projectteam.getWorkingLocation() + "---" + workLocation.getWorkLocationId());
 						return errorMsg;
 					}
 				}
-				errorMsg.add(ProjectsMessageConstants.ProjectAndWorkLocationNotMatched.getLabel().toString());
+				errorMsg.add(ProjectsMessageConstants.ProjectAndWorkLocationNotMatched.getLabel().toString());*/
 				
 			}
 		}
