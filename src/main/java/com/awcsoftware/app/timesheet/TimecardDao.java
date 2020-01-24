@@ -70,7 +70,8 @@ public class TimecardDao {
 			else {
 				if (timecardInfo.getTcId() == AppConstant.WORKING_HOURS.Zero.getValue()) {
 					if (addTimecard(timecardInfo, session) == true) {
-						submitTimecardReturn = TimecardMessageConstant.TimecardSubmitMessage.getLabel();
+						sendMailtoManager(timecardInfo,session);
+						submitTimecardReturn = TimecardMessageConstant.TimecardSubmitMessage.getLabel();						
 					} else
 						submitTimecardReturn = TimecardMessageConstant.Timecard_Data_Exist.getLabel();
 				} else {

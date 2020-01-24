@@ -40,7 +40,7 @@ public enum EmployeeMessageConstants {
 	BlankPassword("Password can't be blank"),
 	AccessDenied("Access Denied"),
 	PasswordExpired("Password has been expired"),
-	ValidatePasswordPattern("Password Must contain at least one uppercase and one lowercase letter and one number digit (ex: 0, 1, 2, 3, etc.) and one following special character (#@$*%&) and length must be equal to or greater than 8 characters and less than or equal to 20 characters"),
+	ValidatePasswordPattern("Password must contain upper and lower case characters, numbers, and symbols like: @#$%!&*"),
 	ValidateEmail("Please enter correct email id"),
 	EmployeeAlreadyExist("Employee already exist"),
 	LoginSuccess("Success"),
