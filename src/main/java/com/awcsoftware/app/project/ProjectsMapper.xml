@@ -63,9 +63,13 @@ insert into ProjectsInfo(projectName,budget,startDate,endDate,status,addedOn,cli
  </select>
  
  <select id="viewProjectTeam" resultMap="ProjectsTeamDetailsMap" parameterType="Projects">
- select pdId,projectId,empId,ifnull((select concat(firstName,middleName,lastName),email from EmployeeInfo e where e.empId=ptd.empId),' ') name,role,workingLocation,startDate,endDate,status,addedOn,lastModifiedOn from 
+ select pdId,projectId,empId,ifnull((select concat(firstName,middleName,lastName)from EmployeeInfo e where e.empId=ptd.empId),' ') name,role,workingLocation,startDate,endDate,status,addedOn,lastModifiedOn from 
  ProjectTeamDetails ptd where projectId=#{projectId}
  </select>
+ 
+ <delete id="deleteProjectLocations" parameterType="Projects">
+ delete from ProjectLocationDetails where projectId=#{projectId};
+ </delete>
  
   <select id="viewProjects" resultType="Projects">
  select p.projectId,p.projectName,p.startDate,p.endDate,p.budget,p.addedOn,p.lastModifiedOn,p.status from ProjectsInfo p 

@@ -24,6 +24,7 @@ public enum EmployeeMessageConstants {
 	BlankAddressType("Address type can't be blank"),
 	BlankPincode("Pincode can't be blank"),
 	BlankStreet("Address can't be blank"),
+	DojNotBeforeDob("Date of joining can't before Date of birth"),
 	BlankLandmark("Landmark can't be blank"),
 	BlankCountry("Country can't be blank"),
 	BlankState("State can't be blank"),

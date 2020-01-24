@@ -62,6 +62,21 @@ public class ProjectsDao {
 		return false;
 		
 	}
+	
+	public boolean deleteProjectLocations(ProjectsInfo info) {
+		SqlSession session = MyBatisManager.openSession();
+		try {
+		       int result = session.delete("Projects.deleteProjectLocations",info);
+		       if(result>0) {
+		    	 return true;  
+		         }
+			return false;
+		} finally
+
+		{
+			session.close();
+		}
+	}
 
 	public boolean checkProject(ProjectsInfo info, SqlSession session) throws AppException, DbException {
 		int result = session.selectOne("Projects.checkProject", info);

@@ -189,7 +189,10 @@ public class EmployeeValidator {
 		if (!Util.isValidDate(user.getDoj().toString())) {
 			errorMsg.add(EmployeeMessageConstants.InvalidDateFormat.getLabel().toString());
 			return errorMsg;
-		
+		}
+		if(dateFormatter(user.getDoj()).isBefore(dateFormatter(user.getDob()))) {
+			errorMsg.add(EmployeeMessageConstants.DojNotBeforeDob.getLabel().toString());
+			return errorMsg;	
 		}
 
 		return errorMsg;

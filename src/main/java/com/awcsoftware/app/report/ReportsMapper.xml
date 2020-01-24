@@ -1,0 +1,93 @@
+<!-- <?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ReportMapper">
+
+	<resultMap id="TimecardInfoMap" type="TimecardInfo">
+		<id column="tcId" property="tcId" jdbcType="INTEGER" />
+		<result column="empId" property="empId" jdbcType="INTEGER" />
+		<result column="weekStart" property="weekStart" jdbcType="DATE" />
+		<result column="weekEnd" property="weekEnd" jdbcType="DATE" />
+		<result column="totalHours" property="totalHours"
+			jdbcType="DECIMAL" />
+		<result column="status" property="status" jdbcType="VARCHAR" />
+		<result column="addedOn" property="addedOn" jdbcType="DATE" />
+		<result column="lastModifiedOn" property="lastModifiedOn"
+			jdbcType="DATE" />
+		<collection property="timecardDayInfo"
+			ofType="TimecardDayInfo" select="getTimecardDayInfoPerTCID"
+			column="tcId">
+			<id column="tcdId" property="tcdId" />
+		</collection>
+	</resultMap>
+
+	<resultMap id="TimecardDayInfoMap" type="TimecardDayInfo">
+		<id column="tcdId" property="tcdId" jdbcType="INTEGER" />
+		<result column="tcId" property="tcId" jdbcType="INTEGER" />
+		<result column="workingDate" property="workingDate"
+			jdbcType="DATE" />
+		<result column="workingDay" property="workingDay"
+			jdbcType="VARCHAR" />
+		<result column="totalWeekWorkHours"
+			property="totalWeekWorkHours" jdbcType="DECIMAL" />
+		<result column="status" property="status"
+			jdbcType="VARCHAR" />
+		<result column="addedOn" property="addedOn" jdbcType="DATE" />
+		<result column="lastModifiedOn" property="lastModifiedOn"
+			jdbcType="DATE" />
+	<collection property="timecardDayDetails"
+		ofType="TimecardDayDetails" select="getTimecardDayDetailsPerTCDID"
+		column="tcdId">
+		<id column="tcdId" property="tcdId" />
+	</collection>
+
+	</resultMap>
+
+	<resultMap id="TimecardDayDetailsMap"
+		type="TimecardDayDetails">
+		<id column="tcddId" property="tcddId" jdbcType="INTEGER" />
+		<result column="tcdId" property="tcdId" jdbcType="INTEGER" />
+		<result column="tcId" property="tcId" jdbcType="INTEGER" />
+		<result column="projectId" property="projectId"
+			jdbcType="INTEGER" />
+		<result column="activityId" property="activityId"
+			jdbcType="INTEGER" />
+		<result column="location" property="location"
+			jdbcType="VARCHAR" />
+		<result column="startTime" property="startTime"
+			jdbcType="VARCHAR" />
+		<result column="endTime" property="endTime" jdbcType="VARCHAR" />
+		<result column="workingHours" property="workingHours"
+			jdbcType="DECIMAL" />
+		<result column="status" property="status" jdbcType="VARCHAR" />
+		<result column="onLeave" property="onLeave" jdbcType="VARCHAR" />
+		<result column="taskDetails" property="taskDetails"
+			jdbcType="VARCHAR" />
+		<result column="addedOn" property="addedOn" jdbcType="DATE" />
+		<result column="lastModifiedOn" property="lastModifiedOn"
+			jdbcType="DATE" />
+	</resultMap>
+
+	<resultMap id="TimecardDayInfoViewMap" type="TimecardDayInfo">
+		<id column="tcId" property="tcId" jdbcType="INTEGER" />
+		<id column="tcdId" property="tcdId" jdbcType="INTEGER" />
+		<result column="workingdate" property="workingdate"
+			jdbcType="DATE" />
+		<collection property="timecardDayDetails" column="tcId"
+			javaType="ArrayList" ofType="TimecardDayDetails">
+			<id property="tcId" column="tcId" />
+			<id property="tcdId" column="tcdId" />
+			<result property="projectId" column="projectId" />
+			<result property="activityId" column="activityId" />
+			<result property="location" column="location" />
+			<result property="taskDetails" column="taskDetails" />
+		</collection>
+	</resultMap>
+	
+	<select id="getTimecard" parameterType="">
+	select  
+	</select>
+	
+
+</mapper> -->
