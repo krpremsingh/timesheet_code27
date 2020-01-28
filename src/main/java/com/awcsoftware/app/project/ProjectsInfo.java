@@ -24,7 +24,8 @@ public class ProjectsInfo implements Serializable {
 	private int clientId;
 	private List<ProjectLocations> projectLocations;
 	private List<ProjectsTeamDetails> projectsTeamDetails;
-
+	private List<ProjectApproverDetails> projectApproverDetails;
+	
 	public int getProjectId() {
 		return projectId;
 	}
@@ -112,5 +113,14 @@ public class ProjectsInfo implements Serializable {
 	public void setProjectsTeamDetails(List<ProjectsTeamDetails> projectsTeamDetails) {
 		this.projectsTeamDetails = projectsTeamDetails;
 	}
+
+	public List<ProjectApproverDetails> getProjectApproverDetails() {
+		return projectApproverDetails;
+	}
+
+	public void setProjectApproverDetails(List<ProjectApproverDetails> projectApproverDetails) {
+		this.projectApproverDetails = projectApproverDetails;
+	}
+	
 
 }

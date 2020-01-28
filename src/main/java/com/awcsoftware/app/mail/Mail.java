@@ -58,7 +58,7 @@ public class Mail {
 		helper.setSubject(MailMessageConstants.PasswordChanged.getLabel().toString());
 		helper.setText(MailMessageConstants.PasswordChangedEmailContent.getLabel().toString(), true);
 		mailconfig.javaMailSender().send(message);
-		return null;
+		return MailMessageConstants.SendEmail.getLabel().toString();
 
 	}
 
@@ -103,7 +103,7 @@ public class Mail {
 		String sendMailContent="Hello Sir\n I have submitted timecard for period "+weekStartDT+" To "+weekEndDT;
 		helper.setText(sendMailContent, true);
 		mailconfig.javaMailSender().send(message);
-		return null;
+		return MailMessageConstants.SendEmail.getLabel().toString();
 
 	}
 }

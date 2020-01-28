@@ -1,6 +1,8 @@
 package com.awcsoftware.app.mail;
 
 import java.io.IOException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import javax.mail.MessagingException;
 
@@ -17,10 +19,10 @@ public class MailController {
 
 	@GetMapping("/WelcomeEmail")
 	public String sendWelcomeMail(MailPojo mailpojo){
-	/*	ExecutorService emailExecutor = Executors.newSingleThreadExecutor();
+		ExecutorService emailExecutor = Executors.newSingleThreadExecutor();
 		emailExecutor.execute(new Runnable() {
 			@Override
-			public void run() {*/
+			public void run() {
 
 				try {
 					service.sendWelcomeEmail(mailpojo);
@@ -32,10 +34,10 @@ public class MailController {
 					e.printStackTrace();
 				}
 
-		/*	}
+			}
 		});
 		emailExecutor.shutdown();
-		*/
+		
 
 		return MailMessageConstants.SendEmail.getLabel().toString();
 
