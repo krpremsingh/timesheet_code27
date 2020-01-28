@@ -393,7 +393,7 @@
 
 	<select id="srhSubmittedTimecardDetails"
 		parameterType="int" resultType="TimecardApproverDetails">
-		select concat(ManagerDet.firstName,' ',ManagerDet.middleName,' ',ManagerDet.lastName) approverName,email approverEmailId,
+		select distinct concat(ManagerDet.firstName,' ',ManagerDet.middleName,' ',ManagerDet.lastName) approverName,email approverEmailId,
 		IFNULL((select concat(firstName,' ',middleName,' ',lastName) from EmployeeInfo EmpDet,TimecardInfo TCI where TCI.tcId=TCAD.tcId and
 		TCI.empId=EmpDet.empId),' ') employeeName 
 		from TimecardApproverDetails TCAD,EmployeeInfo ManagerDet
