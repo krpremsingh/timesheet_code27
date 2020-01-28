@@ -17,11 +17,9 @@ public class MailConfig {
 		mailSender.setJavaMailProperties(mailProperties);
 		mailSender.setHost("smtp.gmail.com");
 		mailSender.setPort(25);
-
 		mailSender.setProtocol("smtp");
 		mailSender.setUsername("awctimesheet@gmail.com");
 		mailSender.setPassword("awc@1234");
-
 		return mailSender;
 	}
 }

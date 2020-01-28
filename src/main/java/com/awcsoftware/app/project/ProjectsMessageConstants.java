@@ -11,7 +11,7 @@ public enum ProjectsMessageConstants {
 	InvalidDateFormat("Date format is invalid"),
 	EmployeeIdCantBeBlank("Employee id can't be blank"),
 	EmployeeRoleCantBeBlank("Employee role can't be blank"),
-	EmployeeWorkingDateNotBeforeProjectStartDate("Project start date can't be less than employee startDate"),
+	EmployeeWorkingDateNotBeforeProjectStartDate("Employee project assigned date can't be greater than project startDate"),
 	EmployeeWorkLocation("Work location can't be blank"),
 	ProjectAndWorkLocationNotMatched("Work location not matched with project location"),
 	ProjectAddedSuccessFully("Project added successfully"),

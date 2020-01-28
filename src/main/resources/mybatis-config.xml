@@ -61,6 +61,9 @@
 		<typeAlias alias="ProjectLocations"  type="com.awcsoftware.app.project.ProjectLocations"/>
          
          <typeAlias  alias="ProjectsTeamDetails" type="com.awcsoftware.app.project.ProjectsTeamDetails"/>
+         
+         <typeAlias alias="ProjectApproverDetails" type="com.awcsoftware.app.project.ProjectApproverDetails"/>
+         
 	</typeAliases>
 	<environments default="development">
 		<environment id="development">

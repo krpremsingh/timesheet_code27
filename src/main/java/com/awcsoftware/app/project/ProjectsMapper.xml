@@ -23,6 +23,10 @@
      <resultMap type="ProjectsTeamDetails" id="ProjectsTeamDetailsMap">
 		<id column="projectId" property="projectId" jdbcType="INTEGER" />	
      </resultMap>
+     
+      <resultMap type="ProjectApproverDetails" id="ProjectApproverDetailsMap">
+		<id column="pId" property="pId" jdbcType="INTEGER" />	
+     </resultMap>
 
 <select id="checkProject" resultType="int" parameterType="Projects">
  select count(*) from ProjectsInfo where upper(projectName)=upper(#{projectName}) or projectId=#{projectId};
@@ -40,6 +44,11 @@ insert into ProjectsInfo(projectName,budget,startDate,endDate,status,addedOn,cli
  insert into ProjectTeamDetails(projectId,empId,role,workingLocation,startDate,endDate,status,addedOn) values(#{projectId},#{empId},#{role},#{workingLocation},#{startDate},#{endDate},#{status},now());
  </insert>
  
+ <insert id="addProjectApproverDetails" parameterType="ProjectApproverDetails" keyProperty="pId">
+  insert into ProjectApproverDetails(pId,tcApprover,level,startDate,endDate,status,addedOn) 
+  values(#{pId},#{tcApprover},#{level},#{startDate},#{endDate},#{status},now());
+ </insert>
+ 
  <update id="updateProjectInfo" parameterType="Projects">
  update ProjectsInfo set projectName=#{projectName},budget=#{budget},startDate=#{startDate},endDate=#{endDate},status=#{status},lastModifiedOn=now() where projectId=#{projectId}
  </update>
@@ -49,6 +58,11 @@ insert into ProjectsInfo(projectName,budget,startDate,endDate,status,addedOn,cli
  </update>
  <update id="updateProjectTeamDetails" parameterType="ProjectsTeamDetails">
  update ProjectTeamDetails set empId=#{empId},projectId=#{projectId},role=#{role},workingLocation=#{workingLocation}
+ ,startDate=#{startDate},endDate=#{endDate},status=#{status},lastModifiedOn=now();
+ </update>
+ 
+ <update id="updateProjectApproverDetails" parameterType="ProjectApproverDetails">
+ update ProjectApproverDetails set pId=#{pId},tcApprover=#{tcApprover},level=#{level}
  ,startDate=#{startDate},endDate=#{endDate},status=#{status},lastModifiedOn=now();
  </update>
  
@@ -65,6 +79,11 @@ insert into ProjectsInfo(projectName,budget,startDate,endDate,status,addedOn,cli
  <select id="viewProjectTeam" resultMap="ProjectsTeamDetailsMap" parameterType="Projects">
  select pdId,projectId,empId,ifnull((select concat(firstName,middleName,lastName)from EmployeeInfo e where e.empId=ptd.empId),' ') name,role,workingLocation,startDate,endDate,status,addedOn,lastModifiedOn from 
  ProjectTeamDetails ptd where projectId=#{projectId}
+ </select>
+ 
+ <select id="viewProjectApprover" resultMap="ProjectApproverDetailsMap" parameterType="Projects">
+ select pId,tcApprover,level,startDate,endDate,status,addedOn,lastModifiedOn from 
+ ProjectApproverDetails where pId=#{pId}
  </select>
  
  <delete id="deleteProjectLocations" parameterType="Projects">

@@ -94,7 +94,7 @@ public class ProjectsValidator {
 					errorMsg.add(ProjectsMessageConstants.ProjectEndDateRange.getLabel().toString());
 					return errorMsg;
 				}
-				if(dateFormatter(projectteam.getStartDate()).isBefore(dateFormatter(info.getStartDate()))) {
+				if(dateFormatter(info.getStartDate()).isBefore(dateFormatter(projectteam.getStartDate()))) {
 					errorMsg.add(ProjectsMessageConstants.EmployeeWorkingDateNotBeforeProjectStartDate.getLabel().toString());
 					return errorMsg;	
 				}

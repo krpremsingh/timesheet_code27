@@ -23,6 +23,7 @@ public class ProjectsDao {
 				if (result != 0) {
 					addProjectLocation(info, session);
 					addProjectTeam(info,session);
+					addProjectApprover(info,session);
 					session.commit();
 					return true;
 				}
@@ -54,6 +55,20 @@ public class ProjectsDao {
 		for ( ProjectsTeamDetails projectteam : info.getProjectsTeamDetails()) {
 			projectteam.setProjectId(info.getProjectId());
 			result = session.insert("Projects.addProjectTeam", projectteam);
+		}
+		if (result != 0) {
+			session.commit();
+			return true;
+		}
+		return false;
+		
+	}
+	
+	public boolean addProjectApprover(ProjectsInfo info,SqlSession session) {
+		int result = 0;
+		for ( ProjectApproverDetails projectapprover : info.getProjectApproverDetails()) {
+			projectapprover.setpId(info.getProjectId());
+			result = session.insert("Projects.addProjectApproverDetails", projectapprover);
 		}
 		if (result != 0) {
 			session.commit();
@@ -95,6 +110,7 @@ public class ProjectsDao {
 			if (result != 0) {
 				updateProjectLocationDetails(info,session);
 				updateProjectTeamDetails(info,session);
+				updateProjectApproverDetails(info,session);
 				session.commit();
 				return true;
 			}
@@ -131,6 +147,20 @@ public class ProjectsDao {
 				return false;
 			}	
 	}
+	
+	public boolean updateProjectApproverDetails(ProjectsInfo info,SqlSession session) {
+		int result = 0;
+			for ( ProjectApproverDetails projectapprover : info.getProjectApproverDetails()) {
+				projectapprover.setpId(info.getProjectId());
+				result = session.update("Projects.updateProjectApproverDetails", projectapprover);
+			}			
+			if (result != 0) {
+				return true;
+			} else {
+				return false;
+			}	
+	}
+	
 	public List<ProjectsInfo> viewProject(int projectId)throws AppException,DbException {
 		SqlSession session = MyBatisManager.openSession();
 		try {
