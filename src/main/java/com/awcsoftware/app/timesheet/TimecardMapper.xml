@@ -371,7 +371,7 @@
 	<select id="getProjectApproverList"
 		parameterType="TimecardDayDetails"
 		resultType="TimecardApproverDetails">
-			select pId projectId,tcApprover approverId,level levelId,concat(firstName,' ',middleName,' ',lastName),email from
+			select projectId projectId,tcApprover approverId,level levelId,concat(firstName,' ',middleName,' ',lastName),email from
 			ProjectApproverDetails PAD,EmployeeInfo EI
 			where projectId=#{projectId} and PAD.status='Active' and level=1 and PAD.tcApprover=EI.empId
 	</select>
