@@ -373,7 +373,7 @@
 		resultType="TimecardApproverDetails">
 			select pId projectId,tcApprover approverId,level levelId,concat(firstName,' ',middleName,' ',lastName),email from
 			ProjectApproverDetails PAD,EmployeeInfo EI
-			where pId=#{projectId} and PAD.status='Active' and level=1 and PAD.tcApprover=EI.empId
+			where projectId=#{projectId} and PAD.status='Active' and level=1 and PAD.tcApprover=EI.empId
 	</select>
 
 	<select id="isApproverExistforCurrentTimecardProject"
@@ -410,7 +410,7 @@
 		FROM
 		ProjectTeamDetails PTM, ProjectApproverDetails PAD, EmployeeInfo
 		ei
-		WHERE Pad.TCAPPROVER=#{empId} and PAD.pId=PTM.projectId AND PTM.empId
+		WHERE Pad.TCAPPROVER=#{empId} and PAD.projectId=PTM.projectId AND PTM.empId
 		&lt;&gt; TCAPPROVER AND
 		ei.empId=PTM.empId and ei.status='Active';
 	</select>

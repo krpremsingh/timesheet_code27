@@ -233,8 +233,7 @@ public class TimecardValidator extends AppValidator {
 
 			if (timecardDayDetails.getActivityId() == 18 && Integer.parseInt(timeDiff.substring(0, 2)) > 9) {
 				errorMsg.add(TimecardMessageConstant.Leave_cant_be_Less_Parameterized_Hour.getLabel()
-						+ AppConstant.WORKING_HOURS.Nine.getValue() + " hours Working Date "
-						+ timecardDayDetails.getWorkingDate() + " ");
+						+ AppConstant.WORKING_HOURS.Eight.getValue() + " hours ");
 			}
 
 			timecardDayDetails.setWorkingHours(timeDiff);
