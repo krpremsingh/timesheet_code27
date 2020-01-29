@@ -123,8 +123,8 @@ values(#{empId},#{phoneNumberType},#{phoneNumber},#{status},now()) ;
 </insert>
 
 <insert id="addEmployeeProjects" parameterType="EmployeeProjectInfo" keyProperty="pdId" useGeneratedKeys="true">
-insert into ProjectTeamDetails(pId,empId,role,workingLocation,startDate,endDate,status,addedOn) 
-values(#{pId},#{empId},#{role},#{workingLocation},#{startDate},#{endDate},#{status},now());
+insert into ProjectTeamDetails(projectId,empId,role,workingLocation,startDate,endDate,status,addedOn) 
+values(#{projectId},#{empId},#{role},#{workingLocation},#{startDate},#{endDate},#{status},now());
 </insert>
 
 <select id="checkEmployee" resultType="int" parameterType="User">

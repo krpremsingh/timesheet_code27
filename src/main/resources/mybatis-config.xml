@@ -64,6 +64,8 @@
          
          <typeAlias alias="ProjectApproverDetails" type="com.awcsoftware.app.project.ProjectApproverDetails"/>
          
+         <typeAlias alias="ReportsInfo"  type="com.awcsoftware.app.report.ReportsInfo"/>
+         
 	</typeAliases>
 	<environments default="development">
 		<environment id="development">
@@ -93,8 +95,9 @@
 			<mapper
 			resource="com/awcsoftware/app/project/ProjectsMapper.xml" />
 			<mapper 
-			resource="com/awcsoftware/app/mail/MailMapper.xml"
-			/>
+			resource="com/awcsoftware/app/mail/MailMapper.xml"/>
+			<mapper 
+			resource="com/awcsoftware/app/report/ReportsMapper.xml"/>
 	</mappers>
 
 </configuration>

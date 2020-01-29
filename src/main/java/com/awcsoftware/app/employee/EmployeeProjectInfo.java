@@ -8,7 +8,7 @@ public class EmployeeProjectInfo implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	private int pdId;
-	private int pId;
+	private int projectId;
 	private int empId;
 	private int role;
 	private int workingLocation;
@@ -23,11 +23,11 @@ public class EmployeeProjectInfo implements Serializable {
 	public void setPdId(int pdId) {
 		this.pdId = pdId;
 	}
-	public int getpId() {
-		return pId;
+	public int getProjectId() {
+		return projectId;
 	}
-	public void setpId(int pId) {
-		this.pId = pId;
+	public void setProjectId(int projectId) {
+		this.projectId = projectId;
 	}
 	public int getEmpId() {
 		return empId;
