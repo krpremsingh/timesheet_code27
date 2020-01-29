@@ -18,7 +18,12 @@ public enum ProjectsMessageConstants {
 	ProjectNotAdded("Project not added"),
 	ProjectNotFound("Project not found"),
 	ProjectLocationNotFound("Project location not found"),
+	ApproverStartDateNotGreaterThanProjectStartDate("Project approver start date must be after project start date"),
 	ProjectEndDateRange("End date can't be less than start date"),
+	ProjectApproverCantbeBlank("Project approver field can't be blank"),
+	ProjectApproverStartDate("Project approver start date can't be blank"),
+	ProjectApproverLevel("Project approver level can't be blank"),
+	ProjectApproverStatus("Project approver status can't be blank"),
 	ProjectUpdated("Project updated successfully");
 
 	private final String label;

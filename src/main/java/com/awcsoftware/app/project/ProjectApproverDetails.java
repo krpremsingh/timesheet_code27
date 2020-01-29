@@ -1,7 +1,13 @@
 package com.awcsoftware.app.project;
 
-public class ProjectApproverDetails {
-	 private int pId;
+import java.io.Serializable;
+
+public class ProjectApproverDetails  implements Serializable{
+	 /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private int projectId;
 	 private int tcApprover;
 	 private int level;
 	 private String startDate;
@@ -10,11 +16,12 @@ public class ProjectApproverDetails {
 	 private String addedOn;
 	 private String lastModifiedOn;
 
-	public int getpId() {
-		return pId;
+
+	public int getProjectId() {
+		return projectId;
 	}
-	public void setpId(int pId) {
-		this.pId = pId;
+	public void setProjectId(int projectId) {
+		this.projectId = projectId;
 	}
 	public int getTcApprover() {
 		return tcApprover;

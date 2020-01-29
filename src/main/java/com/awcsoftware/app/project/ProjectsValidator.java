@@ -102,6 +102,29 @@ public class ProjectsValidator {
 					errorMsg.add(ProjectsMessageConstants.EmployeeWorkLocation.getLabel().toString());
 					return errorMsg;
 				}
+				
+				for(ProjectApproverDetails projectapprover:info.getProjectApproverDetails()) {
+					if(projectapprover.getTcApprover()==0) {
+						errorMsg.add(ProjectsMessageConstants.ProjectApproverCantbeBlank.getLabel().toString());
+						return errorMsg;
+					}
+					if(Util.isEmptyOrNull(projectapprover.getStartDate())) {
+						errorMsg.add(ProjectsMessageConstants.ProjectApproverStartDate.getLabel().toString());
+						return errorMsg;	
+					}
+					if(projectapprover.getLevel()==0) {
+						errorMsg.add(ProjectsMessageConstants.ProjectApproverLevel.getLabel().toString());
+						return errorMsg;	
+					}
+					if(Util.isEmptyOrNull(projectapprover.getStatus())) {
+						errorMsg.add(ProjectsMessageConstants.ProjectApproverStatus.getLabel().toString());
+						return errorMsg;	
+					}
+					if(dateFormatter(info.getStartDate()).isBefore(dateFormatter(projectapprover.getStartDate()))) {
+						errorMsg.add(ProjectsMessageConstants.ApproverStartDateNotGreaterThanProjectStartDate.getLabel().toString());
+						return errorMsg;
+					}
+				}
 
 /*				for (ProjectLocations workLocation : info.getProjectLocations()) {
 					logger.debug("worklocation " + workLocation.getWorkLocationId());
