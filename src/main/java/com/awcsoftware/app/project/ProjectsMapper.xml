@@ -69,8 +69,8 @@ insert into ProjectsInfo(projectName,budget,startDate,endDate,status,addedOn,cli
  </update>
  
  <select id="viewProject" parameterType="Projects" resultMap="ProjectMap">
- select p.projectId,p.projectName,p.startDate,p.endDate,p.budget,p.addedOn,p.lastModifiedOn,p.clientId,p.status from ProjectsInfo p 
- where p.projectId=#{projectId};
+ select p.projectId,p.projectName,p.startDate,p.endDate,p.budget,p.addedOn,p.lastModifiedOn,p.clientId,p.status,ci.clientName from ProjectsInfo p,ClientInfo ci 
+ where p.projectId=#{projectId} and ci.clientId=p.clientId;
  </select>
  
  <select id="viewProjectLocation" resultMap="ProjectLocationsInfoMap" parameterType="Projects">
@@ -93,8 +93,11 @@ insert into ProjectsInfo(projectName,budget,startDate,endDate,status,addedOn,cli
  </delete>
  
   <select id="viewProjects" resultType="Projects">
- select p.projectId,p.projectName,p.startDate,p.endDate,p.budget,p.addedOn,p.lastModifiedOn,p.status from ProjectsInfo p 
+ select p.projectId,p.projectName,p.startDate,p.endDate,p.budget,p.addedOn,p.lastModifiedOn,p.status,p.clientId,ci.clientName from ProjectsInfo p,ClientInfo ci 
  <where>
+ <if test="clientId!=0">
+ ci.clientId=p.clientId and
+</if>
 <if test="startDate!= null">
   p.startDate &gt;= #{startDate,jdbcType=VARCHAR}
 </if>

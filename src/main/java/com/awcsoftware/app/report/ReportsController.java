@@ -19,7 +19,7 @@ public class ReportsController {
 	@Autowired
 	ReportsService reportservice;
 	
-	@RequestMapping(value="/timecardCount",method=RequestMethod.GET)
+	@RequestMapping(value="/timecardCount",method=RequestMethod.POST)
 	public ResponseEntity<List<ReportsInfo>> fetchTimecardsCount(@RequestBody ReportsInfo info){
 		try {
 			return new ResponseEntity<List<ReportsInfo>>(reportservice.fetchTimecardsCount(info), HttpStatus.OK);
@@ -30,4 +30,29 @@ public class ReportsController {
 		}
 
 }
+	@RequestMapping(value="/getEmployeesReportWeekly",method=RequestMethod.POST)
+	public ResponseEntity<List<ReportsInfo>> getEmployeesReport(@RequestBody ReportsInfo info){
+		try {
+			return new ResponseEntity<List<ReportsInfo>>(reportservice.getEmployeesReportBasedOnStatus(info), HttpStatus.OK);
+		} catch (AppException e) {
+			return new ResponseEntity<List<ReportsInfo>>(HttpStatus.INTERNAL_SERVER_ERROR);
+		} catch (DbException e) {
+			return new ResponseEntity<List<ReportsInfo>>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+}
+	
+	@RequestMapping(value="/getTotalEmployeeAndProjectsAndWorkingHours",method=RequestMethod.POST)
+	public ResponseEntity<List<ReportsInfo>> getTotalEmployeeAndProjects(@RequestBody ReportsInfo info){
+		try {
+			return new ResponseEntity<List<ReportsInfo>>(reportservice.getTotalEmployeeAndProjectsAndWorkingHours(info), HttpStatus.OK);
+		} catch (AppException e) {
+			return new ResponseEntity<List<ReportsInfo>>(HttpStatus.INTERNAL_SERVER_ERROR);
+		} catch (DbException e) {
+			return new ResponseEntity<List<ReportsInfo>>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+}
+	
+	
 }

@@ -4,6 +4,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
+import com.awcsoftware.app.client.ClientDao;
+import com.awcsoftware.app.client.ClientService;
+import com.awcsoftware.app.client.ClientValidator;
 import com.awcsoftware.app.common.BasePojo;
 import com.awcsoftware.app.employee.ConfirmationToken;
 import com.awcsoftware.app.employee.EmployeeDao;
@@ -13,6 +16,7 @@ import com.awcsoftware.app.employee.EmployeeValidator;
 import com.awcsoftware.app.mail.Mail;
 import com.awcsoftware.app.mail.MailConfig;
 import com.awcsoftware.app.report.ReportsService;
+import com.awcsoftware.app.report.ReportsValidator;
 import com.awcsoftware.spring.security.auth.user.UserDao;
 
 @ComponentScan(basePackages = "com.awcsoftware")
@@ -23,6 +27,26 @@ public class AppConfig {
 	public EmployeeValidator employeeValidator() {
 		return new EmployeeValidator();
 	}
+	
+	@Bean
+	public ClientDao clientDao() {
+		 return new ClientDao();
+	}
+	
+	@Bean
+	public ClientService clientService() {
+		return new ClientService();
+	}
+	@Bean
+	public ClientValidator clientValidator() {
+		return new ClientValidator();
+	}
+	
+	@Bean
+	public ReportsValidator reportsValidator() {
+		return new ReportsValidator();
+	}
+	
 	@Bean
 	public ReportsService reportservice() {
 		return new ReportsService();

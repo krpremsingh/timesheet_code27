@@ -55,6 +55,12 @@ public class User implements Serializable {
 	private String fromDate;
 
 	private String toDate;
+	
+	private String empPhoto;
+	
+	private String relievingDate;
+	
+	private String resourceType;
 
 	private List<EmployeeAddressInfo> addressInfo;
 
@@ -245,6 +251,27 @@ public class User implements Serializable {
 	public void setToDate(String toDate) {
 		this.toDate = toDate;
 	}
+	public String getEmpPhoto() {
+		return empPhoto;
+	}
+
+	public void setEmpPhoto(String empPhoto) {
+		this.empPhoto = empPhoto;
+	}
+	public String getRelievingDate() {
+		return relievingDate;
+	}
+
+	public void setRelievingDate(String relievingDate) {
+		this.relievingDate = relievingDate;
+	}
+	public String getResourceType() {
+		return resourceType;
+	}
+
+	public void setResourceType(String resourceType) {
+		this.resourceType = resourceType;
+	}
 
 	@Override
 	public String toString() {
@@ -254,7 +281,7 @@ public class User implements Serializable {
 				+ ", currentPassword=" + currentPassword + ", confirmPassword=" + confirmPassword + ", newPassword="
 				+ newPassword + ", firstLoginStatus=" + firstLoginStatus + ", status=" + status + ", designationId="
 				+ designationId + ", mailFlag=" + mailFlag + ", fromDate=" + fromDate + ", toDate=" + toDate
+				+ ", empPhoto=" + empPhoto + ", relievingDate=" + relievingDate + ", resourceType=" + resourceType
 				+ ", addressInfo=" + addressInfo + ", phoneInfo=" + phoneInfo + ", projectInfo=" + projectInfo + "]";
 	}
-
 }

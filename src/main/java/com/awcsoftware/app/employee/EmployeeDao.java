@@ -13,17 +13,19 @@ import com.awcsoftware.spring.security.auth.user.User;
 
 /**
  * 
- * @author Arun methods to generate and verify confirmation token
- *         1.saveToken(assigned a token to user with expiry date)
- *         2.updateToken(update token if user generate a link more than one time
- *         without changing the password) 3.checkToken(to check token in the
- *         database) 4.findByToken(to verify the user entered token with
- *         database token) 5.deleteToken(delete the token from database after
- *         the password changed by user) 6.verifyEmailId(verify the email id
- *         entered by user for link generation to change password) methods to
- *         reset and change password 1.resetPassword 2.updatePassword methods to
- *         maintain the state of user 1.getLoginTransaction 2.saveLastLogin
- *         3.saveLoginTransaction
+ * @author Arun 
+ * methods to generate and verify confirmation token
+ * 1.saveToken(assigned a token to user with expiry date)
+ * 2.updateToken(update token if user generate a link more than one time
+ * without changing the password) 
+ * 3.checkToken(to check token in the database) 
+ * 4.findByToken(to verify the user entered token with database token) 
+ * 5.deleteToken(delete the token from database after the password changed by user) 
+ * 6.verifyEmailId(verify the email id
+ *   entered by user for link generation to change password) methods to
+ *   reset and change password 1.resetPassword 2.updatePassword methods to
+ *   maintain the state of user 1.getLoginTransaction 2.saveLastLogin
+ *   3.saveLoginTransaction
  */
 @Component
 public class EmployeeDao {

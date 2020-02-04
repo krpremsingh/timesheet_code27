@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
 import com.awcsoftware.app.AppException;
+import com.awcsoftware.app.Util;
 import com.awcsoftware.mybatis.DbException;
 import com.awcsoftware.mybatis.MyBatisManager;
 
@@ -29,4 +30,40 @@ public class ReportsDao {
 			session.close();
 		}
 }
+	
+	public List<ReportsInfo> getEmployeesReportBasedOnStatus(ReportsInfo info)throws AppException,DbException {
+		SqlSession session = MyBatisManager.openSession();
+		try {
+			List<ReportsInfo> result = session.selectList("ReportMapper.getEmployeesReportBasedOnStatus",info);
+			logger.debug("Result " + result);
+			if (result.size()!=0) {
+				session.commit();
+				return result;
+			}
+			return null;
+		} finally
+
+		{
+			session.close();
+		}
+}
+	public List<ReportsInfo> getTotalEmployeeAndProjectsAndWorkingHours(ReportsInfo info){
+		SqlSession session = MyBatisManager.openSession();
+		try {
+			List<ReportsInfo> result = session.selectList("ReportMapper.gettotalEmployeesAndProjectsAndWorkingHours",info);
+			logger.debug("Result " + result);
+			if (Util.isEmptyOrNull(result)) {
+				session.commit();
+				return null;
+			}
+			return result;
+		} finally
+
+		{
+			session.close();
+		}
+		
+	}
+	
+	
 }

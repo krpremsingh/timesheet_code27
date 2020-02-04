@@ -95,7 +95,9 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
 				authDetail.setEmpCode(user.getEmpCode());
 				authDetail.setFirstLoginStatus(user.getFirstLoginStatus());
 				authDetail.setDesignationId(user.getDesignationId());
-				authDetail.setLoginTimestamp(logintransaction.getLoginTimestamp());
+                authDetail.setRelievingDate(user.getRelievingDate()); 
+                authDetail.setResourceType(user.getResourceType());
+                log.debug("auutthhddeetails     " + authDetail.getResourceType());
 				return authDetail;
 			}
 

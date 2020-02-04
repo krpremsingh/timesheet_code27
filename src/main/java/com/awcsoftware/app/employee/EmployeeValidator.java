@@ -32,8 +32,8 @@ public class EmployeeValidator {
 	}
 	User result = null;
 
-	private static final String PASSWORD_PATTERN = "^(?=[a-zA-Z0-9#@$*%&]{8,20}$)(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9]).*";
-
+	private static final String PASSWORD_PATTERN = "^(?=[a-zA-Z0-9]{5,20}$).*";
+	//^(?=[a-zA-Z0-9#@$*%&]{8,20}$)(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9]).*
 	private Pattern pattern;
 
 	private Matcher matcher;
@@ -147,6 +147,10 @@ public class EmployeeValidator {
 		}
 		if (Util.isEmptyOrNull(user.getFirstName())) {
 			errorMsg.add(EmployeeMessageConstants.BlankFirstName.getLabel().toString());
+			return errorMsg;
+		}
+		if (Util.isEmptyOrNull(user.getEmpPhoto())) {
+			errorMsg.add(EmployeeMessageConstants.BlankPhoto.getLabel().toString());
 			return errorMsg;
 		}
 		
