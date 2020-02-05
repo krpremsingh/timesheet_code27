@@ -36,7 +36,7 @@
       
     <select id="getUser" parameterType="string" resultType="User">
 		select
-		e.empId,e.firstName,e.email,e.password,e.designationId,e.empCode,e.firstLoginStatus
+		e.empId,e.firstName,e.email,e.password,e.designationId,e.empCode,e.firstLoginStatus,e.relievingDate,e.resourceType
 		from EmployeeInfo e where e.email=#{email}
     </select>
     
@@ -103,9 +103,9 @@ insert into LoginTransaction values(#{empId},#{loginTimestamp},#{lastPasswordCha
 
 <insert id="insertEmployee" parameterType="User" keyProperty="empId" useGeneratedKeys="true">
 insert into EmployeeInfo(empCode,firstName,middleName,lastName,email,dob,doj,
-password,designationId,status,addedOn,lastModifiedOn,firstLoginStatus,mailFlag) 
+password,designationId,status,addedOn,lastModifiedOn,firstLoginStatus,mailFlag,empPhoto) 
 values(#{empCode},#{firstName},#{middleName},#{lastName},#{email},
-#{dob},#{doj},#{password},#{designationId},#{status},now(),#{lastModifiedOn},0,'NO');
+#{dob},#{doj},#{password},#{designationId},#{status},now(),#{lastModifiedOn},0,'NO',#{empPhoto});
 </insert>
 
 <insert id="addEmployeeAddress" parameterType="EmployeeAddressInfo" keyProperty="addressId" useGeneratedKeys="true">
@@ -161,7 +161,7 @@ lastModifiedOn=now() where empId=#{empId} and phoneNumberId=#{phoneNumberId}
 </update>
 
 <select id="getEmployee" resultMap="User" parameterType="User">
-select empId,empCode,firstName,middleName,lastName,email,dob,doj,designationId,status,addedOn,lastModifiedOn,firstLoginStatus from EmployeeInfo 
+select empId,empCode,firstName,middleName,lastName,email,dob,doj,designationId,status,addedOn,lastModifiedOn,firstLoginStatus,empPhoto from EmployeeInfo 
  <where>
 <if test="firstName!=null">
   concat(firstName,lastName) like #{firstName}

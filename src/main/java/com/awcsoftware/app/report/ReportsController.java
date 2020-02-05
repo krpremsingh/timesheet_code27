@@ -19,15 +19,15 @@ public class ReportsController {
 	@Autowired
 	ReportsService reportservice;
 	
-	@RequestMapping(value="/timecardCount",method=RequestMethod.GET)
-	public ResponseEntity<List<ReportsInfo>> fetchTimecardsCount(@RequestBody ReportsInfo info){
+	@RequestMapping(value="/employeeReport",method=RequestMethod.POST)
+	public ResponseEntity<List<ReportsInfo>> employeeReport(@RequestBody ReportsInfo info){
 		try {
-			return new ResponseEntity<List<ReportsInfo>>(reportservice.fetchTimecardsCount(info), HttpStatus.OK);
+			return new ResponseEntity<List<ReportsInfo>>(reportservice.employeeReport(info), HttpStatus.OK);
 		} catch (AppException e) {
 			return new ResponseEntity<List<ReportsInfo>>(HttpStatus.INTERNAL_SERVER_ERROR);
 		} catch (DbException e) {
 			return new ResponseEntity<List<ReportsInfo>>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
-}
+}	
 }

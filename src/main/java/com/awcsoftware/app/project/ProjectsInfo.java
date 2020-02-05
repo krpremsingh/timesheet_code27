@@ -22,6 +22,7 @@ public class ProjectsInfo implements Serializable {
 	private LocalDate addedOn;
 	private LocalDate lastModifiedOn;
 	private int clientId;
+	private String clientName;
 	private List<ProjectLocations> projectLocations;
 	private List<ProjectsTeamDetails> projectsTeamDetails;
 	private List<ProjectApproverDetails> projectApproverDetails;
@@ -120,6 +121,14 @@ public class ProjectsInfo implements Serializable {
 
 	public void setProjectApproverDetails(List<ProjectApproverDetails> projectApproverDetails) {
 		this.projectApproverDetails = projectApproverDetails;
+	}
+
+	public String getClientName() {
+		return clientName;
+	}
+
+	public void setClientName(String clientName) {
+		this.clientName = clientName;
 	}
 	
 

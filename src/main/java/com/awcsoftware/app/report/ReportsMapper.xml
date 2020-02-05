@@ -5,17 +5,41 @@
 <mapper namespace="ReportMapper">
 
 	<resultMap id="ReportMapper" type="ReportsInfo">
-		<id column="tcId" property="tcId" jdbcType="INTEGER" />
-		<result column="empId" property="empId" jdbcType="INTEGER" />
-		<result column="weekStart" property="weekStart" jdbcType="DATE" />
-		<result column="weekEnd" property="weekEnd" jdbcType="DATE" />
-		<result column="totalHours" property="totalHours"
-			jdbcType="VARCHAR" />	
-		<result column="status" property="timcardStatus" jdbcType="VARCHAR" />
+	<id column="tcId" property="tcId" jdbcType="INTEGER" />
+	<id column="empId" property="empId" jdbcType="INTEGER" />
+	<result column="weekStart" property="weekStart" jdbcType="DATE" />
+	<result column="weekEnd" property="weekEnd" jdbcType="DATE" />	
 	</resultMap>
 	
-<select id="timecardsCount" parameterType="ReportsInfo" resultMap="ReportMapper">
-select count(status) statusCount,status from TimecardInfo  where weekStart &gt;=#{weekStart} and weekEnd &lt;=#{weekEnd}  group by status;
-</select>	
-
+<select id="getEmployeeReport" parameterType="ReportsInfo" resultType="ReportsInfo">
+select distinct concat_WS(' ',e.firstname,e.middlename,e.lastname) empName,
+ti.tcId tcId,ti.empId,tdd.activityId,tdd.projectId,ai.activity,tdi.workingDay,tdi.workingDate,e.empCode,e.email 
+from TimecardInfo ti,TimecardDayInfo tdi,TimecardDayDetails tdd,ActivitiesInfo ai,EmployeeInfo e  
+<where> 
+<if test="activity!=null and activity!=''">
+upper(ai.activity)=upper(#{activity}) and
+</if>
+<if test="empName!=null and empName!=''">
+  concat(e.firstName,e.middleName,e.lastName) like #{empName} and
+</if>
+ recordType='Active' and
+<if test="projectId!=0 and projectId!=null">
+ tdd.projectId=#{projectId} and
+</if>
+<if test="empCode!=null and empCode!=''">
+e.empCode = #{empCode} and
+</if>
+<if test="weekStart!=null and weekStart!=''">
+ti.weekStart &gt;=#{weekStart} and
+</if>
+<if test="weekEnd!=null and weekEnd!=''">
+ti.weekEnd &lt;=#{weekEnd} and
+</if>
+<if test="email!=null and email!=''">
+e.email =#{email} and
+</if>
+ti.tcId=tdi.tcId and tdi.tcId=tdd.tcId and tdi.tcdId=tdd.tcdId and e.empId=ti.empId and 
+ai.activityId=tdd.activityId
+</where>
+</select>
 </mapper>

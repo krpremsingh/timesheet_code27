@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Clients">
+	<cache />
+<!-- 	********************************************** 
+			Start Of Defining Result Map 
+		********************************************** 
+-->
+	<resultMap type="Clients" id="ClientsMap">
+		<id column="clientId" property="clientId"/>
+   </resultMap>
+   
+   <insert id="addClient" parameterType="Clients">
+   insert into ClientInfo(clientName,startDate,endDate,status,addedOn) values(#{clientName},#{startDate},#{endDate},#{status},#{addedOn});
+   </insert>
+   
+   <select id="viewClients" parameterType="Clients" resultType="Clients">
+  select ci.clientId,ci.clientName,ci.startDate,ci.endDate,ci.status,ci.addedOn from ClientInfo ci 
+   <where>
+   <if test="startDate!=null">
+   ci.startDate=#{startDate}
+   </if>
+   <if test="endDate!=null">
+   and ci.endDate=#{endDate}
+   </if>
+   <if test="clientId!=0">
+   ci.clientId=#{clientId}
+   </if>
+   </where>
+   </select>
+   
+</mapper>

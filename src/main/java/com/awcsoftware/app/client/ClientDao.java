@@ -1,5 +1,48 @@
 package com.awcsoftware.app.client;
 
-public class ClientDao {
+import java.util.List;
 
+import org.apache.ibatis.session.SqlSession;
+import org.apache.log4j.Logger;
+
+import com.awcsoftware.app.AppException;
+import com.awcsoftware.app.Util;
+import com.awcsoftware.mybatis.DbException;
+import com.awcsoftware.mybatis.MyBatisManager;
+
+public class ClientDao {
+	static Logger logger = Logger.getLogger(ClientDao.class.getName());
+
+	public boolean addClient(ClientInfo info) throws AppException, DbException {
+		SqlSession session = MyBatisManager.openSession();
+		try {
+			int result = session.insert("Clients.addClient", info);
+			if(result!=0) {
+				session.commit();
+				return true;	
+			}
+			return false;		
+		} finally
+
+		{
+			session.close();
+		}
+	}
+	
+	public List<ClientInfo> viewClients(ClientInfo info){
+		SqlSession session = MyBatisManager.openSession();
+		try {
+			List<ClientInfo> result = session.selectList("Clients.viewClients", info);
+			if(!Util.isEmptyOrNull(result)) {
+				session.commit();
+				return result;	
+			}
+			return null;		
+		} finally
+
+		{
+			session.close();
+		}
+		
+	}
 }

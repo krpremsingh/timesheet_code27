@@ -58,6 +58,8 @@
 		<!-- End of Mapping classes with Timesheet package -->
 		<typeAlias alias="Projects" type="com.awcsoftware.app.project.ProjectsInfo"/>
 		
+		<typeAlias alias ="Clients" type="com.awcsoftware.app.client.ClientInfo"/>	
+			
 		<typeAlias alias="ProjectLocations"  type="com.awcsoftware.app.project.ProjectLocations"/>
          
          <typeAlias  alias="ProjectsTeamDetails" type="com.awcsoftware.app.project.ProjectsTeamDetails"/>
@@ -98,6 +100,8 @@
 			resource="com/awcsoftware/app/mail/MailMapper.xml"/>
 			<mapper 
 			resource="com/awcsoftware/app/report/ReportsMapper.xml"/>
+			<mapper 
+			resource="com/awcsoftware/app/client/clientMapper.xml"/>			
 	</mappers>
 
 </configuration>

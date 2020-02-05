@@ -1,7 +1,6 @@
 package com.awcsoftware.app.timesheet;
 
 import java.text.ParseException;
-import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
@@ -9,6 +8,7 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+
 import org.apache.log4j.Logger;
 
 import com.awcsoftware.app.AppConstant;
@@ -84,9 +84,9 @@ public class TimecardValidator extends AppValidator {
 		if (Util.validateInt.test(tcd.getProjectId())) {
 			errorMsg.add(TimecardMessageConstant.BlankProject.getLabel());
 		}
-		if (Util.validateInt.test(tcd.getActivityId())) {
+/*		if (Util.validateInt.test(tcd.getActivityId())) {
 			errorMsg.add(TimecardMessageConstant.BlankActivity.getLabel());
-		}
+		}*/
 
 		if (Util.validateInt.test(tcd.getLocation())) {
 			errorMsg.add(TimecardMessageConstant.BlankLocation.getLabel());

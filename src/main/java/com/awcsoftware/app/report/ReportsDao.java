@@ -6,27 +6,29 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
-import com.awcsoftware.app.AppException;
-import com.awcsoftware.mybatis.DbException;
+import com.awcsoftware.app.Util;
 import com.awcsoftware.mybatis.MyBatisManager;
 
 @Component
 public class ReportsDao {
 	static Logger logger = Logger.getLogger(ReportsDao.class.getName());
-	public List<ReportsInfo> fetchTimecardcount(ReportsInfo info)throws AppException,DbException {
+	public List<ReportsInfo> getEmployeeReport(ReportsInfo info){
 		SqlSession session = MyBatisManager.openSession();
 		try {
-			List<ReportsInfo> result = session.selectList("ReportMapper.timecardsCount",info);
+			List<ReportsInfo> result = session.selectList("ReportMapper.getEmployeeReport",info);
 			logger.debug("Result " + result);
-			if (result.size()!=0) {
+			if (Util.isEmptyOrNull(result)) {
 				session.commit();
-				return result;
+				return null;
 			}
-			return null;
+			return result;
 		} finally
 
 		{
 			session.close();
 		}
-}
+		
+	}
+	
+	
 }

@@ -33,7 +33,8 @@ public class UserAuthenticationDetail extends UsernamePasswordAuthenticationToke
 	private String empCode;
 	private int designationId;
 	private String firstName;
-	private LocalDateTime loginTimestamp;
+	private String relievingDate;
+	private String resourceType;
 
 	private static final long serialVersionUID = 1L;
 	
@@ -104,12 +105,21 @@ public class UserAuthenticationDetail extends UsernamePasswordAuthenticationToke
 		this.firstName = firstName;
 	}
 	
-	public LocalDateTime getLoginTimestamp() {
-		return loginTimestamp;
+	public String getRelievingDate() {
+		return relievingDate;
 	}
 
-	public void setLoginTimestamp(LocalDateTime loginTimestamp) {
-		this.loginTimestamp = loginTimestamp;
+	public void setRelievingDate(String relievingDate) {
+		this.relievingDate = relievingDate;
+	}
+	
+
+	public String getResourceType() {
+		return resourceType;
+	}
+
+	public void setResourceType(String resourceType) {
+		this.resourceType = resourceType;
 	}
 
 	@Override
