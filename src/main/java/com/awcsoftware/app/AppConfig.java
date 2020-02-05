@@ -16,7 +16,6 @@ import com.awcsoftware.app.employee.EmployeeValidator;
 import com.awcsoftware.app.mail.Mail;
 import com.awcsoftware.app.mail.MailConfig;
 import com.awcsoftware.app.report.ReportsService;
-import com.awcsoftware.app.report.ReportsValidator;
 import com.awcsoftware.spring.security.auth.user.UserDao;
 
 @ComponentScan(basePackages = "com.awcsoftware")
@@ -41,11 +40,11 @@ public class AppConfig {
 	public ClientValidator clientValidator() {
 		return new ClientValidator();
 	}
-	
+/*	
 	@Bean
 	public ReportsValidator reportsValidator() {
 		return new ReportsValidator();
-	}
+	}*/
 	
 	@Bean
 	public ReportsService reportservice() {

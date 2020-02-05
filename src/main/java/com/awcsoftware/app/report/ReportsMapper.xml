@@ -4,52 +4,42 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="ReportMapper">
 
-	<resultMap id="ReportMapper" type="ReportsInfo">	
-		<result column="status" property="status" jdbcType="VARCHAR" />
+	<resultMap id="ReportMapper" type="ReportsInfo">
+	<id column="tcId" property="tcId" jdbcType="INTEGER" />
+	<id column="empId" property="empId" jdbcType="INTEGER" />
+	<result column="weekStart" property="weekStart" jdbcType="DATE" />
+	<result column="weekEnd" property="weekEnd" jdbcType="DATE" />	
 	</resultMap>
 	
-<select id="" parameterType="ReportsInfo" resultMap="ReportMapper">
-select distinct concat_WS(' ',e.firstname,e.middlename,e.lastname) empName,ti.tcId,ti.empId,tdd.activityId,tdd.projectId,ai.activity,tdi.workingDay,tdi.workingDate from TimecardInfo ti,
-TimecardDayInfo tdi,TimecardDayDetails tdd,ActivitiesInfo ai,EmployeeInfo e 
-<where>
-<if test="ti.tcdId!=0">
-ti.tcId=tdi.tcId and
+<select id="getEmployeeReport" parameterType="ReportsInfo" resultType="ReportsInfo">
+select distinct concat_WS(' ',e.firstname,e.middlename,e.lastname) empName,
+ti.tcId tcId,ti.empId,tdd.activityId,tdd.projectId,ai.activity,tdi.workingDay,tdi.workingDate,e.empCode,e.email 
+from TimecardInfo ti,TimecardDayInfo tdi,TimecardDayDetails tdd,ActivitiesInfo ai,EmployeeInfo e  
+<where> 
+<if test="activity!=null and activity!=''">
+upper(ai.activity)=upper(#{activity}) and
 </if>
-<if test="ti.empId!=0">
- ti.empId=e.empId and
- </if>
- <if test="ai.activityId!=0">
- ai.activityId=tdd.activityId and
- </if>
- <if test="ai.activity!=0">
- upper(ai.activity)=upper(#{activity}) and
- </if>
- <if test="tdd.projectId!=0">
+<if test="empName!=null and empName!=''">
+  concat(e.firstName,e.middleName,e.lastName) like #{empName} and
+</if>
+ recordType='Active' and
+<if test="projectId!=0 and projectId!=null">
  tdd.projectId=#{projectId} and
- </if>
- <if test="tdi.workingDate!=null">
- tdi.workingDate &gt;=#{workingDate} and
- 
- tdi.workingDate &lt;=#{workingDate}
- </if>
-
+</if>
+<if test="empCode!=null and empCode!=''">
+e.empCode = #{empCode} and
+</if>
+<if test="weekStart!=null and weekStart!=''">
+ti.weekStart &gt;=#{weekStart} and
+</if>
+<if test="weekEnd!=null and weekEnd!=''">
+ti.weekEnd &lt;=#{weekEnd} and
+</if>
+<if test="email!=null and email!=''">
+e.email =#{email} and
+</if>
+ti.tcId=tdi.tcId and tdi.tcId=tdd.tcId and tdi.tcdId=tdd.tcdId and e.empId=ti.empId and 
+ai.activityId=tdd.activityId
 </where>
 </select>
-<!-- 
-<select id="getEmployeesReportBasedOnStatus" parameterType="ReportsInfo" resultMap="ReportMapper">
-select concat_WS(' ',firstname,middlename,lastname) empName,tdi.status, EI.empId,email,empCode,totalHours, 
-ifnull((select count(distinct projectId) from TimecardDayDetails tcdd where tcdd.tcId=tdi.tcId),'0') 
-totalProject,ifnull((select group_concat(Distinct concat(pi.projectName,'-',concat_WS(' ',e.firstname,e.middlename,e.lastname))) 
-from timecardApproverDetails tcad,ProjectsInfo pi,EmployeeInfo e where e.empId= tcad.approverId and pi.projectId=tcad.projectId
- and tcad.tcId=tdi.tcId),' ') approverList,group_concat(tcId) tcId from EmployeeInfo EI, TimecardInfo tdi where tdi.empId=EI.empId 
- and tdi.weekStart &gt;=#{weekStart} and tdi.weekEnd &lt;=#{weekEnd} and tdi.status=#{status} group by 1;
-</select>
-
-<select id="gettotalEmployeesAndProjectsAndWorkingHours" parameterType="ReportsInfo" resultMap="ReportMapper">
-select count(distinct e.empId) totalEmployees,count(distinct tdd.projectId) totalProjects,
-ifnull((select sec_to_time(sum(Time_to_sec(tcdd.workingHours))) from TimecardDayDetails tcdd,
-TimecardInfo ti where tcdd.tcId=ti.tcId and ti.weekStart &gt;=#{weekStart} and ti.weekEnd &lt;=#{weekEnd} and tcdd.recordType='Active'),'') weeklyWorkedHours from EmployeeInfo e,TimecardInfo ti,TimecardDayDetails tdd 
-where ti.empId=e.empId and weekStart &gt;=#{weekStart} and weekEnd &lt;=#{weekEnd}
-</select> -->	
-
 </mapper>

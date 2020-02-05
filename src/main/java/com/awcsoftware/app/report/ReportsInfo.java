@@ -1,110 +1,103 @@
 package com.awcsoftware.app.report;
 
 public class ReportsInfo {
-	private String status;
-	private String weekStart;
+
 	private int empId;
+	private String activity;
 	private String empCode;
+	private int activityId;
+	private String weekStart;
+	private String firstName;
+	private String weekEnd;
+	private String workingDay;
+	private String workingDate;
 	private String empName;
 	private String projectId;
-	private String weekEnd;
-	private String tcId;
-	private String totalHours;
-	private int totalEmployees;
-	private int totalProjects;
-	private String comments;
-
-	public String getTcId() {
-		return tcId;
+	private String email;
+	private int tcId;
+	
+	
+	public String getEmail() {
+		return email;
 	}
-
-	public void setTcId(String tcId) {
-		this.tcId = tcId;
+	public void setEmail(String email) {
+		this.email = email;
 	}
-	public String getStatus() {
-		return status;
+	public String getWorkingDate() {
+		return workingDate;
 	}
-
-	public void setStatus(String status) {
-		this.status = status;
+	public void setWorkingDate(String workingDate) {
+		this.workingDate = workingDate;
 	}
+	
 
 	public int getEmpId() {
 		return empId;
 	}
-
 	public void setEmpId(int empId) {
 		this.empId = empId;
 	}
-
-	public String getEmpCode() {
-		return empCode;
+	public String getActivity() {
+		return activity;
 	}
-
-	public void setEmpCode(String empCode) {
-		this.empCode = empCode;
+	public void setActivity(String activity) {
+		this.activity = activity;
 	}
-
-	public String getEmpName() {
-		return empName;
+	public int getActivityId() {
+		return activityId;
 	}
-
-	public void setEmpName(String empName) {
-		this.empName = empName;
-	}
-
-	public String getProjectId() {
-		return projectId;
-	}
-
-	public void setProjectId(String projectId) {
-		this.projectId = projectId;
+	public void setActivityId(int activityId) {
+		this.activityId = activityId;
 	}
 
 	public String getWeekStart() {
 		return weekStart;
 	}
-
 	public void setWeekStart(String weekStart) {
 		this.weekStart = weekStart;
 	}
-
 	public String getWeekEnd() {
 		return weekEnd;
 	}
-
 	public void setWeekEnd(String weekEnd) {
 		this.weekEnd = weekEnd;
 	}
-	public String getTotalHours() {
-		return totalHours;
+	
+	public String getEmpName() {
+		return empName;
+	}
+	public void setEmpName(String empName) {
+		this.empName = empName;
+	}
+	public String getProjectId() {
+		return projectId;
+	}
+	public void setProjectId(String projectId) {
+		this.projectId = projectId;
 	}
 
-	public void setTotalHours(String totalHours) {
-		this.totalHours = totalHours;
+	public String getWorkingDay() {
+		return workingDay;
 	}
-
-	public String getComments() {
-		return comments;
+	public void setWorkingDay(String workingDay) {
+		this.workingDay = workingDay;
 	}
-
-	public void setComments(String comments) {
-		this.comments = comments;
+	public int getTcId() {
+		return tcId;
 	}
-
-	public int getTotalEmployees() {
-		return totalEmployees;
+	public void setTcId(int tcId) {
+		this.tcId = tcId;
 	}
-
-	public void setTotalEmployees(int totalEmployees) {
-		this.totalEmployees = totalEmployees;
+	public String getEmpCode() {
+		return empCode;
 	}
-
-	public int getTotalProjects() {
-		return totalProjects;
+	public void setEmpCode(String empCode) {
+		this.empCode = empCode;
 	}
-
-	public void setTotalProjects(int totalProjects) {
-		this.totalProjects = totalProjects;
+	public String getFirstName() {
+		return firstName;
+	}
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
 	}
 }
