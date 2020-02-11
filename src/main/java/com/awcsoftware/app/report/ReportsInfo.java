@@ -6,17 +6,27 @@ public class ReportsInfo {
 	private String activity;
 	private String empCode;
 	private int activityId;
-	private String weekStart;
+	private int activityCount;
+	private String fromDate;
 	private String firstName;
-	private String weekEnd;
+	private String toDate;
 	private String workingDay;
 	private String workingDate;
 	private String empName;
+	private String projectName;
+	private String clientName;
 	private String projectId;
+	private String apiStatus;
+	private int clientId;
 	private String email;
 	private int tcId;
 	
-	
+	public String getApiStatus() {
+		return apiStatus;
+	}
+	public void setApiStatus(String apiStatus) {
+		this.apiStatus = apiStatus;
+	}
 	public String getEmail() {
 		return email;
 	}
@@ -29,8 +39,6 @@ public class ReportsInfo {
 	public void setWorkingDate(String workingDate) {
 		this.workingDate = workingDate;
 	}
-	
-
 	public int getEmpId() {
 		return empId;
 	}
@@ -48,21 +56,19 @@ public class ReportsInfo {
 	}
 	public void setActivityId(int activityId) {
 		this.activityId = activityId;
+	}	
+	public String getFromDate() {
+		return fromDate;
 	}
-
-	public String getWeekStart() {
-		return weekStart;
+	public void setFromDate(String fromDate) {
+		this.fromDate = fromDate;
 	}
-	public void setWeekStart(String weekStart) {
-		this.weekStart = weekStart;
+	public String getToDate() {
+		return toDate;
 	}
-	public String getWeekEnd() {
-		return weekEnd;
+	public void setToDate(String toDate) {
+		this.toDate = toDate;
 	}
-	public void setWeekEnd(String weekEnd) {
-		this.weekEnd = weekEnd;
-	}
-	
 	public String getEmpName() {
 		return empName;
 	}
@@ -100,4 +106,29 @@ public class ReportsInfo {
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
 	}
+	public int getClientId() {
+		return clientId;
+	}
+	public void setClientId(int clientId) {
+		this.clientId = clientId;
+	}
+	public String getProjectName() {
+		return projectName;
+	}
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
+	}
+	public String getClientName() {
+		return clientName;
+	}
+	public void setClientName(String clientName) {
+		this.clientName = clientName;
+	}
+	public int getActivityCount() {
+		return activityCount;
+	}
+	public void setActivityCount(int activityCount) {
+		this.activityCount = activityCount;
+	}
+	
 }

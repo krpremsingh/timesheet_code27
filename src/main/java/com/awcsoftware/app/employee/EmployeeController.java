@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,6 +27,7 @@ import com.awcsoftware.spring.security.auth.user.User;
 import com.awcsoftware.spring.security.auth.user.UserDao;
 
 @RestController
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class EmployeeController {
 	final static Logger logger = Logger.getLogger(EmployeeController.class);
 	
@@ -41,7 +43,7 @@ public class EmployeeController {
 	}
      
 	
-	
+	@CrossOrigin
 	@RequestMapping(value = "/resetPassword", method = RequestMethod.PUT, headers = "Accept=application/json")
 	public ResponseEntity<String> resetPassword(@RequestBody User user, HttpServletRequest request) {
 		try {
@@ -132,17 +134,17 @@ public class EmployeeController {
 		}
 
 	}
-/*	@RequestMapping(value = "/getEmployees", method = RequestMethod.GET, headers = "Accept=application/json")
-	public ResponseEntity<List<User>> getEmployees() {
+	@RequestMapping(value = "/getEmployeePerProject", method = RequestMethod.POST, headers = "Accept=application/json")
+	public ResponseEntity<List<User>> getEmployees(@RequestBody User user) {
 		try {
-			return new ResponseEntity<List<User>>(employeeservice.getEmployees(), HttpStatus.OK);
+			return new ResponseEntity<List<User>>(employeeservice.getEmployeeList(user.getProjectgroup()), HttpStatus.OK);
 		} catch (AppException e) {
 			return new ResponseEntity<List<User>>(HttpStatus.INTERNAL_SERVER_ERROR);
 		} catch (DbException e) {
 			return new ResponseEntity<List<User>>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
-	}*/
+	}
 	
 
 }

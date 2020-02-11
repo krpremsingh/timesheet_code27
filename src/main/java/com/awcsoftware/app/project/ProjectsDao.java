@@ -138,10 +138,15 @@ public class ProjectsDao {
 	public boolean updateProjectTeamDetails(ProjectsInfo info,SqlSession session) {
 		int result = 0;
 			for ( ProjectsTeamDetails projectteam : info.getProjectsTeamDetails()) {
+				if(projectteam.getPdId()==0) {
+					projectteam.setProjectId(info.getProjectId());
+				   session.insert("Projects.addProjectTeam",projectteam);	
+				}
 				projectteam.setProjectId(info.getProjectId());
 				result = session.update("Projects.updateProjectTeamDetails", projectteam);
 			}			
 			if (result != 0) {
+				session.commit();
 				return true;
 			} else {
 				return false;

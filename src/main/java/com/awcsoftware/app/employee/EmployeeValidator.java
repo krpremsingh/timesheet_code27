@@ -32,7 +32,7 @@ public class EmployeeValidator {
 	}
 	User result = null;
 
-	private static final String PASSWORD_PATTERN = "^(?=[a-zA-Z0-9]{5,20}$).*";
+	private static final String PASSWORD_PATTERN = "^(?=[a-zA-Z0-9#@$*%&]{5,20}$).*";
 	//^(?=[a-zA-Z0-9#@$*%&]{8,20}$)(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9]).*
 	private Pattern pattern;
 
@@ -202,7 +202,7 @@ public class EmployeeValidator {
 		return errorMsg;
 
 	}
-	
+/*	
 	public Set<String> validateEmployeeAddress(User user)throws AppException, DbException {	
 	errorMsg.clear();	
 	for (EmployeeAddressInfo addressInfo : user.getAddressInfo()) {
@@ -231,7 +231,7 @@ public class EmployeeValidator {
 	}
 	return errorMsg;
 
-}
+}*/
 	public Set<String> validateEmployeePhone(User user){
 		errorMsg.clear();
 		for (EmployeePhoneInfo phoneInfo : user.getPhoneInfo()) {

@@ -13,10 +13,17 @@ public class ReportsService {
 	
 	@Autowired
 	ReportsDao dao;
+	
+	@Autowired
+	ReportsInfo info;
 
 	public List<ReportsInfo> employeeReport(ReportsInfo info) throws AppException, DbException {
 	    List<ReportsInfo> result = dao.getEmployeeReport(info);
-	    logger.debug("resultpppppp    "+result.toString());
+	    if(result.size()!=0) {
+	    	return result;
+	    }
+	    info.setApiStatus(ReportsMessageConstants.NoRecordFound.getLabel().toString());
+	    result.add(info);
 		return result;
 	}
 }

@@ -12,9 +12,10 @@
 	</resultMap>
 	
 <select id="getEmployeeReport" parameterType="ReportsInfo" resultType="ReportsInfo">
-select distinct concat_WS(' ',e.firstname,e.middlename,e.lastname) empName,
-ti.tcId tcId,ti.empId,tdd.activityId,tdd.projectId,ai.activity,tdi.workingDay,tdi.workingDate,e.empCode,e.email 
-from TimecardInfo ti,TimecardDayInfo tdi,TimecardDayDetails tdd,ActivitiesInfo ai,EmployeeInfo e  
+select distinct concat_WS(' ',e.firstname,e.middlename,e.lastname) empName,p.projectName,c.clientName,
+count(ai.activityId) activityCount,ti.tcId tcId,ti.empId,tdd.activityId,tdd.projectId,ai.activity,
+tdi.workingDay,tdi.workingDate,e.empCode,e.email from 
+TimecardInfo ti,TimecardDayInfo tdi,TimecardDayDetails tdd,ActivitiesInfo ai,EmployeeInfo e,ProjectsInfo p,ClientInfo c  
 <where> 
 <if test="activity!=null and activity!=''">
 upper(ai.activity)=upper(#{activity}) and
@@ -22,24 +23,27 @@ upper(ai.activity)=upper(#{activity}) and
 <if test="empName!=null and empName!=''">
   concat(e.firstName,e.middleName,e.lastName) like #{empName} and
 </if>
- recordType='Active' and
 <if test="projectId!=0 and projectId!=null">
  tdd.projectId=#{projectId} and
 </if>
 <if test="empCode!=null and empCode!=''">
 e.empCode = #{empCode} and
 </if>
-<if test="weekStart!=null and weekStart!=''">
-ti.weekStart &gt;=#{weekStart} and
+<if test="fromDate!=null and fromDate!=''">
+tdi.workingDate between #{fromDate} and
 </if>
-<if test="weekEnd!=null and weekEnd!=''">
-ti.weekEnd &lt;=#{weekEnd} and
+<if test="toDate!=null and toDate!=''">
+#{toDate} and
 </if>
 <if test="email!=null and email!=''">
 e.email =#{email} and
 </if>
-ti.tcId=tdi.tcId and tdi.tcId=tdd.tcId and tdi.tcdId=tdd.tcdId and e.empId=ti.empId and 
-ai.activityId=tdd.activityId
+<if test="clientId!=0">
+p.clientId =#{clientId} and
+</if>
+recordType='Active' and
+ti.tcId=tdi.tcId and tdi.tcId=tdd.tcId and tdi.tcdId=tdd.tcdId and c.clientId=p.clientId and e.empId=ti.empId and p.projectId=tdd.projectId and 
+ai.activityId=tdd.activityId group by ai.activityId,tdi.workingDate 
 </where>
 </select>
 </mapper>

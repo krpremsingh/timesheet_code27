@@ -161,22 +161,22 @@ lastModifiedOn=now() where empId=#{empId} and phoneNumberId=#{phoneNumberId}
 </update>
 
 <select id="getEmployee" resultMap="User" parameterType="User">
-select empId,empCode,firstName,middleName,lastName,email,dob,doj,designationId,status,addedOn,lastModifiedOn,firstLoginStatus,empPhoto from EmployeeInfo 
+select e.empId,e.empCode,e.firstName,e.middleName,e.lastName,e.email,e.dob,e.doj,e.designationId,d.designation,e.status,e.addedOn,e.lastModifiedOn,e.firstLoginStatus,e.empPhoto from EmployeeInfo e,DesignationInfo d 
  <where>
 <if test="firstName!=null">
-  concat(firstName,lastName) like #{firstName}
+  concat(e.firstName,e.lastName) like #{firstName} and
 </if>
 
 <if test="empCode!=null">
-  or empCode like #{empCode} 
+  e.empCode like #{empCode} and
 </if>
 <if test="email!=null">
-  or email like #{email} 
+  e.email like #{email} and
 </if>
 <if test="doj!=null">
-  doj between doj=#{fromDate} and doj=#{toDate} 
+  e.doj between e.doj=#{fromDate} and e.doj=#{toDate} and
 </if>
-
+d.designationId=e.designationId
 </where>
 
  </select>
@@ -195,10 +195,17 @@ select pdId,empId, projectId,role,workingLocation,startDate,endDate,status as pr
 </select>
 
 
-<!-- 
-<select id="getEmployees" resultMap="User">
-select empId,empCode,firstName,middleName,lastName,email,dob,doj,designationId,status,addedOn,lastModifiedOn,firstLoginStatus from EmployeeInfo
-</select> -->
+
+<select id="getEmployeesPerProject" resultType="User" parameterType="User">
+select distinct p.projectId,e.empCode,e.email,e.empId,
+concat_ws('',e.firstName,e.middleName,e.lastName) from 
+EmployeeInfo e,ProjectTeamDetails p where e.empId=p.empId 
+and p.projectId  in(
+<foreach item="item" index="index" collection="projectsId" separator="," >
+	#{item} 
+</foreach>
+);
+</select>
 <!--
 <update id="updateFirstLogin" parameterType="EmployeeLoginTransaction">
 update EmployeeInfo e inner join LoginTransaction lt on e.empId=lt.empId set firstLoginStatus=0 where e.empId=#{empId}

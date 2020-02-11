@@ -1,6 +1,12 @@
 package com.awcsoftware.app.client;
 
-public class ClientInfo {
+import java.io.Serializable;
+
+public class ClientInfo implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int clientId;
 	private String clientName;
 	private String startDate;

@@ -5,6 +5,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 import com.awcsoftware.app.client.ClientDao;
+import com.awcsoftware.app.client.ClientInfo;
 import com.awcsoftware.app.client.ClientService;
 import com.awcsoftware.app.client.ClientValidator;
 import com.awcsoftware.app.common.BasePojo;
@@ -15,6 +16,7 @@ import com.awcsoftware.app.employee.EmployeeService;
 import com.awcsoftware.app.employee.EmployeeValidator;
 import com.awcsoftware.app.mail.Mail;
 import com.awcsoftware.app.mail.MailConfig;
+import com.awcsoftware.app.report.ReportsInfo;
 import com.awcsoftware.app.report.ReportsService;
 import com.awcsoftware.spring.security.auth.user.UserDao;
 
@@ -28,9 +30,20 @@ public class AppConfig {
 	}
 	
 	@Bean
+	public ReportsInfo reportsInfo() {
+		return new ReportsInfo();
+	}
+	
+	@Bean
 	public ClientDao clientDao() {
 		 return new ClientDao();
 	}
+	
+	@Bean
+	public ClientInfo clientInfo() {
+		return new ClientInfo();
+	}
+	
 	
 	@Bean
 	public ClientService clientService() {

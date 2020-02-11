@@ -4,12 +4,17 @@
 <!--<cache /> -->
 <resultMap id="DesignationResult" type="ParentBasePojo">
 <id column="designationId" property="id" jdbcType="INTEGER" />
-<collection property="basepojo"  select="getActivities" column="DesignationId" />
+<collection property="basepojo"  select="getActivities" column="DesignationId"/>
 </resultMap>
 
 <resultMap id="ProjectResult" type="ParentBasePojo">
 <id column="projectId" property="id" jdbcType="INTEGER" />
 <collection property="basepojo"  select="getProjects" column="ProjectId" />
+</resultMap>
+
+<resultMap type="BasePojo" id="Designation">
+<id column="designationId" property="id" jdbcType="INTEGER" />
+<result column="designation" property="name" jdbcType="VARCHAR" />
 </resultMap>
 
 <resultMap type="BasePojo" id="ActivitiesResult">
@@ -27,6 +32,12 @@
  <result column="location" property="name" jdbcType="VARCHAR" />
 </resultMap>
 
+<resultMap type="BasePojo" id="projectClientMap">
+<id column="clientId" property="id"  jdbcType="INTEGER"/>
+<id column="projectId" property="id"  jdbcType="INTEGER"/>
+ <result column="projectName" property="name" jdbcType="VARCHAR" />
+</resultMap>
+
 <select id="getActivities"  resultMap="ActivitiesResult">
 <!-- select distinct a.activity,a.activityId from ActivitiesInfo a,DesignationInfo d where a.designationId=#{designationId}; -->
 select distinct activity,activityId from ActivitiesInfo
@@ -41,5 +52,11 @@ select distinct p.projectName,p.projectId from ProjectsInfo p inner join Project
 select distinct wl.location,wl.workLocationId from WorkLocationsInfo wl inner join ProjectLocationDetails pld on pld.workLocationId=wl.workLocationId where pld.projectId=#{projectId};
 </select>
 <!--  select distinct wl.location from worklocationsinfo wl,projectteamdetails ptd where ptd.workingLocation=wl.workLocationId and ptd.pId=1; -->
-	
+<select id="getDesignation" resultMap="Designation">
+select designation from DesignationInfo where designationId=#{designationId};
+</select>
+
+<select id="getProjectsListBasedOnClient" resultMap="projectClientMap">
+select projectName,projectId from ProjectsInfo where clientId=#{clientId};
+</select>	
 </mapper>

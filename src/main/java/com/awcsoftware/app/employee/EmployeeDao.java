@@ -1,5 +1,6 @@
 package com.awcsoftware.app.employee;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
@@ -379,6 +380,29 @@ public class EmployeeDao {
 			session.close();
 		}
 
+	}
+	
+	public List<User> getEmployeeList(String projectGroup){
+		SqlSession session = MyBatisManager.openSession();
+		try {
+			String[] projectSpilt=projectGroup.split(",");
+			List<String> eachProjectVal=new ArrayList<String>();
+			for(int ctr=0;ctr<projectSpilt.length;ctr++)
+			{
+				eachProjectVal.add(projectSpilt[ctr]);
+			}
+			User userObj=new User();
+			userObj.setProjectsId(eachProjectVal);
+			
+			List<User> result = session.selectList("User.getEmployeesPerProject", userObj);
+			if (result != null) {
+				return result;
+			}
+			return null;
+		} finally {
+			session.close();
+		}
+		
 	}
 
 }

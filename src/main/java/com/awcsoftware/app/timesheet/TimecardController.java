@@ -195,15 +195,15 @@ public class TimecardController {
 		}
 	}
 
-/*	@RequestMapping(value="/getWeekTimecard" ,method=RequestMethod.POST)
-	public ResponseEntity<List<TimecardDayDetails>> getWeekTimecard(@RequestBody TimecardInfo timecardInfo){
+	 @RequestMapping(value="/tc-resubmitTimecard" ,method=RequestMethod.POST)
+	public ResponseEntity<String> resubmitTimecard(@RequestBody TimecardDayInfo timecarddayinfo){
 		service=new TimecardService();
 		try {
-			return new ResponseEntity<List<TimecardDayDetails>>(service.getWeekTimecard(timecardInfo), HttpStatus.OK);
+			return new ResponseEntity<String>(service.resubmitTimecard(timecarddayinfo), HttpStatus.OK);
 		} catch (DbException | AppException e) {
-			return new ResponseEntity<List<TimecardDayDetails>>(HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
-	}*/
+	}
 	
 }

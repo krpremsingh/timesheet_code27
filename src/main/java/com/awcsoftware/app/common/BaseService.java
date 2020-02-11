@@ -46,5 +46,22 @@ public class BaseService {
 			}
 		return setoflocations;
 	}
+	
+	public List<BasePojo> getDesignation(BasePojo basepojo){
+		List<BasePojo> designation = dao.getDesignation(basepojo.getId());
+		if(designation.size()!=0) {
+			return designation;
+		}
+		return null;
+		
+	}
+	public List<BasePojo> getProjectsListPerClient(BasePojo basepojo){
+		List<BasePojo> projects = dao.getProjectsListBasedOnClient(basepojo.getId());
+		if(projects.size()!=0) {
+			return projects;
+		}
+		return null;
+		
+	}
 
 }

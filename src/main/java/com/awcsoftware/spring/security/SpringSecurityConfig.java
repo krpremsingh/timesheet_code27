@@ -64,7 +64,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		         http
 		         .cors()
-		         .configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues())
+		        /* .configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues())*/
 		    	 .and()
 		         .csrf().disable()
 		        .addFilterBefore(getLoginFilter(), UsernamePasswordAuthenticationFilter.class)
@@ -95,9 +95,10 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList("*"));
+        configuration.setAllowCredentials(true);
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(Arrays.asList("authorization", "content-type", "x-auth-token"));
-        configuration.setExposedHeaders(Arrays.asList("x-auth-token"));
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type", "X-Auth-Token"));
+        //configuration.setExposedHeaders(Arrays.asList("x-auth-token"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;

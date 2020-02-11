@@ -1,6 +1,7 @@
 package com.awcsoftware.app.employee;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class EmployeeProjectInfo implements Serializable {
 	/**
@@ -9,6 +10,13 @@ public class EmployeeProjectInfo implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private int pdId;
 	private int projectId;
+	private List<String> projectsId;
+	public List<String> getProjectsId() {
+		return projectsId;
+	}
+	public void setProjectsId(List<String> projectsId) {
+		this.projectsId = projectsId;
+	}
 	private int empId;
 	private int role;
 	private int workingLocation;
