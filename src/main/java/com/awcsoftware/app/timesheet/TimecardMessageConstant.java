@@ -65,6 +65,7 @@ public enum TimecardMessageConstant {
 	Invalid_Employee_Code("Employee code is not valid"),
 	Timecard_Approved_successfully("Timecard approved successfully"),
 	Timecard_Rejected_successfully("Timecard rejected successfully"),
+	EMP_Fill_TImecard_Beyond_Relieving_Date("You are not allowed to filled data beyond your relieving date "),
 	Timecard_Is_Already_Approved("Data is mismatch for approval and rejection");
 	
 

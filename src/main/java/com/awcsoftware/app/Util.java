@@ -186,4 +186,23 @@ public class Util {
 		return calendar.getTime();
 	}
 
+	public static String getCurrentDate()
+	{
+		Date currDate = new Date();
+		String currentModifiedDate= new SimpleDateFormat("yyyy-MM-dd").format(currDate);
+		return currentModifiedDate;
+		
+	}
+
+	public static float getDayDiffBetweenTwoDate(String startDate,String endDate) throws ParseException
+	{
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+		Date startDateVal = dateFormat.parse(startDate);
+		Date endDateVal = dateFormat.parse(endDate);
+		long difference = endDateVal.getTime() - startDateVal.getTime();
+		float daysBetween = (difference / (1000*60*60*24));
+		return daysBetween;
+		
+	}
 }

@@ -182,7 +182,7 @@ public class TimecardService {
 		Set<String> validatorResult = validator.validateTimecardApprovalData(timecardInfoParam);
 		if (validatorResult.size() == AppConstant.WORKING_HOURS.Zero.getValue()) {
 			TimecardDao dao = new TimecardDao();			
-			return dao.approveTimecardByManager(timecardInfoParam);
+			return dao.approveTimecardByManagerWrapper(timecardInfoParam);
 		} else
 			return validatorResult.toString();
 	}
@@ -197,7 +197,7 @@ public class TimecardService {
 		Set<String> validatorResult = validator.validateTimecardRejectData(timecardInfoParam);
 		if (validatorResult.size() == AppConstant.WORKING_HOURS.Zero.getValue()) {
 			TimecardDao dao = new TimecardDao();			
-			return dao.approveTimecardByManager(timecardInfoParam);
+			return dao.rejectTimecardByManager(timecardInfoParam);
 		} else
 			return validatorResult.toString();
 	}

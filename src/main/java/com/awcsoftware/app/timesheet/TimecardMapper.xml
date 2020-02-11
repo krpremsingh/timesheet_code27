@@ -201,6 +201,15 @@
 		workingDate= #{workingDate}
 	</update>
 
+	<update id="updateTimecardDayInfoById"
+		parameterType="TimecardInfo" useGeneratedKeys="true"
+		keyProperty="tcdId">
+		UPDATE TimecardDayInfo SET
+		status = #{status},
+		lastModifiedOn = now()
+		WHERE tcId = #{tcId}
+	</update>
+
 	<update id="updateTimecardDayHourInfo"
 		parameterType="TimecardDayInfo" useGeneratedKeys="true"
 		keyProperty="tcdId">
@@ -224,7 +233,23 @@
 		workingDate=#{workingDate,jdbcType=VARCHAR} limit 0,1),-1) from dual;
 	</select>
 
+	<select id="statusOfAvailableDayInfo"
+		parameterType="TimecardDayInfo" resultType="string">
+		select status from TimecardDayInfo where tcId = #{tcId} and
+		workingDate=#{workingDate,jdbcType=VARCHAR} limit 0,1;
+	</select>
+
+	
+
 	<!-- Operation ended for table TimecardDayInfo -->
+
+	<select id="isTimecardDetailsExistsForCurrentDateForCurrentEmployee"
+		parameterType="TimecardDayInfo" resultType="int">
+		select ifnull(
+		(select tcddId
+		from TimecardDayDetails where tcId = #{tcId} and
+		tcdId=#{tcdId} and recordType='Active' limit 0,1),-1) from dual;
+	</select>
 
 	<insert id="addIndividualTimecardDayDetails"
 		parameterType="TimecardDayDetails" useGeneratedKeys='true'
@@ -282,6 +307,15 @@
 		lastModifiedOn = now()
 		WHERE
 		tcId = #{tcId} and projectId=#{projectId} and recordType='Active'
+	</update>
+
+	<update id="UpdateDayDetailsById"
+		parameterType="TimecardInfo">
+		UPDATE TimecardDayDetails SET
+		status =#{status},
+		lastModifiedOn = now()
+		WHERE
+		tcId = #{tcId} and recordType='Active'
 	</update>
 
 	<update id="DeactivateTimecardDayDetails" parameterType="int"
@@ -640,6 +674,12 @@
 		UPDATE TimecardApproverDetails SET status=#{status},comments=#{approverComment},
 		lastModifiedOn=now()
 		WHERE tcId=#{tcId} and projectId=#{projectId}
+	</update>
+
+	<update id="updateTimecardApproverProjectById" parameterType="TimecardInfo">
+		UPDATE TimecardApproverDetails SET status=#{status},
+		lastModifiedOn=now()
+		WHERE tcId=#{tcId}
 	</update>
 
 	<select id="getPreviousWeekStatus"  resultType="TimecardInfo">

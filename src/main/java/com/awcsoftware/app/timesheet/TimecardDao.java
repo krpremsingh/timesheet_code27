@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 
 import com.awcsoftware.app.AppConstant;
 import com.awcsoftware.app.AppException;
+import com.awcsoftware.app.Util;
 import com.awcsoftware.app.mail.Mail;
 import com.awcsoftware.mybatis.DbException;
 import com.awcsoftware.mybatis.MyBatisManager;
@@ -63,14 +64,34 @@ public class TimecardDao {
 
 	public String submitTimecard(TimecardInfo timecardInfo) throws DbException, AppException {
 		SqlSession session = MyBatisManager.openSession();
-		String submitTimecardReturn = "";
+		String submitTimecardReturn = "",checkSubmitSkipFlag="N",empRelievingFlag="N";
+		boolean timecardSubmitCheck=false;
 		try {
-			if (isTimecardAlreadySubmitted(timecardInfo, session) == true)
+
+			if(timecardInfo.getMidsubmitflag().equals("Y"))
+				checkSubmitSkipFlag="Y";
+
+			if(timecardInfo.getRelievingDate().equals(Util.getCurrentDate()))
+				empRelievingFlag="Y";
+			
+			if(checkSubmitSkipFlag.equals("N")&&empRelievingFlag.equals("N"))
+				timecardSubmitCheck=isTimecardAlreadySubmitted(timecardInfo, session);
+			
+			if (timecardSubmitCheck== true)
 				submitTimecardReturn = TimecardMessageConstant.TimecardAlreadySubmitMessage.getLabel();
 			else {
 				if (timecardInfo.getTcId() == AppConstant.WORKING_HOURS.Zero.getValue()) {
 					if (addTimecard(timecardInfo, session) == true) {
 						sendMailtoManager(timecardInfo,session);
+						if(timecardInfo.getResourceType().equals("TM"))
+						{
+							TimecardInfo tcInfo=(TimecardInfo)timecardInfo;
+							tcInfo.setStatus(AppConstant.TIME_CARD_STATUS.Approved.toString());
+							updateTimecardInfo(tcInfo, session);
+							updateTimecardDayInfoById(tcInfo, session);
+							updateTimecardDayDetailsById(tcInfo, session);
+							updateTimecardApproverStatusById(tcInfo,session);
+						}
 						submitTimecardReturn = TimecardMessageConstant.TimecardSubmitMessage.getLabel();						
 					} else
 						submitTimecardReturn = TimecardMessageConstant.Timecard_Data_Exist.getLabel();
@@ -78,6 +99,16 @@ public class TimecardDao {
 					if (updateTimecardByView(timecardInfo, session)
 							.equals(TimecardMessageConstant.TimecardUpdateMessage.getLabel())) {						
 						sendMailtoManager(timecardInfo,session);
+						if(timecardInfo.getResourceType().equals("TM"))
+						{
+							TimecardInfo tcInfo=(TimecardInfo)timecardInfo;
+							tcInfo.setStatus(AppConstant.TIME_CARD_STATUS.Approved.toString());
+							updateTimecardInfo(tcInfo, session);
+							updateTimecardDayInfoById(tcInfo, session);
+							updateTimecardDayDetailsById(tcInfo, session);
+							updateTimecardApproverStatusById(tcInfo,session);
+						}
+							
 						submitTimecardReturn = TimecardMessageConstant.TimecardSubmitMessage.getLabel();
 					}
 				}
@@ -131,7 +162,10 @@ public class TimecardDao {
 				projectId = timecardDayDetails.getProjectId();
 			}
 		}
-		session.insert("TimecardMapper.addBatchTimecardDayDetails", timecardDayInfoParam.getTimecardDayDetails());
+		int timecardDayInfoCtr = -1;
+		timecardDayInfoCtr = isTimecardDetailsExistsForCurrentDate(timecardDayInfoParam, session);
+		if (timecardDayInfoCtr == -1)
+			session.insert("TimecardMapper.addBatchTimecardDayDetails", timecardDayInfoParam.getTimecardDayDetails());
 		updateTimecardDayInfoHourQuery(timecardDayInfoParam, session);
 	}
 
@@ -263,6 +297,19 @@ logger.debug("Timecard Managers>>>>>>>>>>>>>>>>>"+tcManagerName);
 		int tcdId = 0;
 		tcdId = session.selectOne("TimecardMapper.isTimecardExistsForCurrentDateForCurrentEmployee", timecardDayInfo);
 		return tcdId;
+	}
+	
+	public int isTimecardDetailsExistsForCurrentDate(TimecardDayInfo timecardDayInfo, SqlSession session) throws DbException {
+		int tcdId = 0;
+		tcdId = session.selectOne("TimecardMapper.isTimecardDetailsExistsForCurrentDateForCurrentEmployee", timecardDayInfo);
+		return tcdId;
+	}
+	
+
+	public String getStatusOfCurrentDateTimecard(TimecardDayInfo timecardDayInfo, SqlSession session) throws DbException {
+		String dayStatus="";
+		dayStatus = session.selectOne("TimecardMapper.statusOfAvailableDayInfo", timecardDayInfo);
+		return dayStatus;
 	}
 
 	public boolean isCurrentTimecardExistForCurrentEmployee(TimecardInfo timecardInfo, SqlSession session)
@@ -406,8 +453,22 @@ logger.debug("timecardInfoManager>>>>>>"+timecardInfoManager);
 	 * 
 	 */
 
-	public String approveTimecardByManager(List<TimecardInfo> timecardInfoParam) throws DbException, AppException {
-		SqlSession session = MyBatisManager.openSession();
+	public String approveTimecardByManagerWrapper(List<TimecardInfo> timecardInfoParam) throws DbException, AppException
+	{
+		SqlSession session = MyBatisManager.openSession();	
+		try
+		{		
+			approveTimecardByManager(timecardInfoParam,session,"Y");
+			session.commit();
+			return TimecardMessageConstant.Timecard_Approved_successfully.getLabel();
+		}
+		finally
+		{
+			session.close();
+		}
+	}
+	public String approveTimecardByManager(List<TimecardInfo> timecardInfoParam,SqlSession session,String sessionCommitFlag) throws DbException, AppException {
+
 		String saveTimecardReturn = "";
 		int notApprovedDayNo = 1;
 
@@ -440,11 +501,12 @@ logger.debug("timecardInfoManager>>>>>>"+timecardInfoManager);
 				
 			}
 			saveTimecardReturn=TimecardMessageConstant.Timecard_Approved_successfully.getLabel();
-
-			session.commit();
+			if(sessionCommitFlag.equals("Y"))
+				session.commit();
 			return saveTimecardReturn;
 		} finally {
-			session.close();
+			if(sessionCommitFlag.equals("Y"))
+				session.close();
 		}
 	}
 
@@ -543,6 +605,16 @@ logger.debug("timecardInfoManager>>>>>>"+timecardInfoManager);
 		session.insert("TimecardMapper.updateTimecardInfo", timecardInfo);
 	}
 
+	private void updateTimecardDayInfoById(TimecardInfo timecardInfo, SqlSession session)
+			throws DbException, AppException {
+		session.insert("TimecardMapper.updateTimecardDayInfoById", timecardInfo);
+	}
+
+	private void updateTimecardDayDetailsById(TimecardInfo timecardInfo, SqlSession session)
+			throws DbException, AppException {
+		session.insert("TimecardMapper.UpdateDayDetailsById", timecardInfo);
+	}
+
 	public int updateTimecardApproverStatus(List<TimecardProjectWorkDetails> timecardProjectWorkDetailsParam,SqlSession session)
 	{
 		int noOfRecordUpd = 0;
@@ -553,4 +625,16 @@ logger.debug("timecardInfoManager>>>>>>"+timecardInfoManager);
 		return noOfRecordUpd;
 	}
 
+	public void updateTimecardApproverStatusById(TimecardInfo timecardInfoParam,SqlSession session)
+	{
+		int noOfRecordUpd = 0;
+		noOfRecordUpd = session.insert("TimecardMapper.updateTimecardApproverProjectById", timecardInfoParam);
+	}
+
+	public String automaticApproverForTMEmployee(TimecardInfo timecardInfo,SqlSession session) throws DbException, AppException
+	{
+		List<TimecardInfo> timecardData=new ArrayList<TimecardInfo>();
+		timecardData.add(timecardInfo);
+		return approveTimecardByManager(timecardData,session,"N");		
+	}
 }

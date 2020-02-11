@@ -32,7 +32,10 @@ public class TimecardInfo implements Serializable {
 	private String statusGrid;
 	private String managerName;
     private String email;
-	/*
+    private String midsubmitflag;
+    private String relievingDate;
+    private String resourceType;
+    /*
 	 * Field used for showing error when logged-in user 
 	 * and data insert user are different
 	 * 
@@ -250,6 +253,32 @@ public class TimecardInfo implements Serializable {
 
 	public void setTimecardApproverDetails(List<TimecardApproverDetails> timecardApproverDetails) {
 		this.timecardApproverDetails = timecardApproverDetails;
+	}
+	
+
+	public String getMidsubmitflag() {
+		return midsubmitflag;
+	}
+
+	public void setMidsubmitflag(String midsubmitflag) {
+		this.midsubmitflag = midsubmitflag;
+	}
+
+	public String getResourceType() {
+		return resourceType;
+	}
+
+	public void setResourceType(String resourceType) {
+		this.resourceType = resourceType;
+	}
+
+	
+	public String getRelievingDate() {
+		return relievingDate;
+	}
+
+	public void setRelievingDate(String relievingDate) {
+		this.relievingDate = relievingDate;
 	}
 
 	@Override

@@ -60,7 +60,7 @@ public class TimecardValidator extends AppValidator {
 		}
 
 		validateTimecardDayInfo(timecardInfo.getTimecardDayInfo(), timecardInfo.getWeekStart().toString(),
-				timecardInfo.getWeekEnd().toString());
+				timecardInfo.getWeekEnd().toString(),timecardInfo.getRelievingDate().toString());
 //		timecardInfo.setTotalHours(this.getStrWeeklyTimeSum());
 		return errorMsg;
 	}
@@ -71,11 +71,13 @@ public class TimecardValidator extends AppValidator {
 		draftFlag = AppConstant.TIME_CARD_STATUS.Pending.toString();
 
 		validateTimeCard(timecardInfo);
-
-		if (timecardInfo.getTimecardDayInfo().size() < AppConstant.WORKING_HOURS.Five.getValue()) {
-			errorMsg.add(TimecardMessageConstant.MimimunTimecards.getLabel());
+		
+		if(!timecardInfo.getMidsubmitflag().equals("Y")&&!timecardInfo.getRelievingDate().equals(Util.getCurrentDate()))
+		{
+			if (timecardInfo.getTimecardDayInfo().size() < AppConstant.WORKING_HOURS.Five.getValue()) {
+				errorMsg.add(TimecardMessageConstant.MimimunTimecards.getLabel());
+			}				
 		}
-
 		return errorMsg;
 	}
 
@@ -96,12 +98,13 @@ public class TimecardValidator extends AppValidator {
 	}
 
 	public Set<String> validateTimecardDayInfo(List<TimecardDayInfo> timecardDayInfoParam, String weekStartDate,
-			String weekEndDate) throws ParseException {
+			String weekEndDate,String empRelievingDate) throws ParseException {
 		int timecardDayCtr = 0;
 		Set dateSet = new HashSet();
 		for (timecardDayCtr = 0; timecardDayCtr < timecardDayInfoParam.size(); timecardDayCtr++) {
 			TimecardDayInfo timecardDayInfo = (TimecardDayInfo) timecardDayInfoParam.get(timecardDayCtr);
 
+			
 			if (timecardDayInfo.getWorkingDate() == null) {
 				errorMsg.add(TimecardMessageConstant.WorkDateCantBeNull.getLabel());
 			}
@@ -130,7 +133,13 @@ public class TimecardValidator extends AppValidator {
 			if (timecardDayInfo.getTimecardDayDetails().size() == AppConstant.WORKING_HOURS.Zero.getValue()) {
 				errorMsg.add(TimecardMessageConstant.BlankDayTimecardDetails.getLabel());
 			}
-
+			if(!empRelievingDate.trim().equals(""))
+			{
+				if(Util.getDayDiffBetweenTwoDate(empRelievingDate, timecardDayInfo.getWorkingDate().toString())>0)
+				{
+					errorMsg.add(TimecardMessageConstant.EMP_Fill_TImecard_Beyond_Relieving_Date.getLabel());				
+				}
+			}
 			validateTimecardDayDetailsData(timecardDayInfo.getTimecardDayDetails());
 			dateSet.add(timecardDayInfo.getWorkingDate().toString());
 		}
