@@ -2,6 +2,7 @@ package com.awcsoftware.app.project;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class ProjectsTeamDetails implements Serializable {
 	 /**
@@ -10,6 +11,7 @@ public class ProjectsTeamDetails implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private int pdId;
 	 private int projectId;
+	 private List<Integer> projectsId;
 	 private int empId;
 	 private int role;
 	 private int workingLocation;
@@ -73,6 +75,13 @@ public class ProjectsTeamDetails implements Serializable {
 	}
 	public void setStatus(String status) {
 		this.status = status;
+	}
+	
+	public List<Integer> getProjectsId() {
+		return projectsId;
+	}
+	public void setProjectsId(List<Integer> projectsId) {
+		this.projectsId = projectsId;
 	}
 	public LocalDateTime getAddedOn() {
 		return addedOn;

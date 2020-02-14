@@ -199,9 +199,9 @@ public class EmployeeService {
 		if (employeevalidator.validateEmployeeBasicDetails(user).size() != 0) {
 			return employeevalidator.validateEmployeeBasicDetails(user).toString();
 		}
-		if (employeevalidator.validateEmployeeAddress(user).size() != 0) {
+	/*	if (employeevalidator.validateEmployeeAddress(user).size() != 0) {
 			return employeevalidator.validateEmployeeAddress(user).toString();
-		}
+		}*/
 		if (employeevalidator.validateEmployeePhone(user).size() != 0) {
 			return employeevalidator.validateEmployeePhone(user).toString();
 		}
@@ -224,9 +224,9 @@ public class EmployeeService {
 		if (Util.isEmptyOrNull(userDao.getUser(user.getEmail()))) {
 			return EmployeeMessageConstants.EmailIdCantBeChanged.getLabel().toString();
 		}
-		if (employeevalidator.validateEmployeeAddress(user).size() != 0) {
+	/*	if (employeevalidator.validateEmployeeAddress(user).size() != 0) {
 			return employeevalidator.validateEmployeeAddress(user).toString();
-		}
+		}*/
 		if (employeevalidator.validateEmployeePhone(user).size() != 0) {
 			return employeevalidator.validateEmployeePhone(user).toString();
 		}
@@ -254,9 +254,13 @@ public class EmployeeService {
 
 	}
 
-/*	public List<User> getEmployees() throws AppException, DbException {
-		return empDao.getEmployees();
+	public List<User> getEmployeeList(String projectsInfo) throws AppException, DbException {
+		 List<User> result = empDao.getEmployeeList(projectsInfo);
+		 if(result!=null) {
+			 return result;
+		 }
+		   return null;
 
-	}*/
+	}
 
 }

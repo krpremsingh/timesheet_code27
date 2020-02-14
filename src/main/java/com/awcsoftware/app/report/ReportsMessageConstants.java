@@ -6,6 +6,7 @@ public enum ReportsMessageConstants {
 	RecordNotFoundBetweenDates("No record found for this duration"),
 	RecordNotFoundForStatus("No record found against this status"),
 	WeekEndDateCannotBeBlank("Week end date can't be blank"),
+	NoRecordFound("No record found"),
 	WeekStartDateFormatIsNotValid("Week start date format is not valid"),
 	WeekEndDateFormatIsNotValid("Week end date format is not valid"),
 	WeekStartDateNotBeforeEndDate("Week start date can't before week end date"),

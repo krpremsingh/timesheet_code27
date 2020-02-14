@@ -8,7 +8,7 @@ import java.util.List;
 public class TimecardDayInfo implements Serializable {
 	private int tcdId;
 	private int tcId;
-	
+	private int projectId;
 	private LocalDate workingDate;
 	private String workingDay;
 	private String totalWeekWorkHours;
@@ -112,12 +112,25 @@ public class TimecardDayInfo implements Serializable {
 	public void setTimeRemainToApprove(String timeRemainToApprove) {
 		this.timeRemainToApprove = timeRemainToApprove;
 	}
+	
+
+	public int getProjectId() {
+		return projectId;
+	}
+
+	public void setProjectId(int projectId) {
+		this.projectId = projectId;
+	}
 
 	@Override
 	public String toString() {
-		return "TimecardDayInfo [tcdId=" + tcdId + ", tcId=" + tcId + ", workingDate=" + workingDate + ", workingDay="
-				+ workingDay + ", totalWeekWorkHours=" + totalWeekWorkHours + ", status=" + status + ", addedOn="
-				+ addedOn + ", lastModifiedOn=" + lastModifiedOn + "]";
+		return "TimecardDayInfo [tcdId=" + tcdId + ", tcId=" + tcId + ", projectId=" + projectId + ", workingDate="
+				+ workingDate + ", workingDay=" + workingDay + ", totalWeekWorkHours=" + totalWeekWorkHours
+				+ ", status=" + status + ", addedOn=" + addedOn + ", lastModifiedOn=" + lastModifiedOn
+				+ ", projectGroup=" + projectGroup + ", timecardDayDetails=" + timecardDayDetails
+				+ ", timeRemainToApprove=" + timeRemainToApprove + "]";
 	}
+
+
 
 }

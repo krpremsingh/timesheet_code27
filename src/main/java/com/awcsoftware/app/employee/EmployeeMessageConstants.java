@@ -42,7 +42,7 @@ public enum EmployeeMessageConstants {
 	BlankPassword("Password can't be blank"),
 	AccessDenied("Access Denied"),
 	PasswordExpired("Password has been expired"),
-	ValidatePasswordPattern("Password length must be > 5 character and < 20 character "),
+	ValidatePasswordPattern("Password length must be > 5 character and < 20 character and only #@$*%& special characters are allowed"),
 	ValidateEmail("Please enter correct email id"),
 	EmployeeAlreadyExist("Employee already exist"),
 	LoginSuccess("Success"),

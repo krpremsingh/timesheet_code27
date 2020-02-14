@@ -49,6 +49,8 @@ public class User implements Serializable {
 	private String status;
 
 	private int designationId;
+	
+	private String designation;
 
 	private String mailFlag;
 
@@ -61,6 +63,12 @@ public class User implements Serializable {
 	private String relievingDate;
 	
 	private String resourceType;
+	
+	private int projectId;
+	
+	private List<String> projectsId;
+	
+	private String projectgroup;
 
 	private List<EmployeeAddressInfo> addressInfo;
 
@@ -273,6 +281,37 @@ public class User implements Serializable {
 		this.resourceType = resourceType;
 	}
 
+	public int getProjectId() {
+		return projectId;
+	}
+
+	public void setProjectId(int projectId) {
+		this.projectId = projectId;
+	}
+
+	public List<String> getProjectsId() {
+		return projectsId;
+	}
+
+	public void setProjectsId(List<String> projectsId) {
+		this.projectsId = projectsId;
+	}
+
+	public String getDesignation() {
+		return designation;
+	}
+
+	public void setDesignation(String designation) {
+		this.designation = designation;
+	}
+	public String getProjectgroup() {
+		return projectgroup;
+	}
+
+	public void setProjectgroup(String projectgroup) {
+		this.projectgroup = projectgroup;
+	}
+
 	@Override
 	public String toString() {
 		return "User [empId=" + empId + ", firstName=" + firstName + ", middleName=" + middleName + ", lastName="
@@ -280,8 +319,12 @@ public class User implements Serializable {
 				+ ", lastModifiedOn=" + lastModifiedOn + ", email=" + email + ", password=" + password
 				+ ", currentPassword=" + currentPassword + ", confirmPassword=" + confirmPassword + ", newPassword="
 				+ newPassword + ", firstLoginStatus=" + firstLoginStatus + ", status=" + status + ", designationId="
-				+ designationId + ", mailFlag=" + mailFlag + ", fromDate=" + fromDate + ", toDate=" + toDate
-				+ ", empPhoto=" + empPhoto + ", relievingDate=" + relievingDate + ", resourceType=" + resourceType
-				+ ", addressInfo=" + addressInfo + ", phoneInfo=" + phoneInfo + ", projectInfo=" + projectInfo + "]";
+				+ designationId + ", designation=" + designation + ", mailFlag=" + mailFlag + ", fromDate=" + fromDate
+				+ ", toDate=" + toDate + ", empPhoto=" + empPhoto + ", relievingDate=" + relievingDate
+				+ ", resourceType=" + resourceType + ", projectId=" + projectId + ", projectsId=" + projectsId
+				+ ", projectgroup=" + projectgroup + ", addressInfo=" + addressInfo + ", phoneInfo=" + phoneInfo
+				+ ", projectInfo=" + projectInfo + "]";
 	}
+	
+
 }

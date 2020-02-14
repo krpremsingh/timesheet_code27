@@ -1,12 +1,7 @@
 package com.awcsoftware.app.timesheet;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-import javax.mail.MessagingException;
 
 import org.apache.ibatis.session.SqlSession;
 import org.apache.log4j.Logger;
@@ -15,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import com.awcsoftware.app.AppConstant;
 import com.awcsoftware.app.AppException;
+import com.awcsoftware.app.Util;
 import com.awcsoftware.app.mail.Mail;
 import com.awcsoftware.mybatis.DbException;
 import com.awcsoftware.mybatis.MyBatisManager;
@@ -551,6 +547,50 @@ logger.debug("timecardInfoManager>>>>>>"+timecardInfoManager);
 			noOfRecordUpd = session.insert("TimecardMapper.updateTimecardApproverProject", timecardProjectWorkDetObj);
 		}
 		return noOfRecordUpd;
+	}
+	
+	public List<TimecardDayInfo> checkRejectedTimecard(TimecardDayInfo timecardDayInfoParam)throws AppException,DbException {
+		SqlSession session = MyBatisManager.openSession();
+
+		try {
+			List<TimecardDayInfo> result = session.selectList("TimecardMapper.checkRejectedTimecard",timecardDayInfoParam);
+		     if(!Util.isEmptyOrNull(result)) {
+		    	return result;
+		     }
+			return null;
+		} finally {
+			session.close();
+		}	
+	}
+	
+	public boolean resubmitTimecard(TimecardDayInfo timecardDayInfoParam) throws AppException, DbException {
+		SqlSession session = MyBatisManager.openSession();
+
+		try {
+		  List<TimecardDayInfo> timecardstatus = checkRejectedTimecard(timecardDayInfoParam);
+		  for(TimecardDayInfo timecardInfo:timecardstatus) {
+				 logger.debug(timecardInfo.getStatus()+" "+timecardInfo.getTcId()+" "+timecardInfo.getProjectGroup());
+				 timecardDayInfoParam.setTcId(timecardInfo.getTcId());
+				 addTimecardDayDetails(timecardDayInfoParam, session);
+				 timecardDayInfoParam.setProjectId(Integer.valueOf(timecardDayInfoParam.getProjectGroup()));
+				 updateLastModifiedOnAndStatusAfterResubmit(timecardDayInfoParam,session);
+		  }
+			session.commit();
+			return true;
+		} finally {
+			session.close();
+		}
+		
+	}
+	
+	public boolean updateLastModifiedOnAndStatusAfterResubmit(TimecardDayInfo timecardDayInfoParam,SqlSession session) {
+		       int result = session.update("TimecardMapper.updateLastModifiedOnAndStatusAfterResubmit", timecardDayInfoParam);
+		       if(result!=0) {
+		    	   logger.debug(result);
+		    	   return true;
+		       }
+		        return false;
+		
 	}
 
 }

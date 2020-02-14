@@ -8,6 +8,10 @@ public enum ClientMessageConstants {
 	BlankStatus("Status can't be blank"),
 	DataNotFound("Data not found"),
 	ClientAddedSuccessFully("Client added successfully"),
+	ClientAlreadyExists("Client already exists"),
+	NoClientFound("No record found"),
+	//FoundDuplicateClientName("Client name assigned to another client.Please enter different client name"),
+	ClientUpdatedSuccessfully("Client updated successfully"),
 	EndDateCantBeforeStartDate("End date can't before the start date");
 	
 	private final String label;

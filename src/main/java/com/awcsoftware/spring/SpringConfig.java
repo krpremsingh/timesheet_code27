@@ -40,6 +40,7 @@ public class SpringConfig extends WebMvcConfigurationSupport {
     
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**");
+        registry.addMapping("/**")
+                      .allowedMethods("HEAD","GET","POST","DELETE","PATCH");
     }
 }

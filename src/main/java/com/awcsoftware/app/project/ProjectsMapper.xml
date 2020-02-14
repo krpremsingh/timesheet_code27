@@ -59,8 +59,8 @@ insert into ProjectsInfo(projectName,budget,startDate,endDate,status,addedOn,cli
  update ProjectLocationDetails set workLocationId=#{workLocationId} where projectId=#{projectId} and pldId=#{pldId}
  </update>
  <update id="updateProjectTeamDetails" parameterType="ProjectsTeamDetails">
- update ProjectTeamDetails set empId=#{empId},role=#{role},workingLocation=#{workingLocation}
- ,startDate=#{startDate},endDate=#{endDate},status=#{status},lastModifiedOn=now();
+ update ProjectTeamDetails set role=#{role},workingLocation=#{workingLocation},startDate=#{startDate},
+ endDate=#{endDate},status=#{status},lastModifiedOn=now() where projectId=#{projectId} and pdId=#{pdId};
  </update>
  
  <update id="updateProjectApproverDetails" parameterType="ProjectApproverDetails">

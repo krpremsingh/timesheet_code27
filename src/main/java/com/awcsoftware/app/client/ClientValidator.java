@@ -26,6 +26,7 @@ public class ClientValidator {
 	}
 	
 	public Set<String> validateAddClient(ClientInfo info){
+		errorMsg.clear();
 		if(Util.isEmptyOrNull(info.getClientName())) {
 			errorMsg.add(ClientMessageConstants.BlankClientName.getLabel().toString());
 			return errorMsg;
@@ -55,6 +56,7 @@ public class ClientValidator {
 	}
 	
 	public Set<String> validateViewClient(ClientInfo info){
+		errorMsg.clear();
 		if(Util.isEmptyOrNull(info.getStartDate())) {
 			errorMsg.add(ClientMessageConstants.BlankStartDate.getLabel().toString());
 			return errorMsg;

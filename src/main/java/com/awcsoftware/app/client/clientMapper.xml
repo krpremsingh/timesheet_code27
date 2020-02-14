@@ -12,23 +12,38 @@
 		<id column="clientId" property="clientId"/>
    </resultMap>
    
+   <select id="checkClient" parameterType="Clients" resultType="int">
+   select count(*) from ClientInfo where clientName=#{clientName} and status='Active';
+   </select>
+   
    <insert id="addClient" parameterType="Clients">
-   insert into ClientInfo(clientName,startDate,endDate,status,addedOn) values(#{clientName},#{startDate},#{endDate},#{status},#{addedOn});
+   insert into ClientInfo(clientName,startDate,endDate,status,addedOn) values(#{clientName},#{startDate},#{endDate},#{status},now());
    </insert>
    
    <select id="viewClients" parameterType="Clients" resultType="Clients">
   select ci.clientId,ci.clientName,ci.startDate,ci.endDate,ci.status,ci.addedOn from ClientInfo ci 
    <where>
-   <if test="startDate!=null">
-   ci.startDate=#{startDate}
+   <if test="startDate!=null and startDate!='' ">
+   ci.startDate=#{startDate} and
    </if>
-   <if test="endDate!=null">
-   and ci.endDate=#{endDate}
+   <if test="endDate!=null and endDate!='' and clientName==null or clientName=='' ">
+   ci.endDate=#{endDate}
    </if>
-   <if test="clientId!=0">
-   ci.clientId=#{clientId}
+   <if test="endDate!=null and endDate!='' and clientName!=null ">
+   ci.endDate=#{endDate} and
+   </if>
+   <if test="clientName!=null and clientName!='' ">
+    ci.clientName like #{clientName}
    </if>
    </where>
    </select>
+   <select id="getClientList" parameterType="Clients" resultType="Clients">
+   select clientName,clientId from ClientInfo 
+   </select>
+   
+   <update id="updateClient" parameterType="Clients">
+   update ClientInfo set clientName=#{clientName},startDate=#{startDate},endDate=#{endDate},
+   status=#{status},lastModifiedOn=now() where clientId=#{clientId};
+   </update>
    
 </mapper>

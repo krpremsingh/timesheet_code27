@@ -38,4 +38,16 @@ public class BaseController {
 		return new ResponseEntity<List<BasePojo>>(setOfProjectLocations,HttpStatus.OK);
 
 	}
+	@PostMapping("/getDesignation")
+	public ResponseEntity<List<BasePojo>> getDesignation(@RequestBody BasePojo basepojo) {
+		List<BasePojo> setOfDesignation = baseservice.getDesignation(basepojo);
+		return new ResponseEntity<List<BasePojo>>(setOfDesignation,HttpStatus.OK);
+
+	}
+	@PostMapping("/getProjectsList")
+	public ResponseEntity<List<BasePojo>> getProjectsListPerClient(@RequestBody BasePojo basepojo) {
+		List<BasePojo> setOfProjects = baseservice.getProjectsListPerClient(basepojo);
+		return new ResponseEntity<List<BasePojo>>(setOfProjects,HttpStatus.OK);
+
+	}
 }

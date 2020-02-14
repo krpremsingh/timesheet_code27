@@ -11,6 +11,16 @@ import com.awcsoftware.mybatis.MyBatisManager;
 @Repository
 public class BaseDao {
 	static Logger log = Logger.getLogger(BaseDao.class.getName());
+	public List<BasePojo> getDesignation(int designationId){
+		
+		SqlSession session = MyBatisManager.openSession();
+		try {
+			List<BasePojo> designation = session.selectList("ParentBasePojo.getDesignation",designationId);
+			return designation;
+		} finally {
+			session.close();
+		}		
+	}
 	
 	public List<BasePojo> getActivities(){
 		
@@ -39,8 +49,17 @@ public class BaseDao {
 			return projects;
 		} finally {
 			session.close();
-		}
-
-		
+		}	
+	}
+	
+	public List<BasePojo> getProjectsListBasedOnClient(int clientId){
+		SqlSession session = MyBatisManager.openSession();
+		try {
+			List<BasePojo> projects = session.selectList("ParentBasePojo.getProjectsListBasedOnClient", clientId);
+			log.debug(projects);
+			return projects;
+		} finally {
+			session.close();
+		}	
 	}
 }

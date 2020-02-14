@@ -215,6 +215,9 @@
 		#{tcId} and
 		workingDate= #{workingDate}
 	</update>
+	
+	
+	
 
 	<select id="isTimecardExistsForCurrentDateForCurrentEmployee"
 		parameterType="TimecardDayInfo" resultType="int">
@@ -646,6 +649,25 @@
 	select distinct ti.empId,(select e.email from EmployeeInfo e where ti.empId=e.empId) email,ti.status,now() FROM TimecardInfo ti WHERE ti.weekStart BETWEEN (NOW() - INTERVAL
 	 11 DAY) AND NOW() and UPPER(ti.status)=upper('draft');
 	</select>
+	
+	<select id="checkRejectedTimecard" resultType="TimecardDayInfo">
+	select tdd.status,tdd.projectId,tdd.tcId from TimecardDayDetails  tdd ,TimecardApproverDetails tad
+	 where tdd.tcId=#{tcId} and tdd.tcId=tad.tcId and 
+	 tdd.projectId=tad.projectId  and tdd.status='Reject' group by tdd.projectId,tdd.tcId; 
+	</select>
+	
+	<update id="updateLastModifiedOnAndStatusAfterResubmit"
+		parameterType="TimecardDayInfo" useGeneratedKeys="true"
+		keyProperty="tcdId">
+		UPDATE TimecardDayInfo tcdi,TimecardInfo ti,TimecardDayDetails tcdd SET
+		tcdd.lastModifiedOn=now(),
+		tcdi.lastModifiedOn=now(),
+		ti.lastModifiedOn=now(),
+		tcdd.status = #{status}
+		WHERE tcdd.tcdId=#{tcdId} and tcdd.projectId=#{projectId}
+		and tcdd.status='Reject' and tcdd.tcdId =
+		tcdi.tcdId;
+	</update>
 	
 </mapper> 
  

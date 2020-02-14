@@ -201,5 +201,17 @@ public class TimecardService {
 		} else
 			return validatorResult.toString();
 	}
+	
+	public String resubmitTimecard(TimecardDayInfo timecardDayInfoParam)throws AppException,DbException{
+		TimecardDao dao = new TimecardDao();
+		boolean result = dao.resubmitTimecard(timecardDayInfoParam);
+		if(result==true) {
+			logger.debug("result    "+result +" " +timecardDayInfoParam);
+	        return "timecard resubmit successfully";	
+		}
+		logger.debug("result    "+result);
+        return "timecard not submitted";
+		
+	}
 
 }
