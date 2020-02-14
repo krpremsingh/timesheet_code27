@@ -467,11 +467,11 @@ logger.debug("timecardInfoManager>>>>>>"+timecardInfoManager);
 				for (int dayApproveCtr = 0; dayApproveCtr < allTimecardDayInfoObj.size(); dayApproveCtr++) {
 					TimecardDayInfo timecardDayInfo = (TimecardDayInfo) allTimecardDayInfoObj.get(dayApproveCtr);
 					if (timecardDayInfo.getTimeRemainToApprove().equals("0")) {
-						timecardDayInfo.setStatus(AppConstant.TIME_CARD_STATUS.Approved.toString());
+						timecardDayInfo.setStatus(AppConstant.TIME_CARD_STATUS.Reject.toString());
 						updateTimecardDayInfoStatus(timecardDayInfo, session);
 					}
 				}
-				timecardInfoObj.setStatus(AppConstant.TIME_CARD_STATUS.Approved.toString());
+				timecardInfoObj.setStatus(AppConstant.TIME_CARD_STATUS.Reject.toString());
 				notApprovedDayNo = getNotApprovedDay(timecardInfoObj, session);
 				if (notApprovedDayNo == 0)
 					updateTimecardInfo(timecardInfoObj, session);
