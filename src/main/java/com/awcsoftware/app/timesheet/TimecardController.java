@@ -195,7 +195,30 @@ public class TimecardController {
 		}
 	}
 
-	 @RequestMapping(value="/tc-resubmitTimecard" ,method=RequestMethod.POST)
+	/*
+	 *  This function is called when employee's will be rejected and employee will resubmit his/her timecard information. 
+	 *  This function will store data in table as submit mode.
+	 *  Once the timecard data is submitted, employee can not resubmitted his/her timecard details again
+	 *  until manager reject the particular time card. This url/method will allow 
+	 *  user to add new record  or update the existing timecard details 
+	 * 
+	 */
+	
+	@RequestMapping(value = "/tc-resubmit", method = RequestMethod.POST, headers = "Accept=application/json")
+	public ResponseEntity<String> resubmitTimecard(@RequestBody TimecardInfo timecardInfo) {
+		service = new TimecardService();
+		String timecardSubmitResult = "";
+		try {
+			timecardSubmitResult = service.resubmitTimeCard(timecardInfo);
+			timecardSubmitResult=timecardSubmitResult+" {"+timecardInfo.getTcId()+"}("+timecardInfo.getManagerName()+")";
+			return new ResponseEntity<String>(timecardSubmitResult, HttpStatus.OK);
+		} catch (DbException | AppException | ParseException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	
+	@RequestMapping(value="/tc-resubmitTimecard" ,method=RequestMethod.POST)
 	public ResponseEntity<String> resubmitTimecard(@RequestBody TimecardDayInfo timecarddayinfo){
 		service=new TimecardService();
 		try {

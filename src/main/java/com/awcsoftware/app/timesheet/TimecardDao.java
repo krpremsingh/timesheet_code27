@@ -87,6 +87,7 @@ public class TimecardDao {
 							updateTimecardDayDetailsById(tcInfo, session);
 							updateTimecardApproverStatusById(tcInfo,session);
 						}
+						deleteDiscardData(timecardInfo.getTcId(),session);
 						submitTimecardReturn = TimecardMessageConstant.TimecardSubmitMessage.getLabel();						
 					} else
 						submitTimecardReturn = TimecardMessageConstant.Timecard_Data_Exist.getLabel();
@@ -103,7 +104,7 @@ public class TimecardDao {
 							updateTimecardDayDetailsById(tcInfo, session);
 							updateTimecardApproverStatusById(tcInfo,session);
 						}
-							
+						deleteDiscardData(timecardInfo.getTcId(),session);	
 						submitTimecardReturn = TimecardMessageConstant.TimecardSubmitMessage.getLabel();
 					}
 				}
@@ -212,6 +213,33 @@ logger.debug("Timecard Managers>>>>>>>>>>>>>>>>>"+tcManagerName);
 		timecardInfoParam.setManagerName(tcManagerName);
 	}
 
+	public String resubmitTimecard(TimecardInfo timecardInfo) throws DbException, AppException {
+		SqlSession session = MyBatisManager.openSession();
+		String submitTimecardReturn = "",checkSubmitSkipFlag="N",empRelievingFlag="N";
+		boolean timecardSubmitCheck=false;
+		try {
+			if (updateTimecardByView(timecardInfo, session)
+					.equals(TimecardMessageConstant.TimecardUpdateMessage.getLabel())) {
+				sendMailtoManager(timecardInfo, session);
+				deleteDiscardData(timecardInfo.getTcId(), session);
+				submitTimecardReturn = TimecardMessageConstant.TimecardSubmitMessage.getLabel();
+			}
+
+			session.commit();
+			return submitTimecardReturn;
+		} finally {
+			session.close();
+		}
+	}
+
+	private String updateResubmitTimecardByView(TimecardInfo timecardInfo, SqlSession session)
+			throws DbException, AppException {
+		session.update("TimecardMapper.DeactivateTimecardDayDetails", timecardInfo.getTcId());
+		addTimecardDayInfo(timecardInfo, session);
+		updateTimecardInfoHourForResubmit(timecardInfo, session);
+		return TimecardMessageConstant.TimecardUpdateMessage.getLabel();
+	}
+
 	public List<TimecardInfo> getEmployeeTimeCard(TimecardInfo timecardInfoParam) throws DbException {
 		List<TimecardInfo> timecardInfo = null;
 		SqlSession session = MyBatisManager.openSession();
@@ -263,6 +291,12 @@ logger.debug("Timecard Managers>>>>>>>>>>>>>>>>>"+tcManagerName);
 			throws DbException, AppException {
 		session.insert("TimecardMapper.updateTimecardInfoHour", timecardInfo);
 	}
+
+	private void updateTimecardInfoHourForResubmit(TimecardInfo timecardInfo, SqlSession session)
+			throws DbException, AppException {
+		session.insert("TimecardMapper.updateTimecardInfoHourForResubmit", timecardInfo);
+	}
+	
 
 	private void addTimecardDayInfoQuery(TimecardDayInfo timecardDayInfo, SqlSession session)
 			throws DbException, AppException {
@@ -676,4 +710,12 @@ logger.debug("timecardInfoManager>>>>>>"+timecardInfoManager);
 		timecardData.add(timecardInfo);
 		return approveTimecardByManager(timecardData,session,"N");		
 	}
+
+	public void deleteDiscardData(int tcId,SqlSession session)
+	{
+		int noOfRecordUpd = 0;
+		noOfRecordUpd = session.insert("TimecardMapper.deleteDiscardData", tcId);
+	}
+
+	
 }

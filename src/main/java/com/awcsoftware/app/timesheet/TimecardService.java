@@ -62,6 +62,27 @@ public class TimecardService {
 	}
 
 	/*
+	 *  This function is called when employee's will resubmit his/her timecard information. 
+	 *  This function will store data in table as submit mode.
+	 *  Once the timecard data is submitted, employee can not resubmitted his/her timecard details again
+	 *  until manager reject the particular time card. This url/method will allow 
+	 *  user to add new record  or update the existing timecard details 
+	 * 
+	 */
+
+	public String resubmitTimeCard(TimecardInfo submitTimecardInfo) throws DbException, AppException, ParseException {
+		TimecardValidator validator = new TimecardValidator();
+		Set<String> validatorResult = validator.validateSubmitTimeCard(submitTimecardInfo);
+		if (validatorResult.size() == AppConstant.WORKING_HOURS.Zero.getValue()) {
+			TimecardDao dao = new TimecardDao();
+			submitTimecardInfo.setStatus(AppConstant.TIME_CARD_STATUS.Pending.toString());
+			return dao.resubmitTimecard(submitTimecardInfo);
+
+		} else
+			return validatorResult.toString();
+	}
+
+	/*
 	 *  This function is called when employee wants to check his/her timecard.
 	 *  This function will show the detail view of entered 
 	 * 

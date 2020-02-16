@@ -59,7 +59,10 @@ public class TimecardInfo implements Serializable {
 	
 	private List<TimecardProjectWorkDetails> employeeProjectTimecard;
 	private List<TimecardApproverDetails> timecardApproverDetails;
-	
+
+	private String totalWorkingHours;
+	private String totalLeaveHours;
+	private String totalHalfdayHour;
 	
 	public String getSearchStatus() {
 		return searchStatus;
@@ -279,6 +282,31 @@ public class TimecardInfo implements Serializable {
 
 	public void setRelievingDate(String relievingDate) {
 		this.relievingDate = relievingDate;
+	}
+
+	
+	public String getTotalWorkingHours() {
+		return totalWorkingHours;
+	}
+
+	public void setTotalWorkingHours(String totalWorkingHours) {
+		this.totalWorkingHours = totalWorkingHours;
+	}
+
+	public String getTotalLeaveHours() {
+		return totalLeaveHours;
+	}
+
+	public void setTotalLeaveHours(String totalLeaveHours) {
+		this.totalLeaveHours = totalLeaveHours;
+	}
+
+	public String getTotalHalfdayHour() {
+		return totalHalfdayHour;
+	}
+
+	public void setTotalHalfdayHour(String totalHalfdayHour) {
+		this.totalHalfdayHour = totalHalfdayHour;
 	}
 
 	@Override

@@ -58,6 +58,9 @@ public class TimecardValidator extends AppValidator {
 		if (timecardInfo.getTimecardDayInfo().size() == AppConstant.WORKING_HOURS.Zero.getValue()) {
 			errorMsg.add(TimecardMessageConstant.BlankTimecardDetails.getLabel());
 		}
+		
+		if(timecardInfo.getRelievingDate().toString()==null)
+			timecardInfo.setRelievingDate("");
 
 		validateTimecardDayInfo(timecardInfo.getTimecardDayInfo(), timecardInfo.getWeekStart().toString(),
 				timecardInfo.getWeekEnd().toString(),timecardInfo.getRelievingDate().toString());

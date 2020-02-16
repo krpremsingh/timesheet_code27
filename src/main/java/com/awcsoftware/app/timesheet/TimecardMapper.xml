@@ -136,6 +136,15 @@
 		tcId=#{tcId} and empId=#{empId}
 	</update>
 
+	<update id="updateTimecardInfoHourForResubmit" parameterType="TimecardInfo"
+		keyProperty="tcId">
+		UPDATE TimecardInfo ti SET status=#{status}, totalHours = ifnull((select
+		sec_to_time(sum(Time_to_sec(workingHours))) from
+		TimecardDayDetails tcdd where tcdd.tcid=ti.tcId and recordType='Active' and status&lt;&gt;'Reject'),'00:00:00')
+		WHERE
+		tcId=#{tcId} and empId=#{empId}
+	</update>
+
 	<select id="isCurrentTimecardExistForCurrentEmployee"
 		parameterType="TimecardInfo" resultType="int">
 		select ifnull(
@@ -708,7 +717,18 @@
 		and tcdd.status='Reject' and tcdd.tcdId =
 		tcdi.tcdId;
 	</update>
-	
+
+	<delete id="deleteDiscardData" parameterType="int">
+    	delete from TimecardDayDetails where tcId=#{tcId} and recordType='Discard'
+  	</delete>	
+
+	<select id="checkNotApprovedDay"
+		parameterType="int" resultType="list">		
+		select concat(activityName,'~',WorkTime) from (
+		select ifnull((select activity from ActivitiesInfo AI where AI.activityId=TDD.activityId),' ') activityName,sec_to_time(sum(Time_to_sec(workingHours)))) WorkTime from TimecardDayDetails TDD where tcId=#{tcId} 
+		and recordType='Active' group by 1);
+	</select>
+
 </mapper> 
  
  
